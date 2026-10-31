@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beranda | PB Jgeer</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              maroon: '#7A1020',
+              rose: '#D6455D',
+              dark: '#0B0B0B',
+              card: '#161616',
+            },
+          },
+          fontFamily: {
+            display: ['Oswald', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+
+    /* Menu aktif */
+    .nav-link[aria-current="page"] { background: #7A1020; color: #fff; font-weight: 600; }
+
+    /* Home: marquee & stripe */
+    .marquee { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 28s linear infinite; }
+    .marquee-wrap:hover .marquee { animation-play-state: paused; }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+    @media (prefers-reduced-motion: reduce) { .marquee { animation: none; padding-left: 0; white-space: normal; } }
+    .stripe { background-image: repeating-linear-gradient(-45deg, rgba(0,0,0,.10) 0 12px, transparent 12px 24px); }
+
+    /* Roster: tab, kartu, klasemen */
+    .tab-btn { transition: all .25s; }
+    .tab-btn[aria-selected="true"] { background: #7A1020; color: #fff; box-shadow: 0 8px 22px -8px rgba(214,69,93,.7); }
+    .tab-btn[aria-selected="false"] { color: #a3a3a3; }
+    .tab-btn[aria-selected="false"]:hover { color: #fff; background: rgba(255,255,255,.06); }
+    .player-card { transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
+    .player-card:hover { transform: scale(1.06); border-color: #D6455D; box-shadow: 0 25px 50px -15px rgba(214,69,93,.45); z-index: 10; }
+    @media (prefers-reduced-motion: reduce) { .player-card:hover { transform: none; } }
+    .lb-row { transition: background .2s; }
+    .lb-row:hover { background: rgba(255,255,255,.04); }
+    .row-gold   { background: linear-gradient(90deg, rgba(251,191,36,.12), transparent 70%); box-shadow: inset 4px 0 0 #fbbf24; }
+    .row-silver { background: linear-gradient(90deg, rgba(212,212,216,.10), transparent 70%); box-shadow: inset 4px 0 0 #d4d4d8; }
+    .row-bronze { background: linear-gradient(90deg, rgba(205,127,50,.12), transparent 70%); box-shadow: inset 4px 0 0 #cd7f32; }
+    .medal { width: 2.5rem; height: 2.5rem; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+    .medal-gold   { background: radial-gradient(circle at 30% 30%, #fde68a, #f59e0b); box-shadow: 0 0 18px rgba(251,191,36,.55); }
+    .medal-silver { background: radial-gradient(circle at 30% 30%, #f4f4f5, #a1a1aa); box-shadow: 0 0 14px rgba(212,212,216,.4); }
+    .medal-bronze { background: radial-gradient(circle at 30% 30%, #fdba74, #b45309); box-shadow: 0 0 14px rgba(205,127,50,.45); }
+
+    /* SOP: accordion */
+    summary::-webkit-details-marker { display: none; }
+    summary { list-style: none; }
+    details > summary:focus-visible { outline: 2px solid #D6455D; outline-offset: -2px; border-radius: 1rem; }
+    details[open] > .doc-body { animation: fadeIn .25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { details[open] > .doc-body { animation: none; } }
+
+    /* Galeri: lightbox */
+    dialog::backdrop { background: rgba(0,0,0,.9); }
+    dialog[open] { animation: pop .2s ease; }
+    @keyframes pop { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { dialog[open] { animation: none; } }
+  </style>
+</head>
+
+<body class="bg-brand-dark text-white antialiased min-h-screen flex flex-col">
+
+  <!-- Sprite ikon ceklis -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="ic-check" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="11" fill="currentColor" fill-opacity=".15" />
+      <path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+  </svg>
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-50 bg-brand-dark/95 backdrop-blur border-b border-brand-maroon/60">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="#home" class="flex items-center gap-2 group">
+        <img src="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" alt="Logo PB Jgeer" class="h-10 w-auto" />
+        <span class="font-display text-2xl font-bold tracking-wide uppercase">
+          PB <span class="text-brand-rose group-hover:text-white transition">Jgeer</span>
+        </span>
+      </a>
+
+      <!-- Menu desktop -->
+      <ul class="hidden md:flex items-center gap-1 font-display uppercase tracking-wider text-sm">
+        <li><a href="#home" data-nav="home" class="nav-link px-4 py-2 rounded hover:text-brand-rose transition">Home</a></li>
+        <li><a href="#roster" data-nav="roster" class="nav-link px-4 py-2 rounded hover:text-brand-rose transition">Roster</a></li>
+        <li><a href="#leaderboard" data-nav="leaderboard" class="nav-link px-4 py-2 rounded hover:text-brand-rose transition">Leaderboard</a></li>
+        <li><a href="#sop" data-nav="sop" class="nav-link px-4 py-2 rounded hover:text-brand-rose transition">SOP</a></li>
+        <li><a href="#galeri" data-nav="galeri" class="nav-link px-4 py-2 rounded hover:text-brand-rose transition">Galeri</a></li>
+      </ul>
+
+      <!-- Tombol hamburger (mobile) -->
+      <button id="menuBtn" class="md:hidden p-2 rounded hover:bg-white/10" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </nav>
+
+    <!-- Menu mobile -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-brand-maroon/60 bg-brand-dark">
+      <ul class="px-4 py-3 flex flex-col font-display uppercase tracking-wider">
+        <li><a href="#home" data-nav="home" class="nav-link block px-3 py-3 rounded hover:text-brand-rose">Home</a></li>
+        <li><a href="#roster" data-nav="roster" class="nav-link block px-3 py-3 rounded hover:text-brand-rose">Roster</a></li>
+        <li><a href="#leaderboard" data-nav="leaderboard" class="nav-link block px-3 py-3 rounded hover:text-brand-rose">Leaderboard</a></li>
+        <li><a href="#sop" data-nav="sop" class="nav-link block px-3 py-3 rounded hover:text-brand-rose">SOP</a></li>
+        <li><a href="#galeri" data-nav="galeri" class="nav-link block px-3 py-3 rounded hover:text-brand-rose">Galeri</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="flex-1">
+
+    <!-- HALAMAN: HOME -->
+    <div data-page="home" data-title="Beranda | PB Jgeer">
+    <!-- HERO -->
+    <section class="relative isolate overflow-hidden bg-neutral-900">
+      <img
+        src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=1920&q=80"
+        alt="Pemain bulu tangkis sedang bermain di lapangan"
+        class="absolute inset-0 -z-20 w-full h-full object-cover"
+        onerror="this.style.display='none'"
+      />
+      <div class="absolute inset-0 -z-10 bg-gradient-to-b from-black/75 via-brand-maroon/40 to-brand-dark"></div>
+
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-24 sm:py-32 lg:py-40 text-center">
+        <span class="inline-block mb-5 px-4 py-1 rounded-full border border-brand-rose/70 text-brand-rose font-display uppercase tracking-[0.25em] text-xs sm:text-sm">
+          Portal Internal Jgeer Badminton
+        </span>
+        <h1 class="font-display font-bold uppercase leading-tight text-4xl sm:text-6xl lg:text-7xl">
+          Selamat Datang di <br class="hidden sm:block" />
+          Portal <span class="text-brand-rose">PB Jgeer!</span>
+        </h1>
+        <p class="mt-5 text-lg sm:text-2xl text-neutral-200 font-medium">
+          Mari Ngesang dan Bersenang-senang
+        </p>
+
+        <div class="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="#leaderboard" class="px-7 py-3 rounded bg-brand-maroon text-white border border-brand-rose/40 font-display uppercase tracking-wider font-semibold hover:bg-brand-rose transition">
+            Lihat Leaderboard
+          </a>
+          <a href="#roster" class="px-7 py-3 rounded border border-white/40 font-display uppercase tracking-wider font-semibold hover:border-brand-rose hover:text-brand-rose transition">
+            Kenalan dengan Tim
+          </a>
+        </div>
+
+        <!-- Countdown mabar berikutnya -->
+        <div class="mt-14 inline-block bg-black/65 backdrop-blur border border-brand-maroon rounded-xl px-5 sm:px-8 py-5">
+          <p class="font-display uppercase tracking-widest text-xs text-brand-rose">Mabar Berikutnya</p>
+          <p id="nextLabel" class="mt-1 text-sm text-neutral-300">Menghitung...</p>
+          <div class="mt-3 grid grid-cols-4 gap-2 sm:gap-4 font-display">
+            <div><span id="cdD" class="block text-3xl sm:text-4xl font-bold">00</span><span class="text-[10px] uppercase tracking-widest text-neutral-400">Hari</span></div>
+            <div><span id="cdH" class="block text-3xl sm:text-4xl font-bold">00</span><span class="text-[10px] uppercase tracking-widest text-neutral-400">Jam</span></div>
+            <div><span id="cdM" class="block text-3xl sm:text-4xl font-bold">00</span><span class="text-[10px] uppercase tracking-widest text-neutral-400">Menit</span></div>
+            <div><span id="cdS" class="block text-3xl sm:text-4xl font-bold text-brand-rose">00</span><span class="text-[10px] uppercase tracking-widest text-neutral-400">Detik</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAPAN PENGUMUMAN -->
+    <section aria-label="Papan Pengumuman" class="bg-amber-400 text-black border-y-4 border-amber-600 stripe">
+      <div class="max-w-6xl mx-auto flex items-stretch">
+        <div class="shrink-0 flex items-center gap-2 bg-black text-amber-400 px-4 sm:px-6 py-3 font-display uppercase tracking-widest text-sm sm:text-base font-semibold">
+          <span aria-hidden="true">📢</span> Pengumuman
+        </div>
+        <div class="marquee-wrap overflow-hidden flex-1 flex items-center">
+          <p id="announcement" class="marquee py-3 font-bold text-sm sm:text-lg">
+            ‼️ Iuran kas perkok 5000 &nbsp;•&nbsp; Main sesuai jam datang &nbsp;•&nbsp; Datang tepat waktu! ‼️
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+      <div class="text-center mb-10">
+        <h2 class="font-display uppercase font-bold text-3xl sm:text-4xl">
+          Mau <span class="text-brand-rose">Ngapain</span> Hari Ini?
+        </h2>
+        <div class="mt-3 mx-auto h-1 w-20 bg-brand-maroon rounded"></div>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <!-- Kartu Leaderboard -->
+        <a href="#leaderboard" class="group relative overflow-hidden rounded-2xl bg-brand-maroon text-white p-8 sm:p-10 min-h-[240px] flex flex-col justify-between transition hover:-translate-y-1 hover:shadow-[0_20px_50px_-15px_rgba(214,69,93,.55)]">
+          <span class="absolute -right-6 -top-6 text-[9rem] opacity-15 select-none group-hover:rotate-12 transition" aria-hidden="true">🏸</span>
+          <div class="relative">
+            <span class="text-5xl" aria-hidden="true">🏆</span>
+            <h3 class="mt-4 font-display uppercase font-bold text-3xl sm:text-4xl">Leaderboard</h3>
+            <p class="mt-2 font-medium text-white/80 max-w-sm">Lihat klasemen bulanan dan tahunan. Siapa yang menguasai lapangan?</p>
+          </div>
+          <span class="relative mt-6 inline-flex items-center gap-2 font-display uppercase tracking-wider font-semibold">
+            Lihat klasemen
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </span>
+        </a>
+
+        <!-- Kartu Roster -->
+        <a href="#roster" class="group relative overflow-hidden rounded-2xl bg-brand-card border-2 border-brand-maroon text-white p-8 sm:p-10 min-h-[240px] flex flex-col justify-between transition hover:-translate-y-1 hover:bg-black hover:border-brand-rose hover:shadow-[0_20px_50px_-15px_rgba(122,16,32,.7)]">
+          <span class="absolute -right-4 -top-4 text-[9rem] opacity-10 select-none group-hover:-rotate-12 transition" aria-hidden="true">👥</span>
+          <div class="relative">
+            <span class="text-5xl" aria-hidden="true">👥</span>
+            <h3 class="mt-4 font-display uppercase font-bold text-3xl sm:text-4xl text-brand-rose">Roster Tim</h3>
+            <p class="mt-2 font-medium text-neutral-300 max-w-sm">Kenalan dengan para pemain PB Jgeer beserta keahlian andalannya.</p>
+          </div>
+          <span class="relative mt-6 inline-flex items-center gap-2 font-display uppercase tracking-wider font-semibold text-brand-rose">
+            Lihat roster
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <!-- INFO CEPAT -->
+    <section class="border-y border-brand-maroon/60 bg-brand-card">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div>
+          <p class="text-3xl" aria-hidden="true">👥</p>
+          <p class="mt-1 font-display text-3xl font-bold text-brand-rose">36</p>
+          <p class="text-xs uppercase tracking-widest text-neutral-400">Anggota Aktif</p>
+        </div>
+        <div>
+          <p class="text-3xl" aria-hidden="true">🗓️</p>
+          <p class="mt-1 font-display text-3xl font-bold text-brand-rose">3x</p>
+          <p class="text-xs uppercase tracking-widest text-neutral-400">Mabar / Minggu</p>
+        </div>
+        <div>
+          <p class="text-3xl" aria-hidden="true">📍</p>
+          <p class="mt-1 font-display text-xl sm:text-3xl font-bold text-brand-rose">GOR GDM Leuwiliang</p>
+          <p class="text-xs uppercase tracking-widest text-neutral-400">Lokasi Utama</p>
+        </div>
+        <div>
+          <p class="text-3xl" aria-hidden="true">🕖</p>
+          <p class="mt-1 font-display text-3xl font-bold text-brand-rose">16.00</p>
+          <p class="text-xs uppercase tracking-widest text-neutral-400">Jam Mulai (WIB)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AKSES CEPAT -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+      <h2 class="font-display uppercase font-bold text-2xl sm:text-3xl mb-8">
+        Akses <span class="text-brand-rose">Cepat</span>
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <a href="#roster" class="flex items-center gap-4 p-5 rounded-xl bg-brand-card border border-white/10 hover:border-brand-rose transition">
+          <span class="text-3xl" aria-hidden="true">🧑‍🤝‍🧑</span>
+          <div><h3 class="font-display uppercase tracking-wide font-semibold">Roster</h3><p class="text-sm text-neutral-400">Daftar anggota & level main</p></div>
+        </a>
+        <a href="#leaderboard" class="flex items-center gap-4 p-5 rounded-xl bg-brand-card border border-white/10 hover:border-brand-rose transition">
+          <span class="text-3xl" aria-hidden="true">🏆</span>
+          <div><h3 class="font-display uppercase tracking-wide font-semibold">Leaderboard</h3><p class="text-sm text-neutral-400">Klasemen bulanan & tahunan</p></div>
+        </a>
+        <a href="#sop" class="flex items-center gap-4 p-5 rounded-xl bg-brand-card border border-white/10 hover:border-brand-rose transition">
+          <span class="text-3xl" aria-hidden="true">📋</span>
+          <div><h3 class="font-display uppercase tracking-wide font-semibold">SOP</h3><p class="text-sm text-neutral-400">Aturan main & tata tertib</p></div>
+        </a>
+        <a href="#galeri" class="flex items-center gap-4 p-5 rounded-xl bg-brand-card border border-white/10 hover:border-brand-rose transition">
+          <span class="text-3xl" aria-hidden="true">📸</span>
+          <div><h3 class="font-display uppercase tracking-wide font-semibold">Galeri</h3><p class="text-sm text-neutral-400">Foto & momen seru bareng</p></div>
+        </a>
+      </div>
+    </section>
+    </div>
+
+    <!-- HALAMAN: ROSTER -->
+    <div data-page="roster" data-title="Roster | PB Jgeer" class="hidden">
+    <section class="relative overflow-hidden border-b border-brand-maroon/60 bg-gradient-to-b from-brand-maroon/50 to-brand-dark">
+      <span class="absolute -right-8 -top-10 text-[16rem] leading-none opacity-[0.07] select-none" aria-hidden="true">👥</span>
+      <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center sm:text-left">
+        <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Season 2026</p>
+        <h1 class="mt-2 font-display font-bold uppercase text-4xl sm:text-6xl leading-tight">
+          Roster <span class="text-brand-rose">Tim</span>
+        </h1>
+        <div class="mt-4 h-1 w-20 bg-brand-maroon rounded mx-auto sm:mx-0"></div>
+        <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg mx-auto sm:mx-0">
+          Kenali para pemain PB Jgeer. Main sungguh-sungguh, bersenang-senang, dan kejar posisi puncak!
+        </p>
+      </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+      <div id="rosterGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <p class="col-span-full text-center py-10 text-neutral-400 animate-pulse">Memuat data roster dari Google Sheets...</p>
+      </div>
+    </section>
+    </div>
+
+    <!-- HALAMAN: LEADERBOARD -->
+    <div data-page="leaderboard" data-title="Leaderboard | PB Jgeer" class="hidden">
+    <section class="relative overflow-hidden border-b border-brand-maroon/60 bg-gradient-to-b from-brand-maroon/50 to-brand-dark">
+      <span class="absolute -right-8 -top-10 text-[16rem] leading-none opacity-[0.07] select-none" aria-hidden="true">🏆</span>
+      <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center sm:text-left">
+        <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Season 2026</p>
+        <h1 class="mt-2 font-display font-bold uppercase text-4xl sm:text-6xl leading-tight">
+          Leader<span class="text-brand-rose">board</span>
+        </h1>
+        <div class="mt-4 h-1 w-20 bg-brand-maroon rounded mx-auto sm:mx-0"></div>
+        <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg mx-auto sm:mx-0">
+          Lihat siapa yang menguasai lapangan, per bulan maupun sepanjang tahun.
+        </p>
+      </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 text-center sm:text-left">
+      <div role="tablist" aria-label="Periode klasemen" class="inline-flex w-full sm:w-auto p-1.5 rounded-xl bg-brand-card border border-white/10 font-display uppercase tracking-wider text-sm sm:text-base">
+        <button role="tab" id="tab-bulanan" data-tab="bulanan" aria-controls="panel-bulanan" aria-selected="true"
+                class="tab-btn flex-1 sm:flex-none px-5 sm:px-8 py-3 rounded-lg font-semibold">📅 Bulanan</button>
+        <button role="tab" id="tab-tahunan" data-tab="tahunan" aria-controls="panel-tahunan" aria-selected="false"
+                class="tab-btn flex-1 sm:flex-none px-5 sm:px-8 py-3 rounded-lg font-semibold">🗓️ Tahunan</button>
+      </div>
+    </section>
+
+    <!-- Panel Bulanan -->
+    <section id="panel-bulanan" role="tabpanel" aria-labelledby="tab-bulanan" class="max-w-5xl mx-auto px-2 sm:px-6 py-10">
+      <div class="rounded-2xl bg-brand-card border border-white/10 shadow-2xl overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 sm:px-8 py-5 bg-gradient-to-r from-brand-maroon/80 to-brand-card border-b border-white/10">
+          <div>
+            <h2 class="font-display uppercase text-2xl font-bold tracking-wide">Klasemen Bulanan</h2>
+            <p class="text-xs text-neutral-300">Sistem Perhitungan Utama: Selisih Set (+/-)</p>
+          </div>
+          <div class="flex items-center gap-2 self-start sm:self-center">
+            <select id="selBulanan" aria-label="Pilih periode" class="hidden text-xs bg-black/60 border border-white/20 rounded px-3 py-1.5 text-white focus:outline-none focus:border-brand-rose"></select>
+            <button onclick="loadAll()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition">🔄 Refresh Data</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left whitespace-nowrap">
+            <thead>
+              <tr class="font-display uppercase tracking-widest text-[11px] sm:text-xs text-neutral-400 border-b border-white/10 bg-black/40">
+                <th scope="col" class="px-3 sm:px-6 py-4 w-16 text-center">Rank</th>
+                <th scope="col" class="px-3 py-4">Nama Pemain</th>
+                <th scope="col" class="px-2 py-4 text-center" title="Total Set Dimainkan">Main</th>
+                <th scope="col" class="px-2 py-4 text-center text-green-400" title="Set Menang (Win)">W</th>
+                <th scope="col" class="px-2 py-4 text-center text-rose-500" title="Set Kalah (Lose)">L</th>
+                <th scope="col" class="px-3 py-4 text-center text-sky-400" title="Win Rate (Persentase Kemenangan)">WR %</th>
+                <th scope="col" class="px-3 sm:px-6 py-4 text-right text-brand-rose">Selisih (+/-)</th>
+              </tr>
+            </thead>
+            <tbody id="lb-bulanan" class="divide-y divide-white/5">
+              <tr><td colspan="7" class="text-center py-10 text-neutral-400"><div class="animate-pulse">Memuat data dari Google Sheets...</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="px-5 sm:px-8 py-4 border-t border-white/10 bg-black/40 text-[11px] sm:text-xs text-neutral-400 leading-relaxed">
+          <span class="text-green-400 font-bold">W</span> = Menang |
+          <span class="text-rose-500 font-bold">L</span> = Kalah |
+          <span class="text-sky-400 font-bold">WR %</span> = Win Rate.<br>
+          <strong class="text-white">Rumus Klasemen:</strong> (Total Set Menang) dikurangi (Total Set Kalah). Sistem ini adil untuk yang main 1 kali maupun 4 kali sehari.
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel Tahunan -->
+    <section id="panel-tahunan" role="tabpanel" aria-labelledby="tab-tahunan" class="hidden max-w-5xl mx-auto px-2 sm:px-6 py-10">
+      <div class="rounded-2xl bg-brand-card border border-white/10 shadow-2xl overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 sm:px-8 py-5 bg-gradient-to-r from-brand-maroon/80 to-brand-card border-b border-white/10">
+          <div>
+            <h2 class="font-display uppercase text-2xl font-bold tracking-wide">Klasemen Tahunan</h2>
+            <p class="text-xs text-neutral-300">Sistem Perhitungan Utama: Selisih Set (+/-)</p>
+          </div>
+          <div class="flex items-center gap-2 self-start sm:self-center">
+            <select id="selTahunan" aria-label="Pilih periode" class="hidden text-xs bg-black/60 border border-white/20 rounded px-3 py-1.5 text-white focus:outline-none focus:border-brand-rose"></select>
+            <button onclick="loadAll()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition">🔄 Refresh Data</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left whitespace-nowrap">
+            <thead>
+              <tr class="font-display uppercase tracking-widest text-[11px] sm:text-xs text-neutral-400 border-b border-white/10 bg-black/40">
+                <th scope="col" class="px-3 sm:px-6 py-4 w-16 text-center">Rank</th>
+                <th scope="col" class="px-3 py-4">Nama Pemain</th>
+                <th scope="col" class="px-2 py-4 text-center" title="Total Set Dimainkan">Main</th>
+                <th scope="col" class="px-2 py-4 text-center text-green-400" title="Set Menang (Win)">W</th>
+                <th scope="col" class="px-2 py-4 text-center text-rose-500" title="Set Kalah (Lose)">L</th>
+                <th scope="col" class="px-3 py-4 text-center text-sky-400" title="Win Rate (Persentase Kemenangan)">WR %</th>
+                <th scope="col" class="px-3 sm:px-6 py-4 text-right text-brand-rose">Selisih (+/-)</th>
+              </tr>
+            </thead>
+            <tbody id="lb-tahunan" class="divide-y divide-white/5">
+              <tr><td colspan="7" class="text-center py-10 text-neutral-400"><div class="animate-pulse">Memuat data dari Google Sheets...</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="px-5 sm:px-8 py-4 border-t border-white/10 bg-black/40 text-[11px] sm:text-xs text-neutral-400 leading-relaxed">
+          <span class="text-green-400 font-bold">W</span> = Menang |
+          <span class="text-rose-500 font-bold">L</span> = Kalah |
+          <span class="text-sky-400 font-bold">WR %</span> = Win Rate.<br>
+          <strong class="text-white">Rumus Klasemen:</strong> (Total Set Menang) dikurangi (Total Set Kalah). Sistem ini adil untuk yang main 1 kali maupun 4 kali sehari.
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <!-- HALAMAN: SOP -->
+    <div data-page="sop" data-title="SOP &amp; Tata Tertib | PB Jgeer" class="hidden">
+    <section class="border-b border-brand-maroon/60 bg-gradient-to-b from-brand-maroon/40 to-brand-dark">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">SOP &amp; Tata Tertib</p>
+        <h1 class="mt-3 font-display font-bold uppercase text-4xl sm:text-6xl leading-[1.1]">
+          Aturan Main <span class="text-brand-rose">&amp;</span><br class="hidden sm:block" /> Etika Lapangan
+        </h1>
+        <div class="mt-5 h-1 w-20 bg-brand-maroon rounded"></div>
+        <p class="mt-6 text-lg leading-8 text-neutral-300">
+          Pegangan bersama anggota PB Jgeer supaya main tetap seru, adil, dan nyaman untuk semua.
+          Klik tiap bagian di bawah untuk membaca selengkapnya.
+        </p>
+      </div>
+    </section>
+
+    <article class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+      <!-- Ringkasan cepat -->
+      <div class="grid gap-3 sm:grid-cols-3 mb-10">
+        <div class="rounded-xl bg-brand-card border border-white/10 px-5 py-4">
+          <p class="text-xs uppercase tracking-widest text-neutral-500">Jadwal rutin</p>
+          <p class="mt-1 font-display text-xl font-semibold">Senin · Rabu · Sabtu</p>
+          <p class="text-sm text-neutral-400">Pukul 16.00</p>
+        </div>
+        <div class="rounded-xl bg-brand-card border border-white/10 px-5 py-4">
+          <p class="text-xs uppercase tracking-widest text-neutral-500">Pertandingan</p>
+          <p class="mt-1 font-display text-xl font-semibold">Maks. 2 Set</p>
+          <p class="text-sm text-neutral-400">21 poin, rally point</p>
+        </div>
+        <div class="rounded-xl bg-brand-card border border-white/10 px-5 py-4">
+          <p class="text-xs uppercase tracking-widest text-neutral-500">Iuran</p>
+          <p class="mt-1 font-display text-xl font-semibold">Rp5.000 / kok</p>
+          <p class="text-sm text-neutral-400">Sesuai penggunaan</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Bagian 1 -->
+        <details class="group rounded-2xl bg-brand-card border border-white/10 open:border-brand-rose/50 transition-colors" open>
+          <summary class="flex items-center gap-4 cursor-pointer select-none px-5 sm:px-7 py-5">
+            <span class="font-display text-2xl text-brand-rose">01</span>
+            <span class="flex-1">
+              <span class="block text-xs uppercase tracking-widest text-neutral-500">Bagian 1</span>
+              <span class="block text-lg sm:text-xl font-semibold">Aturan Iuran &amp; Keuangan</span>
+            </span>
+            <svg class="w-5 h-5 text-neutral-400 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="doc-body px-5 sm:px-7 pb-7 pt-1 border-t border-white/5">
+            <p class="mt-5 text-neutral-300 leading-8 text-[17px]">Agar pengelolaan kas tetap rapi dan tidak ada yang salah paham, berikut ketentuan iuran di PB Jgeer.</p>
+            <ul class="mt-4 space-y-3 text-[17px] leading-8 text-neutral-200">
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Iuran dibayar per orang sebesar <strong class="text-white">Rp5.000 per kok</strong>, sesuai jumlah kok yang dipakai.</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Minum, jajan, dan keperluan pribadi lainnya ditanggung masing-masing.</span></li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Bagian 2 -->
+        <details class="group rounded-2xl bg-brand-card border border-white/10 open:border-brand-rose/50 transition-colors">
+          <summary class="flex items-center gap-4 cursor-pointer select-none px-5 sm:px-7 py-5">
+            <span class="font-display text-2xl text-brand-rose">02</span>
+            <span class="flex-1">
+              <span class="block text-xs uppercase tracking-widest text-neutral-500">Bagian 2</span>
+              <span class="block text-lg sm:text-xl font-semibold">Sistem Kehadiran</span>
+            </span>
+            <svg class="w-5 h-5 text-neutral-400 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="doc-body px-5 sm:px-7 pb-7 pt-1 border-t border-white/5">
+            <p class="mt-5 text-neutral-300 leading-8 text-[17px]">Kehadiran yang jelas membantu pengurus mengatur jumlah pemain dan giliran main.</p>
+            <ul class="mt-4 space-y-3 text-[17px] leading-8 text-neutral-200">
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Daily Jgeer diadakan setiap hari <strong class="text-white">Senin, Rabu, dan Sabtu pukul 16.00</strong>.</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span><strong class="text-white">Wajib mengisi absen</strong>, baik hadir maupun tidak hadir.</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Hadir tepat waktu 😶‍🌫️</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Tidak diperkenankan membawa teman bermain tanpa izin sebelumnya.</span></li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Bagian 3 -->
+        <details class="group rounded-2xl bg-brand-card border border-white/10 open:border-brand-rose/50 transition-colors">
+          <summary class="flex items-center gap-4 cursor-pointer select-none px-5 sm:px-7 py-5">
+            <span class="font-display text-2xl text-brand-rose">03</span>
+            <span class="flex-1">
+              <span class="block text-xs uppercase tracking-widest text-neutral-500">Bagian 3</span>
+              <span class="block text-lg sm:text-xl font-semibold">Aturan Rotasi Pemain di Lapangan</span>
+            </span>
+            <svg class="w-5 h-5 text-neutral-400 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="doc-body px-5 sm:px-7 pb-7 pt-1 border-t border-white/5">
+            <p class="mt-5 text-neutral-300 leading-8 text-[17px]">Semua anggota berhak mendapat kesempatan bermain yang sama.</p>
+            <ul class="mt-4 space-y-3 text-[17px] leading-8 text-neutral-200">
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Tim dibagi secara <strong class="text-white">rotasi atau acak</strong> agar kesempatan bermain merata.</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Setiap pemain mendapat giliran bermain secara adil.</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Setiap pertandingan dibatasi <strong class="text-white">maksimal 2 set</strong>.</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Satu set terdiri dari <strong class="text-white">21 poin</strong> dengan sistem rally point (dilarang second).</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Setelah bermain 1 game, pemain diganti agar yang lain mendapat kesempatan.</span></li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Bagian 4 -->
+        <details class="group rounded-2xl bg-brand-card border border-white/10 open:border-brand-rose/50 transition-colors">
+          <summary class="flex items-center gap-4 cursor-pointer select-none px-5 sm:px-7 py-5">
+            <span class="font-display text-2xl text-brand-rose">04</span>
+            <span class="flex-1">
+              <span class="block text-xs uppercase tracking-widest text-neutral-500">Bagian 4</span>
+              <span class="block text-lg sm:text-xl font-semibold">Pemakaian Shuttlecock &amp; Peralatan</span>
+            </span>
+            <svg class="w-5 h-5 text-neutral-400 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="doc-body px-5 sm:px-7 pb-7 pt-1 border-t border-white/5">
+            <p class="mt-5 text-neutral-300 leading-8 text-[17px]">Biaya kok dibagi sesuai pemakaian, dan tidak ada yang perlu khawatir soal raket.</p>
+            <ul class="mt-4 space-y-3 text-[17px] leading-8 text-neutral-200">
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Biaya shuttlecock dihitung sesuai penggunaan, yaitu <strong class="text-white">Rp5.000 per kok</strong> untuk tiap orang.</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Belum punya raket? Jangan takut, raket tersedia (pabalatak).</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Kalau punya raket sendiri, silakan dibawa.</span></li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Bagian 5 -->
+        <details class="group rounded-2xl bg-brand-card border border-white/10 open:border-brand-rose/50 transition-colors">
+          <summary class="flex items-center gap-4 cursor-pointer select-none px-5 sm:px-7 py-5">
+            <span class="font-display text-2xl text-brand-rose">05</span>
+            <span class="flex-1">
+              <span class="block text-xs uppercase tracking-widest text-neutral-500">Bagian 5</span>
+              <span class="block text-lg sm:text-xl font-semibold">Etika Bermain</span>
+            </span>
+            <svg class="w-5 h-5 text-neutral-400 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="doc-body px-5 sm:px-7 pb-7 pt-1 border-t border-white/5">
+            <p class="mt-5 text-neutral-300 leading-8 text-[17px]">Kompetitif boleh, asal tetap menyenangkan untuk semua.</p>
+            <ul class="mt-4 space-y-3 text-[17px] leading-8 text-neutral-200">
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Bermain dengan <strong class="text-white">sportivitas</strong>.</span></li>
+              <li class="flex gap-3"><svg class="mt-1 w-6 h-6 shrink-0 text-brand-rose" aria-hidden="true"><use href="#ic-check"/></svg><span>Taunting boleh, tapi sewajarnya saja.</span></li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </article>
+    </div>
+
+    <!-- HALAMAN: GALERI -->
+    <div data-page="galeri" data-title="Galeri &amp; Dokumentasi | PB Jgeer" class="hidden">
+    <section class="border-b border-brand-maroon/60 bg-gradient-to-b from-brand-maroon/40 to-brand-dark">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Galeri &amp; Dokumentasi</p>
+        <h1 class="mt-2 font-display font-bold uppercase text-4xl sm:text-6xl">
+          Galeri <span class="text-brand-rose">Mabar</span>
+        </h1>
+        <div class="mt-4 h-1 w-20 bg-brand-maroon rounded"></div>
+        <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg leading-relaxed">
+          Kumpulan momen seru PB Jgeer di lapangan, dari smash keras sampai tawa di pinggir lapangan.
+          Klik foto untuk memperbesar.
+        </p>
+      </div>
+    </section>
+
+    <!-- FOTO: MASONRY -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-2xl" aria-hidden="true">📸</span>
+        <h2 class="font-display uppercase font-semibold text-2xl sm:text-3xl tracking-wide">Foto <span class="text-brand-rose">Dokumentasi</span></h2>
+      </div>
+
+      <div class="columns-1 sm:columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
+        <!-- Foto 1 -->
+        <button type="button" class="photo group relative block w-full mb-4 break-inside-avoid overflow-hidden rounded-2xl bg-gradient-to-br from-brand-maroon/50 to-brand-card min-h-[10rem] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-rose"
+                data-full="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=max&w=1600&q=80" aria-label="Perbesar foto: pemain melompat untuk smash di lapangan indoor">
+          <span class="absolute inset-0 flex items-center justify-center text-5xl opacity-30" aria-hidden="true">🏸</span>
+          <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=max&w=800&q=70" alt="Pemain bulu tangkis melompat untuk memukul shuttlecock di lapangan indoor" loading="lazy" onerror="this.style.display='none'"
+               class="relative block w-full h-auto transition-transform duration-500 group-hover:scale-105" />
+          <span class="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300">
+            <svg class="w-12 h-12 text-white drop-shadow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>
+          </span>
+        </button>
+
+        <!-- Foto 2 -->
+        <button type="button" class="photo group relative block w-full mb-4 break-inside-avoid overflow-hidden rounded-2xl bg-gradient-to-br from-brand-maroon/50 to-brand-card min-h-[10rem] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-rose"
+                data-full="https://images.unsplash.com/photo-1775720724581-6e6ba7eb395f?auto=format&fit=max&w=1600&q=80" aria-label="Perbesar foto: raket dan shuttlecock di permukaan hijau">
+          <span class="absolute inset-0 flex items-center justify-center text-5xl opacity-30" aria-hidden="true">🏸</span>
+          <img src="https://images.unsplash.com/photo-1775720724581-6e6ba7eb395f?auto=format&fit=max&w=800&q=70" alt="Raket bulu tangkis dan shuttlecock tertata di permukaan hijau" loading="lazy" onerror="this.style.display='none'"
+               class="relative block w-full h-auto transition-transform duration-500 group-hover:scale-105" />
+          <span class="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300">
+            <svg class="w-12 h-12 text-white drop-shadow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>
+          </span>
+        </button>
+
+        <!-- Foto 3 -->
+        <button type="button" class="photo group relative block w-full mb-4 break-inside-avoid overflow-hidden rounded-2xl bg-gradient-to-br from-brand-maroon/50 to-brand-card min-h-[10rem] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-rose"
+                data-full="https://images.unsplash.com/photo-1722087642932-9b070e9a066e?auto=format&fit=max&w=1600&q=80" aria-label="Perbesar foto: pemain melompat memukul shuttlecock">
+          <span class="absolute inset-0 flex items-center justify-center text-5xl opacity-30" aria-hidden="true">🏸</span>
+          <img src="https://images.unsplash.com/photo-1722087642932-9b070e9a066e?auto=format&fit=max&w=800&q=70" alt="Pemain melompat memukul shuttlecock di lapangan indoor" loading="lazy" onerror="this.style.display='none'"
+               class="relative block w-full h-auto transition-transform duration-500 group-hover:scale-105" />
+          <span class="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300">
+            <svg class="w-12 h-12 text-white drop-shadow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>
+          </span>
+        </button>
+      </div>
+      <p class="mt-2 text-xs text-neutral-500">Foto contoh dari Unsplash. Ganti dengan dokumentasi mabar PB Jgeer.</p>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="border-t border-brand-maroon/60 bg-brand-card">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div class="flex items-center gap-3 mb-8">
+          <span class="text-2xl" aria-hidden="true">🎬</span>
+          <h2 class="font-display uppercase font-semibold text-2xl sm:text-3xl tracking-wide">Video <span class="text-brand-rose">Mabar</span></h2>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <!-- Video 1 -->
+          <figure>
+            <div class="relative aspect-video overflow-hidden rounded-2xl bg-black border border-white/10 shadow-2xl shadow-black/60">
+              <iframe id="video1" title="Video mabar PB Jgeer 1" class="absolute inset-0 w-full h-full hidden" loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen frameborder="0"></iframe>
+              <div id="video1Placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 border-2 border-dashed border-white/20 m-3 rounded-xl">
+                <span class="text-5xl" aria-hidden="true">▶️</span>
+                <p class="mt-2 font-display uppercase tracking-wider text-brand-rose">Video YouTube 1</p>
+                <p class="mt-1 text-xs sm:text-sm text-neutral-400 max-w-xs">Isi <code class="text-neutral-200">VIDEO_1</code> di bagian script dengan link embed YouTube.</p>
+              </div>
+            </div>
+            <figcaption class="mt-3 font-medium text-neutral-200">Highlight Mabar #1</figcaption>
+          </figure>
+
+          <!-- Video 2 -->
+          <figure>
+            <div class="relative aspect-video overflow-hidden rounded-2xl bg-black border border-white/10 shadow-2xl shadow-black/60">
+              <iframe id="video2" title="Video mabar PB Jgeer 2" class="absolute inset-0 w-full h-full hidden" loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen frameborder="0"></iframe>
+              <div id="video2Placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 border-2 border-dashed border-white/20 m-3 rounded-xl">
+                <span class="text-5xl" aria-hidden="true">▶️</span>
+                <p class="mt-2 font-display uppercase tracking-wider text-brand-rose">Video YouTube 2</p>
+                <p class="mt-1 text-xs sm:text-sm text-neutral-400 max-w-xs">Isi <code class="text-neutral-200">VIDEO_2</code> di bagian script dengan link embed YouTube.</p>
+              </div>
+            </div>
+            <figcaption class="mt-3 font-medium text-neutral-200">Highlight Mabar #2</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+    </div>
+
+  </main>
+
+  <!-- LIGHTBOX -->
+  <dialog id="lightbox" class="m-auto max-w-[95vw] max-h-[92vh] bg-transparent p-0 text-white outline-none">
+    <div class="relative">
+      <img id="lightboxImg" src="" alt="" class="block max-w-[95vw] max-h-[80vh] w-auto h-auto rounded-xl object-contain mx-auto" />
+      <p id="lightboxCaption" class="mt-3 text-center text-sm text-neutral-300"></p>
+      <button id="lightboxClose" type="button" aria-label="Tutup"
+              class="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-brand-maroon border border-brand-rose/60 hover:bg-brand-rose transition flex items-center justify-center">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+  </dialog>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-brand-maroon/60 bg-black">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-neutral-400">
+      <p class="font-display uppercase tracking-widest text-white">PB <span class="text-brand-rose">Jgeer</span></p>
+      <p>&copy; 2026 PB Jgeer</p>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP -->
+  <button id="toTop" class="hidden fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full bg-brand-maroon text-white border border-brand-rose/50 shadow-lg hover:bg-brand-rose transition" aria-label="Kembali ke atas">
+    <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 15 6-6 6 6"/></svg>
+  </button>
+
+  <script>
+    // =====================================================================
+    // GOOGLE SHEETS CONFIGURATION
+    // =====================================================================
+    const SHEET_ID = '1kgZAmiJjMhBfk9Sk8vHUtS0OCq6wr1_4-egr_KpIfao';
+    const SHEET_ROSTER = { gid: '0' }; 
+    const SHEET_BULANAN = { gid: '1721494674' };
+    const SHEET_TAHUNAN = { gid: '1795527929' };
+
+    // =====================================================================
+    // NAVIGASI ANTAR HALAMAN (hash)
+    // =====================================================================
+    const pages = [...document.querySelectorAll('[data-page]')];
+    const navLinks = [...document.querySelectorAll('[data-nav]')];
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let currentPage = null;
+
+    function setLbTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
+      document.getElementById('panel-bulanan').classList.toggle('hidden', name !== 'bulanan');
+      document.getElementById('panel-tahunan').classList.toggle('hidden', name !== 'tahunan');
+    }
+
+    function route() {
+      let hash = (location.hash || '#home').slice(1);
+      let sub = 'bulanan';
+      if (hash === 'klasemen') hash = 'leaderboard';
+      if (hash === 'leaderboard-tahunan') { hash = 'leaderboard'; sub = 'tahunan'; }
+      if (!pages.some(p => p.dataset.page === hash)) hash = 'home';
+
+      pages.forEach(p => p.classList.toggle('hidden', p.dataset.page !== hash));
+      navLinks.forEach(a => {
+        if (a.dataset.nav === hash) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+      });
+      if (hash === 'leaderboard') setLbTab(sub);
+
+      const active = pages.find(p => p.dataset.page === hash);
+      const t = document.createElement('textarea'); t.innerHTML = active.dataset.title; document.title = t.value;
+
+      mobileMenu.classList.add('hidden');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      if (currentPage !== hash) window.scrollTo({ top: 0, behavior: 'instant' });
+      currentPage = hash;
+    }
+    window.addEventListener('hashchange', route);
+
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => {
+      location.hash = btn.dataset.tab === 'tahunan' ? '#leaderboard-tahunan' : '#leaderboard';
+    }));
+
+    menuBtn.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('hidden') === false;
+      menuBtn.setAttribute('aria-expanded', open);
+    });
+
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', () => { toTop.classList.toggle('hidden', window.scrollY < 400); });
+    toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // =====================================================================
+    // HOME: COUNTDOWN MABAR
+    // =====================================================================
+    const JADWAL_MABAR = [
+      { hari: 1, jam: 16, menit: 0 },
+      { hari: 3, jam: 16, menit: 0 },
+      { hari: 6, jam: 16, menit: 0 },
+    ];
+    const NAMA_HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+
+    function nextSession() {
+      const now = new Date();
+      let best = null;
+      for (const j of JADWAL_MABAR) {
+        for (let add = 0; add < 8; add++) {
+          const d = new Date(now);
+          d.setDate(now.getDate() + add);
+          d.setHours(j.jam, j.menit, 0, 0);
+          if (d.getDay() === j.hari && d > now) {
+            if (!best || d < best) best = d;
+            break;
+          }
+        }
+      }
+      return best;
+    }
+
+    const pad = n => String(n).padStart(2, '0');
+    function tick() {
+      const target = nextSession();
+      if (!target) return;
+      const diff = target - new Date();
+      const s = Math.floor(diff / 1000);
+      document.getElementById('cdD').textContent = pad(Math.floor(s / 86400));
+      document.getElementById('cdH').textContent = pad(Math.floor((s % 86400) / 3600));
+      document.getElementById('cdM').textContent = pad(Math.floor((s % 3600) / 60));
+      document.getElementById('cdS').textContent = pad(s % 60);
+      document.getElementById('nextLabel').textContent =
+        `${NAMA_HARI[target.getDay()]}, ${target.getDate()}/${target.getMonth() + 1} • ${pad(target.getHours())}.${pad(target.getMinutes())} WIB`;
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // =====================================================================
+    // GALERI: VIDEO & LIGHTBOX
+    // =====================================================================
+    const VIDEO_1 = '';
+    const VIDEO_2 = '';
+    [['video1', VIDEO_1], ['video2', VIDEO_2]].forEach(([id, url]) => {
+      if (!url) return;
+      const frame = document.getElementById(id);
+      frame.src = url;
+      frame.classList.remove('hidden');
+      document.getElementById(id + 'Placeholder').classList.add('hidden');
+    });
+
+    const box = document.getElementById('lightbox');
+    const boxImg = document.getElementById('lightboxImg');
+    const boxCap = document.getElementById('lightboxCaption');
+    document.querySelectorAll('.photo').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const thumb = btn.querySelector('img');
+        boxImg.src = btn.dataset.full;
+        boxImg.alt = thumb.alt;
+        boxCap.textContent = thumb.alt;
+        box.showModal();
+      });
+    });
+    document.getElementById('lightboxClose').addEventListener('click', () => box.close());
+    box.addEventListener('click', e => { if (e.target === box) box.close(); });
+    box.addEventListener('close', () => { boxImg.src = ''; });
+
+    // =====================================================================
+    // GOOGLE SHEETS FETCH AND PARSE LOGIC
+    // =====================================================================
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+    const str = v => (v == null ? '' : String(v).trim());
+    const norm = v => str(v).toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+    const toNum = v => { const n = parseFloat(str(v).replace(',', '.').replace(/[^\d.\-]/g, '')); return isFinite(n) ? n : 0; };
+
+    function parseCSV(text) {
+      const rows = []; let row = [], cell = '', q = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (q) {
+          if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+          else cell += ch;
+        } else if (ch === '"') q = true;
+        else if (ch === ',') { row.push(cell); cell = ''; }
+        else if (ch === '\n' || ch === '\r') {
+          if (ch === '\r' && text[i + 1] === '\n') i++;
+          row.push(cell); rows.push(row); row = []; cell = '';
+        } else cell += ch;
+      }
+      if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+      return rows;
+    }
+
+    function jsonpGrid(url) {
+      return new Promise((resolve, reject) => {
+        const cb = '__gv' + Math.random().toString(36).slice(2);
+        const s = document.createElement('script');
+        const done = () => { clearTimeout(timer); delete window[cb]; s.remove(); };
+        const timer = setTimeout(() => { done(); reject(new Error('timeout / tidak ada akses')); }, 10000);
+        window[cb] = r => {
+          done();
+          if (!r || r.status !== 'ok') { reject(new Error((r && r.errors && r.errors[0] && (r.errors[0].detailed_message || r.errors[0].message)) || 'gviz error')); return; }
+          const val = c => !c ? '' : (c.v != null ? (typeof c.v === 'string' && /^Date\(/.test(c.v) && c.f ? c.f : c.v) : (c.f ?? ''));
+          const grid = r.table.rows.map(row => row.c.map(val));
+          const labels = r.table.cols.map(c => c.label || '');
+          if (labels.some(Boolean)) grid.unshift(labels);
+          resolve(grid);
+        };
+        s.onerror = () => { done(); reject(new Error('script diblokir')); };
+        s.src = url + (url.includes('?') ? '&' : '?') + 'headers=0&tqx=responseHandler:' + cb;
+        document.head.appendChild(s);
+      });
+    }
+
+    async function fetchGrid(cfg) {
+      const base = `https://docs.google.com/spreadsheets/d/${SHEET_ID}`;
+      const targets = cfg.gid ? [`gid=${cfg.gid}`] : [].concat(cfg.name).map(n => `sheet=${encodeURIComponent(n)}`);
+      const errors = [];
+      for (const tg of targets) {
+        const attempts = [];
+        if (cfg.gid) attempts.push(['export-csv', () => fetchCSV(`${base}/export?format=csv&${tg}`)]);
+        attempts.push(['gviz-csv', () => fetchCSV(`${base}/gviz/tq?tqx=out:csv&${tg}`)]);
+        attempts.push(['gviz-json', () => jsonpGrid(`${base}/gviz/tq?${tg}`)]);
+        for (const [name, fn] of attempts) {
+          try { const g = await fn(); if (g.length) return g; throw new Error('kosong'); }
+          catch (e) { errors.push(`${tg.split('=')[0] === 'gid' ? 'gid' : decodeURIComponent(tg.split('=')[1])}/${name}: ${e.message}`); }
+        }
+      }
+      throw new Error(errors.join(' | '));
+    }
+
+    // ---------- Logika Khusus Roster (Sheet 1) ----------
+    function findTables(grid) {
+      const tables = [];
+      grid.forEach((row, r) => row.forEach((cell, c) => {
+        if (!/^nama/.test(norm(cell))) return;
+        const headers = [];
+        for (let cc = c; cc < row.length && str(row[cc]) !== ''; cc++) headers.push({ key: norm(row[cc]), col: cc });
+        const rows = [];
+        for (let rr = r + 1; rr < grid.length && str((grid[rr] || [])[c]) !== ''; rr++) rows.push(grid[rr]);
+        tables.push({ r, c, headers, rows });
+      }));
+      return tables;
+    }
+
+    function driveThumb(url) {
+      const m = String(url).match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=view&)?id=)([\w-]+)/);
+      return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w256` : url;
+    }
+    const avatar = (name, size) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=${size}&background=161616&color=D6455D&bold=true`;
+
+    function extractRoster(grid) {
+      const t = findTables(grid).find(x => true);
+      if (!t) return [];
+      const used = new Set([t.c]);
+      const pick = re => { const h = t.headers.find(x => re.test(x.key) && !used.has(x.col)); if (h) used.add(h.col); return h ? h.col : -1; };
+      const cFoto = pick(/foto|photo|gambar|avatar|image|img/);
+      const cJab  = pick(/jabatan|peran|status|role/);
+      let cKat    = pick(/kategori|jenis|nomor|spesialis|tipe|level|bagian|ganda|tunggal/);
+      let cJul    = pick(/julukan|gelar|keunggulan|skill|keahlian|ciri|posisi|label|title|keterangan/);
+      const rest = () => { const h = t.headers.find(x => !used.has(x.col)); if (h) used.add(h.col); return h ? h.col : -1; };
+      if (cKat < 0) cKat = rest();
+      if (cJul < 0) cJul = rest();
+      return t.rows.map(r => ({
+        nama: str(r[t.c]),
+        foto: cFoto >= 0 ? str(r[cFoto]) : '',
+        jabatan: cJab >= 0 ? str(r[cJab]) : '',
+        kategori: cKat >= 0 ? str(r[cKat]) : '',
+        julukan: cJul >= 0 ? str(r[cJul]) : '',
+      })).filter(p => p.nama);
+    }
+
+    function renderRoster(list) {
+      const el = document.getElementById('rosterGrid');
+      if (!list.length) { el.innerHTML = `<p class="col-span-full text-center py-10 text-neutral-400">Belum ada data roster di spreadsheet.</p>`; return; }
+      el.innerHTML = list.map(p => {
+        const cap = /kapten|ketua|captain/i.test(p.jabatan)
+          ? `<span class="absolute top-3 right-3 text-[11px] font-display uppercase tracking-widest bg-black/60 border border-amber-400/70 text-amber-300 px-2.5 py-1 rounded-full">👑 ${esc(p.jabatan)}</span>` : '';
+        const src = p.foto ? driveThumb(p.foto) : avatar(p.nama, 256);
+        return `
+        <article class="player-card relative overflow-hidden rounded-2xl bg-brand-card border border-white/10 text-center">
+          <div class="h-20 bg-gradient-to-r from-brand-maroon to-brand-rose/70"></div>
+          ${cap}
+          <div class="px-6 pb-7 -mt-12">
+            <img src="${esc(src)}" alt="Foto ${esc(p.nama)}" width="96" height="96" loading="lazy"
+                 onerror="this.onerror=null;this.src='${esc(avatar(p.nama, 256))}'"
+                 class="mx-auto w-24 h-24 rounded-full object-cover border-4 border-brand-card ring-2 ring-brand-rose" />
+            <h3 class="mt-4 font-display uppercase text-2xl font-semibold tracking-wide">${esc(p.nama)}</h3>
+            ${p.kategori ? `<span class="mt-2 inline-block px-3 py-1 rounded-full bg-brand-maroon text-xs font-semibold uppercase tracking-wider">${esc(p.kategori)}</span>` : ''}
+            ${p.julukan ? `<p class="mt-4 text-brand-rose font-semibold">${esc(p.julukan)}</p>` : ''}
+          </div>
+        </article>`;
+      }).join('');
+    }
+
+    // ---------- Logika Khusus Leaderboard Index (Sheet 2 & Sheet 3) ----------
+    // Berdasarkan format pasti yang Anda berikan:
+    // A=Nama, B=Bulan, C=Tahun, D=Win, E=Lose
+    function extractBoardsIndexBased(grid, isTahunan) {
+      if (!grid || grid.length < 2) return [];
+      const groups = new Map();
+      
+      // Lewati baris 0 (header), mulai baca data dari baris 1
+      for (let i = 1; i < grid.length; i++) {
+        const row = grid[i];
+        if (!row || !str(row[0])) continue; // Jika Nama (Kolom A) kosong, skip
+        
+        const nama = str(row[0]);
+        // Ambil pemisah grup: Jika tahunan ambil Tahun (Kolom C/index 2), jika bulanan ambil Bulan (Kolom B/index 1)
+        const key = isTahunan ? str(row[2]) : str(row[1]);
+        if (!key) continue;
+
+        const win = toNum(row[3]);  // Kolom D
+        const lose = toNum(row[4]); // Kolom E
+        
+        if (!groups.has(key)) groups.set(key, new Map());
+        const m = groups.get(key);
+        const p = m.get(nama) || { nama, menang: 0, kalah: 0 };
+        p.menang += win;
+        p.kalah += lose;
+        m.set(nama, p);
+      }
+      
+      const boards = [];
+      groups.forEach((m, label) => boards.push({ label, players: [...m.values()] }));
+      return boards;
+    }
+
+    const BULAN = ['januari','februari','maret','april','mei','juni','juli','agustus','september','oktober','november','desember'];
+    const state = { bulanan: { boards: [], idx: 0 }, tahunan: { boards: [], idx: 0 } };
+
+    function defaultIndex(boards, kind) {
+      const now = new Date();
+      const want = kind === 'bulanan' ? BULAN[now.getMonth()] : String(now.getFullYear());
+      const hit = boards.findIndex(b => b.label.toLowerCase().includes(want) || (kind === 'bulanan' && b.label.toLowerCase().includes(want.slice(0, 3))));
+      return hit >= 0 ? hit : Math.max(boards.length - 1, 0);
+    }
+
+    function renderBoard(kind) {
+      const { boards, idx } = state[kind];
+      const tbody = document.getElementById('lb-' + kind);
+      const sel = document.getElementById(kind === 'bulanan' ? 'selBulanan' : 'selTahunan');
+      sel.classList.toggle('hidden', boards.length < 2);
+      sel.innerHTML = boards.map((b, i) => `<option value="${i}" ${i === idx ? 'selected' : ''}>${esc(b.label)}</option>`).join('');
+
+      const board = boards[idx];
+      const players = (board ? board.players : []).map(p => {
+        const main = p.menang + p.kalah;
+        return { ...p, main, selisih: p.menang - p.kalah, winRate: main > 0 ? Math.round((p.menang / main) * 100) : 0 };
+      }).filter(p => p.main > 0)
+        .sort((a, b) => b.selisih - a.selisih || b.menang - a.menang);
+
+      if (!players.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-neutral-400">Belum ada data pertandingan.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = players.map((p, index) => {
+        const rank = index + 1;
+        let rowClass = 'lb-row';
+        let rankBadge = `<span class="font-display text-xl text-neutral-400">${rank}</span>`;
+        let nameColor = 'text-white';
+        if (rank === 1) { rowClass += ' row-gold'; rankBadge = `<span class="medal medal-gold">🥇</span>`; nameColor = 'text-amber-300'; }
+        else if (rank === 2) { rowClass += ' row-silver'; rankBadge = `<span class="medal medal-silver">🥈</span>`; nameColor = 'text-zinc-200'; }
+        else if (rank === 3) { rowClass += ' row-bronze'; rankBadge = `<span class="medal medal-bronze">🥉</span>`; nameColor = 'text-orange-300'; }
+
+        let selisihText = p.selisih, selisihColor = 'text-neutral-400 font-bold';
+        if (p.selisih > 0) { selisihText = `+${p.selisih}`; selisihColor = 'text-amber-400 font-bold text-xl drop-shadow-md'; }
+        else if (p.selisih < 0) selisihColor = 'text-rose-500 font-bold';
+
+        return `
+          <tr class="${rowClass}">
+            <td class="px-3 sm:px-6 py-4 text-center">${rankBadge}</td>
+            <td class="px-3 py-4">
+              <div class="flex items-center gap-3">
+                <img src="${esc(avatar(p.nama, 80))}" alt="${esc(p.nama)}" class="hidden sm:block w-10 h-10 rounded-full ring-1 ring-white/20" />
+                <span class="font-display uppercase tracking-wide text-base sm:text-lg font-medium ${nameColor}">${esc(p.nama)} ${rank === 1 ? '<span aria-hidden="true">👑</span>' : ''}</span>
+              </div>
+            </td>
+            <td class="px-2 py-4 text-center font-semibold text-neutral-300">${p.main}</td>
+            <td class="px-2 py-4 text-center font-bold text-green-400">${p.menang}</td>
+            <td class="px-2 py-4 text-center font-bold text-rose-500">${p.kalah}</td>
+            <td class="px-3 py-4 text-center font-bold text-sky-400">${p.winRate}%</td>
+            <td class="px-3 sm:px-6 py-4 text-right font-display text-lg sm:text-2xl ${selisihColor}">${selisihText}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    document.getElementById('selBulanan').addEventListener('change', e => { state.bulanan.idx = +e.target.value; renderBoard('bulanan'); });
+    document.getElementById('selTahunan').addEventListener('change', e => { state.tahunan.idx = +e.target.value; renderBoard('tahunan'); });
+
+    const failHTML = (cols, msg) => `<tr><td colspan="${cols}" class="text-center py-10 text-rose-500">Gagal mengambil data dari Spreadsheet (${esc(msg)}). Pastikan Sheet dibagikan.</td></tr>`;
+
+    async function loadAll() {
+      const [sRoster, sBulanan, sTahunan] = await Promise.allSettled([
+        fetchGrid(SHEET_ROSTER),
+        fetchGrid(SHEET_BULANAN),
+        fetchGrid(SHEET_TAHUNAN)
+      ]);
+
+      // Roster (Sheet 1)
+      if (sRoster.status === 'fulfilled') {
+        renderRoster(extractRoster(sRoster.value));
+      } else {
+        console.error("Roster error:", sRoster.reason);
+        document.getElementById('rosterGrid').innerHTML = `<p class="col-span-full text-center py-10 text-rose-500">Gagal mengambil data roster (${esc(sRoster.reason.message)}).</p>`;
+      }
+
+      // Leaderboard Bulanan (Sheet 2)
+      if (sBulanan.status === 'fulfilled') {
+        state.bulanan.boards = extractBoardsIndexBased(sBulanan.value, false);
+        state.bulanan.idx = defaultIndex(state.bulanan.boards, 'bulanan');
+        renderBoard('bulanan');
+      } else {
+        console.error("Bulanan error:", sBulanan.reason);
+        document.getElementById('lb-bulanan').innerHTML = failHTML(7, sBulanan.reason.message);
+      }
+
+      // Leaderboard Tahunan (Sheet 3)
+      if (sTahunan.status === 'fulfilled') {
+        state.tahunan.boards = extractBoardsIndexBased(sTahunan.value, true);
+        state.tahunan.idx = defaultIndex(state.tahunan.boards, 'tahunan');
+        renderBoard('tahunan');
+      } else {
+        console.error("Tahunan error:", sTahunan.reason);
+        document.getElementById('lb-tahunan').innerHTML = failHTML(7, sTahunan.reason.message);
+      }
+    }
+
+    // Mulai
+    route();
+    loadAll();
+
+  </script>
+</body>
+</html>
