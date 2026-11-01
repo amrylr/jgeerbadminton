@@ -32,15 +32,17 @@
     </div>
 </div>
 
-<!-- NAVBAR -->
+<!-- NAVBAR DENGAN LOGO & TOMBOL LEADERBOARD -->
 <header class="sticky top-0 z-50 bg-brand-dark/95 backdrop-blur border-b border-brand-maroon/60">
     <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <div class="flex items-center gap-2">
+        <a href="https://amrylr.github.io/jgeerbadminton/#leaderboard" class="flex items-center gap-2 group cursor-pointer hover:opacity-90 transition">
+            <img src="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" alt="Logo PB Jgeer" class="h-10 w-auto" />
             <span class="font-display text-2xl font-bold tracking-wide uppercase">
-                PB <span class="text-brand-rose">Jgeer</span>
+                PB <span class="text-brand-rose group-hover:text-white transition">Jgeer</span>
             </span>
-        </div>
+        </a>
         <ul class="flex items-center gap-2 font-display uppercase tracking-wider text-sm">
+            <li><a href="https://amrylr.github.io/jgeerbadminton/#leaderboard" class="hidden sm:inline-block px-4 py-2 rounded text-neutral-400 hover:text-brand-rose hover:bg-white/5 transition mr-2">🏆 Leaderboard</a></li>
             <li><button id="btnPlayer" onclick="switchTab('player')" class="px-5 py-2 rounded bg-brand-maroon text-white font-semibold transition shadow-[0_4px_14px_0_rgba(122,16,32,0.39)]">Pemain</button></li>
             <li><button id="btnAdmin" onclick="switchTab('admin')" class="px-5 py-2 rounded text-neutral-400 hover:text-brand-rose hover:bg-white/5 transition">Admin</button></li>
         </ul>
@@ -51,7 +53,6 @@
     
     <!-- HALAMAN PEMAIN -->
     <div id="playerView" class="space-y-8">
-        <!-- Form Pemain -->
         <div class="rounded-2xl bg-brand-card border border-white/10 p-6 sm:p-8 shadow-2xl">
             <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-1">Input Pertandingan</h2>
             <p class="text-sm text-neutral-400 mb-6">Data yang dikirim akan masuk ke antrean verifikasi Admin.</p>
@@ -65,20 +66,30 @@
                 <div class="grid gap-6 md:grid-cols-2">
                     <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
                         <label class="font-display uppercase tracking-widest text-brand-rose text-sm mb-3 block">Tim A</label>
-                        <select id="p_tA_p1" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-3 focus:border-brand-rose outline-none transition" required></select>
-                        <select id="p_tA_p2" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-5 focus:border-brand-rose outline-none transition" required></select>
+                        <select id="p_tA_p1" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-3 outline-none" required></select>
+                        <select id="p_tA_p2" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-5 outline-none" required></select>
                         
-                        <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Skor Menang (Win)</label>
-                        <input type="number" id="p_scoreA" min="0" max="2" placeholder="0-2" oninput="autoScore('p_scoreA', 'p_scoreB')" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white font-bold focus:border-brand-rose outline-none transition" required>
+                        <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Skor Menang (Win)</label>
+                        <div class="flex gap-2 mb-2">
+                            <button type="button" id="btn-p_A-2" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 2)">2</button>
+                            <button type="button" id="btn-p_A-1" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 1)">1</button>
+                            <button type="button" id="btn-p_A-0" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 0)">0</button>
+                        </div>
+                        <input type="number" id="p_scoreA" class="w-full bg-black/50 border border-white/5 rounded px-3 py-2 text-neutral-500 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik tombol skor di atas">
                     </div>
 
                     <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
                         <label class="font-display uppercase tracking-widest text-neutral-300 text-sm mb-3 block">Tim B</label>
-                        <select id="p_tB_p1" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-3 focus:border-brand-rose outline-none transition" required></select>
-                        <select id="p_tB_p2" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-5 focus:border-brand-rose outline-none transition" required></select>
+                        <select id="p_tB_p1" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-3 outline-none" required></select>
+                        <select id="p_tB_p2" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-5 outline-none" required></select>
                         
-                        <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Skor Menang (Win)</label>
-                        <input type="number" id="p_scoreB" min="0" max="2" placeholder="0-2" oninput="autoScore('p_scoreB', 'p_scoreA')" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white font-bold focus:border-brand-rose outline-none transition" required>
+                        <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Skor Menang (Win)</label>
+                        <div class="flex gap-2 mb-2">
+                            <button type="button" id="btn-p_B-2" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 2)">2</button>
+                            <button type="button" id="btn-p_B-1" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 1)">1</button>
+                            <button type="button" id="btn-p_B-0" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 0)">0</button>
+                        </div>
+                        <input type="number" id="p_scoreB" class="w-full bg-black/50 border border-white/5 rounded px-3 py-2 text-neutral-500 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik tombol skor di atas">
                     </div>
                 </div>
                 <button type="submit" class="w-full py-4 rounded-xl bg-brand-rose hover:bg-brand-maroon text-white font-display font-bold uppercase tracking-wider transition shadow-lg">Kirim Antrean</button>
@@ -107,11 +118,10 @@
 
     <!-- HALAMAN ADMIN -->
     <div id="adminView" class="hidden space-y-8">
-        <!-- Login -->
         <div id="adminLogin" class="max-w-md mx-auto rounded-2xl bg-brand-card border border-white/10 p-8 shadow-2xl text-center">
             <span class="text-4xl mb-4 block" aria-hidden="true">🔒</span>
             <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-6">Akses Admin</h2>
-            <input type="password" id="adminPwd" placeholder="Masukkan Password" class="w-full bg-black/60 border border-white/20 rounded px-4 py-3 text-white text-center tracking-widest mb-4 focus:border-brand-rose outline-none">
+            <input type="password" id="adminPwd" placeholder="Masukkan Password" class="w-full bg-black/60 border border-white/20 rounded px-4 py-3 text-white text-center tracking-widest mb-4 outline-none">
             <button onclick="checkAdmin()" class="w-full py-3 rounded bg-white text-black font-display font-bold uppercase tracking-wider hover:bg-gray-200 transition">Buka Kunci</button>
         </div>
 
@@ -129,12 +139,12 @@
             <div class="rounded-2xl bg-brand-card border border-brand-maroon/60 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
                 <div class="absolute top-0 right-0 bg-brand-maroon text-white text-xs font-bold px-3 py-1 rounded-bl-lg">NO VERIFY</div>
                 <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-1 text-brand-rose">Input Langsung</h2>
-                <p class="text-sm text-neutral-400 mb-6">Data yang dikirim akan langsung menjumlahkan Win/Lose di Sheet 4.</p>
+                <p class="text-sm text-neutral-400 mb-6">Data dikirim akan langsung menjumlahkan skor di Valid.</p>
                 
                 <form id="adminDirectForm" class="space-y-6">
                     <div>
                         <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Tanggal</label>
-                        <input type="date" id="a_tanggal" class="w-full bg-black/60 border border-white/20 rounded px-4 py-3 text-white focus:outline-none focus:border-brand-rose" required>
+                        <input type="date" id="a_tanggal" class="w-full bg-black/60 border border-white/20 rounded px-4 py-3 text-white outline-none" required>
                     </div>
                     
                     <div class="grid gap-6 md:grid-cols-2">
@@ -142,13 +152,23 @@
                             <label class="font-display uppercase tracking-widest text-brand-rose text-sm mb-3 block">Tim A</label>
                             <select id="a_tA_p1" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2 text-white mb-3" required></select>
                             <select id="a_tA_p2" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2 text-white mb-5" required></select>
-                            <input type="number" id="a_scoreA" min="0" max="2" placeholder="Skor A" oninput="autoScore('a_scoreA', 'a_scoreB')" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white font-bold" required>
+                            <div class="flex gap-2 mb-2">
+                                <button type="button" id="btn-a_A-2" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 2)">2</button>
+                                <button type="button" id="btn-a_A-1" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 1)">1</button>
+                                <button type="button" id="btn-a_A-0" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 0)">0</button>
+                            </div>
+                            <input type="number" id="a_scoreA" class="w-full bg-black/50 border border-white/5 rounded px-3 py-2 text-neutral-500 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik skor di atas">
                         </div>
                         <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
                             <label class="font-display uppercase tracking-widest text-neutral-300 text-sm mb-3 block">Tim B</label>
                             <select id="a_tB_p1" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2 text-white mb-3" required></select>
                             <select id="a_tB_p2" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2 text-white mb-5" required></select>
-                            <input type="number" id="a_scoreB" min="0" max="2" placeholder="Skor B" oninput="autoScore('a_scoreB', 'a_scoreA')" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white font-bold" required>
+                            <div class="flex gap-2 mb-2">
+                                <button type="button" id="btn-a_B-2" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 2)">2</button>
+                                <button type="button" id="btn-a_B-1" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 1)">1</button>
+                                <button type="button" id="btn-a_B-0" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 0)">0</button>
+                            </div>
+                            <input type="number" id="a_scoreB" class="w-full bg-black/50 border border-white/5 rounded px-3 py-2 text-neutral-500 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik skor di atas">
                         </div>
                     </div>
                     <button type="submit" class="w-full py-4 rounded-xl bg-brand-maroon hover:bg-red-800 text-white font-display font-bold uppercase tracking-wider transition">Input Langsung ke Valid</button>
@@ -160,32 +180,61 @@
 
 <script>
     // MASUKKAN URL WEB APP GOOGLE SCRIPT YANG BARU DI SINI
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjQxPCSFAvAQEiK-p-HdkgkcRguZ_pXt5DtL0McQSExXGY4cmviN3PBnOmA6nOD5AN/exec"; 
+    const WEB_APP_URL = "MASUKKAN_URL_WEB_APP_DI_SINI"; 
 
-    // 1. TANGGAL OTOMATIS BERDASARKAN ZONA WAKTU LOKAL
+    // PENGATURAN TANGGAL HARI INI & LIMITASI TANGGAL
     const tzOffset = (new Date()).getTimezoneOffset() * 60000; 
     const localDate = new Date(Date.now() - tzOffset);
-    const todayYMD = localDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    const todayYMD = localDate.toISOString().split('T')[0]; 
     
-    // Terapkan default hari ini untuk Admin maupun Pemain
-    document.getElementById('p_tanggal').value = todayYMD;
-    document.getElementById('a_tanggal').value = todayYMD;
+    // Mencegah input tanggal lebih dari hari ini
+    const pTanggal = document.getElementById('p_tanggal');
+    const aTanggal = document.getElementById('a_tanggal');
+    
+    pTanggal.value = todayYMD;
+    pTanggal.max = todayYMD; 
+    aTanggal.value = todayYMD;
+    aTanggal.max = todayYMD;
 
-    // 2. SISTEM SKOR OTOMATIS
-    function autoScore(sourceId, targetId) {
-        const val = document.getElementById(sourceId).value;
-        const target = document.getElementById(targetId);
-        if (val === "2") target.value = "0";
-        else if (val === "1") target.value = "1";
-        else if (val === "0") target.value = "2";
-        else target.value = "";
+    // TOMBOL SKOR CEPAT
+    function setScore(prefix, team, val) {
+        const opponent = team === 'A' ? 'B' : 'A';
+        
+        // Atur nilai input hidden/readonly
+        document.getElementById(prefix + 'score' + team).value = val;
+        if (val === 2) document.getElementById(prefix + 'score' + opponent).value = 0;
+        else if (val === 1) document.getElementById(prefix + 'score' + opponent).value = 1;
+        else if (val === 0) document.getElementById(prefix + 'score' + opponent).value = 2;
+        
+        // Update warna tombol
+        ['A', 'B'].forEach(t => {
+            const currentVal = document.getElementById(prefix + 'score' + t).value;
+            [0, 1, 2].forEach(v => {
+                const btn = document.getElementById(`btn-${prefix}${t}-${v}`);
+                if (String(v) === currentVal) {
+                    btn.classList.add('bg-brand-rose', 'border-brand-rose', 'text-white');
+                    btn.classList.remove('bg-brand-card', 'border-white/10', 'text-neutral-400');
+                } else {
+                    btn.classList.remove('bg-brand-rose', 'border-brand-rose', 'text-white');
+                    btn.classList.add('bg-brand-card', 'border-white/10', 'text-neutral-400');
+                }
+            });
+        });
     }
 
-    function showLoading(show) { 
-        document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; 
+    // RESET TOMBOL SKOR UI
+    function resetScoreButtons(prefix) {
+        ['A', 'B'].forEach(t => {
+            [0, 1, 2].forEach(v => {
+                const btn = document.getElementById(`btn-${prefix}${t}-${v}`);
+                btn.classList.remove('bg-brand-rose', 'border-brand-rose', 'text-white');
+                btn.classList.add('bg-brand-card', 'border-white/10', 'text-neutral-400');
+            });
+        });
     }
+
+    function showLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
     
-    // 3. MUAT DATA PERTAMA KALI
     window.onload = function() {
         fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getInitData", date: todayYMD}) })
         .then(res => res.json()).then(res => {
@@ -195,9 +244,7 @@
                 showLoading(false);
             }
         }).catch(err => { 
-            console.log(err);
-            alert("Gagal memuat data. Pastikan URL Apps Script benar."); 
-            showLoading(false); 
+            console.log(err); alert("Gagal memuat data."); showLoading(false); 
         });
     }
 
@@ -207,32 +254,25 @@
         ids.forEach(id => document.getElementById(id).innerHTML = options);
     }
 
-    // 4. MENGAMBIL RIWAYAT TERVERIFIKASI
     function fetchHistory() {
         showLoading(true);
-        const selectedDate = document.getElementById('p_tanggal').value; // Ambil YYYY-MM-DD
+        const selectedDate = document.getElementById('p_tanggal').value; 
         fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getHistory", date: selectedDate}) })
         .then(res => res.json()).then(res => {
-            renderHistory(res.history);
-            showLoading(false);
+            renderHistory(res.history); showLoading(false);
         });
     }
 
-    // 5. MERENDER RIWAYAT KE TABEL
     function renderHistory(data) {
         const tbody = document.getElementById('historyTableBody');
         tbody.innerHTML = "";
-        
-        // Filter nama kosong jika terbawa dari sheets
         const validData = data.filter(row => row[1] && row[1].trim() !== "");
 
         if(validData.length === 0) { 
             tbody.innerHTML = "<tr><td colspan='3' class='text-center py-8 text-neutral-500 italic'>Belum ada pertandingan terverifikasi pada tanggal ini</td></tr>"; 
             return; 
         }
-        
         validData.forEach(row => {
-            // Urutan baris: [Tanggal, Nama, Bulan, Win, Lose]
             tbody.innerHTML += `
             <tr class="hover:bg-white/5 transition border-b border-white/5">
                 <td class="px-6 py-4 font-semibold">${row[1]}</td>
@@ -242,21 +282,19 @@
         });
     }
 
-    // 6. MENGIRIM DATA (KINI KEDUANYA MENGIRIM FORMAT YANG SAMA)
     document.getElementById('playerForm').addEventListener('submit', function(e) { e.preventDefault(); submitMatchData('p_', 'submitPending'); });
     document.getElementById('adminDirectForm').addEventListener('submit', function(e) { e.preventDefault(); submitMatchData('a_', 'submitDirect'); });
 
     function submitMatchData(prefix, actionType) {
         showLoading(true);
-        const dateVal = document.getElementById(prefix+'tanggal').value; // Mengambil YYYY-MM-DD mutlak
+        const dateVal = document.getElementById(prefix+'tanggal').value;
         const dObj = new Date(dateVal);
         const blnList = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         
         const payload = {
             action: actionType,
             data: {
-                tanggal: dateVal, // <- Pemain & Admin formatnya 100% SAMA
-                bulan: blnList[dObj.getMonth()],
+                tanggal: dateVal, bulan: blnList[dObj.getMonth()],
                 tA_p1: document.getElementById(prefix+'tA_p1').value,
                 tA_p2: document.getElementById(prefix+'tA_p2').value,
                 scoreA: document.getElementById(prefix+'scoreA').value,
@@ -274,11 +312,11 @@
             if(actionType === 'submitPending') fetchHistory(); 
             
             document.getElementById(prefix === 'p_' ? 'playerForm' : 'adminDirectForm').reset();
-            document.getElementById(prefix+'tanggal').value = dateVal; // Kembalikan isi tanggalnya
+            document.getElementById(prefix+'tanggal').value = dateVal;
+            resetScoreButtons(prefix); // Mengembalikan UI skor
         });
     }
 
-    // Tab Navigasi & Login
     function switchTab(tab) {
         document.getElementById('btnPlayer').className = tab === 'player' ? 'px-5 py-2 rounded bg-brand-maroon text-white font-semibold transition shadow-[0_4px_14px_0_rgba(122,16,32,0.39)]' : 'px-5 py-2 rounded text-neutral-400 hover:text-brand-rose hover:bg-white/5 transition';
         document.getElementById('btnAdmin').className = tab === 'admin' ? 'px-5 py-2 rounded bg-brand-maroon text-white font-semibold transition shadow-[0_4px_14px_0_rgba(122,16,32,0.39)]' : 'px-5 py-2 rounded text-neutral-400 hover:text-brand-rose hover:bg-white/5 transition';
@@ -297,7 +335,6 @@
         } else { alert("Password Salah!"); }
     }
 
-    // 7. MEMUAT ANTREAN VERIFIKASI ADMIN
     function loadPending() {
         const list = document.getElementById('pendingList');
         list.innerHTML = `<p class="text-neutral-400 italic">Memuat antrean...</p>`;
@@ -318,7 +355,10 @@
                                 <strong class="text-white">${row[6]} & ${row[7]}</strong> <span class="text-green-400 font-bold">(${row[8]})</span>
                             </p>
                         </div>
-                        <button class="bg-green-600 hover:bg-green-500 text-white px-5 py-2 rounded font-semibold transition shrink-0 shadow-lg" onclick="verifyMatch('${row[0]}')">Setujui & Gabungkan ke Data Valid</button>
+                        <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+                            <button class="flex-1 sm:flex-none bg-green-600 hover:bg-green-500 text-white px-5 py-2 rounded font-semibold transition shadow-lg text-sm" onclick="verifyMatch('${row[0]}')">Setujui</button>
+                            <button class="flex-1 sm:flex-none bg-brand-card border border-white/10 hover:bg-brand-rose hover:border-brand-rose text-neutral-300 hover:text-white px-5 py-2 rounded font-semibold transition shadow-lg text-sm" onclick="deleteMatch('${row[0]}')">Tolak</button>
+                        </div>
                     </div>`;
             });
         });
@@ -331,7 +371,21 @@
             showLoading(false);
             if(res.status === "success") {
                 document.getElementById(`card-${id}`).style.display = 'none';
-                fetchHistory(); // Segarkan tabel riwayat pemain
+                fetchHistory(); 
+            }
+        });
+    }
+
+    // FITUR BARU: Hapus data (Tolak)
+    function deleteMatch(id) {
+        if(!confirm("Yakin ingin menolak dan menghapus data antrean ini?")) return;
+        
+        showLoading(true);
+        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "deleteMatch", id: id}) })
+        .then(res => res.json()).then(res => {
+            showLoading(false);
+            if(res.status === "success") {
+                document.getElementById(`card-${id}`).style.display = 'none';
             }
         });
     }
