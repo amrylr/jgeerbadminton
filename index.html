@@ -896,11 +896,11 @@
         if (!row || !str(row[0])) continue; 
         
         const nama = str(row[0]);
-        const key = isTahunan ? str(row[2]) : str(row[1]);
+        const key = str(row[1]);
         if (!key) continue;
 
-        const win = toNum(row[3]);  
-        const lose = toNum(row[4]); 
+        const win = isTahunan ? toNum(row[2]) : toNum(row[3]);  
+        const lose = isTahunan ? toNum(row[3]) : toNum(row[4]); 
         
         if (!groups.has(key)) groups.set(key, new Map());
         const m = groups.get(key);
