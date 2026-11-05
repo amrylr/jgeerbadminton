@@ -17,8 +17,6 @@
 <!-- Standard Meta Tags (Untuk Browser & SEO dasar) -->
 <meta name="title" content="Input Hasil Pertandingan | PB Jgeer" />
 <meta name="description" content="Portal input skor harian pertandingan ganda PB Jgeer. Mari ngesang dan bersenang-senang!" />
-
-    
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -38,6 +36,12 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         /* Tampilan nama yang di-disable agar lebih rapi di beberapa browser */
         select option:disabled { color: #555; background: #222; }
+        /* Hilangkan panah input number */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 <body class="bg-brand-dark text-white antialiased min-h-screen flex flex-col font-body">
@@ -83,8 +87,20 @@
                 <div class="grid gap-6 md:grid-cols-2">
                     <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
                         <label class="font-display uppercase tracking-widest text-brand-rose text-sm mb-3 block">Tim A</label>
-                        <select id="p_tA_p1" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-3 outline-none" required onchange="updateDropdowns('p_')"></select>
-                        <select id="p_tA_p2" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-5 outline-none" required onchange="updateDropdowns('p_')"></select>
+                        
+                        <!-- Kartu Pemain A1 -->
+                        <div onclick="openPlayerModal('p_tA_p1')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tA_p1" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                            <span id="name_p_tA_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
+                        </div>
+                        <input type="hidden" id="p_tA_p1" required>
+
+                        <!-- Kartu Pemain A2 -->
+                        <div onclick="openPlayerModal('p_tA_p2')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tA_p2" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                            <span id="name_p_tA_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
+                        </div>
+                        <input type="hidden" id="p_tA_p2" required>
                         
                         <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Skor Menang (Win)</label>
                         <div class="flex gap-2 mb-2">
@@ -97,8 +113,20 @@
 
                     <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
                         <label class="font-display uppercase tracking-widest text-neutral-300 text-sm mb-3 block">Tim B</label>
-                        <select id="p_tB_p1" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-3 outline-none" required onchange="updateDropdowns('p_')"></select>
-                        <select id="p_tB_p2" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2.5 text-white mb-5 outline-none" required onchange="updateDropdowns('p_')"></select>
+                        
+                        <!-- Kartu Pemain B1 -->
+                        <div onclick="openPlayerModal('p_tB_p1')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tB_p1" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                            <span id="name_p_tB_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
+                        </div>
+                        <input type="hidden" id="p_tB_p1" required>
+
+                        <!-- Kartu Pemain B2 -->
+                        <div onclick="openPlayerModal('p_tB_p2')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tB_p2" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                            <span id="name_p_tB_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
+                        </div>
+                        <input type="hidden" id="p_tB_p2" required>
                         
                         <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Skor Menang (Win)</label>
                         <div class="flex gap-2 mb-2">
@@ -167,8 +195,21 @@
                     <div class="grid gap-6 md:grid-cols-2">
                         <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
                             <label class="font-display uppercase tracking-widest text-brand-rose text-sm mb-3 block">Tim A</label>
-                            <select id="a_tA_p1" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2 text-white mb-3" required onchange="updateDropdowns('a_')"></select>
-                            <select id="a_tA_p2" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2 text-white mb-5" required onchange="updateDropdowns('a_')"></select>
+                            
+                            <!-- Kartu Admin A1 -->
+                            <div onclick="openPlayerModal('a_tA_p1')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tA_p1" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                                <span id="name_a_tA_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
+                            </div>
+                            <input type="hidden" id="a_tA_p1" required>
+
+                            <!-- Kartu Admin A2 -->
+                            <div onclick="openPlayerModal('a_tA_p2')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tA_p2" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                                <span id="name_a_tA_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
+                            </div>
+                            <input type="hidden" id="a_tA_p2" required>
+
                             <div class="flex gap-2 mb-2">
                                 <button type="button" id="btn-a_A-2" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 2)">2</button>
                                 <button type="button" id="btn-a_A-1" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 1)">1</button>
@@ -178,8 +219,21 @@
                         </div>
                         <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
                             <label class="font-display uppercase tracking-widest text-neutral-300 text-sm mb-3 block">Tim B</label>
-                            <select id="a_tB_p1" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2 text-white mb-3" required onchange="updateDropdowns('a_')"></select>
-                            <select id="a_tB_p2" class="w-full bg-brand-card border border-white/10 rounded px-3 py-2 text-white mb-5" required onchange="updateDropdowns('a_')"></select>
+                            
+                            <!-- Kartu Admin B1 -->
+                            <div onclick="openPlayerModal('a_tB_p1')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tB_p1" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                                <span id="name_a_tB_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
+                            </div>
+                            <input type="hidden" id="a_tB_p1" required>
+
+                            <!-- Kartu Admin B2 -->
+                            <div onclick="openPlayerModal('a_tB_p2')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tB_p2" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                                <span id="name_a_tB_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
+                            </div>
+                            <input type="hidden" id="a_tB_p2" required>
+
                             <div class="flex gap-2 mb-2">
                                 <button type="button" id="btn-a_B-2" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 2)">2</button>
                                 <button type="button" id="btn-a_B-1" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 1)">1</button>
@@ -193,10 +247,24 @@
             </div>
         </div>
     </div>
+    
+    <!-- MODAL PILIH PEMAIN -->
+    <div id="playerModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-brand-card w-full max-w-2xl rounded-2xl border border-white/10 p-6 shadow-2xl flex flex-col h-[75vh]">
+            <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-3">
+                <h3 class="font-display uppercase text-xl font-bold tracking-wide text-white">Pilih Pemain</h3>
+                <button onclick="closePlayerModal()" class="text-neutral-400 hover:text-brand-rose text-3xl font-bold transition">&times;</button>
+            </div>
+            <div id="playerGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 overflow-y-auto pr-2 pb-4">
+                <!-- Grid pemain dipopulate oleh Javascript -->
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <script>
-    // MASUKKAN URL WEB APP GOOGLE SCRIPT YANG BARU DI SINI
+    // --- GANTI URL DI BAWAH INI DENGAN URL DEPLOY BARU ANDA ---
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjQxPCSFAvAQEiK-p-HdkgkcRguZ_pXt5DtL0McQSExXGY4cmviN3PBnOmA6nOD5AN/exec"; 
 
     // PENGATURAN TANGGAL HARI INI & LIMITASI TANGGAL
@@ -212,31 +280,75 @@
     aTanggal.value = todayYMD;
     aTanggal.max = todayYMD;
 
-    // FITUR BARU: Cegah pilihan nama ganda pada dropdown
-    function updateDropdowns(prefix) {
-        const selects = [
-            document.getElementById(prefix + 'tA_p1'),
-            document.getElementById(prefix + 'tA_p2'),
-            document.getElementById(prefix + 'tB_p1'),
-            document.getElementById(prefix + 'tB_p2')
-        ];
-        
-        const selectedVals = selects.map(s => s.value).filter(val => val !== "");
+    // VARIABEL GLOBAL BARU
+    let globalPlayers = [];
+    let currentSelectTarget = "";
 
-        selects.forEach(select => {
-            Array.from(select.options).forEach(option => {
-                if (option.value === "") return; // Abaikan opsi placeholder
-                
-                // Matikan opsi jika nama sudah dipilih di kolom lain
-                if (selectedVals.includes(option.value) && option.value !== select.value) {
-                    option.disabled = true;
-                    option.style.display = 'none';
-                } else {
-                    option.disabled = false;
-                    option.style.display = 'block';
-                }
-            });
+    function showLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
+    
+    window.onload = function() {
+        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getInitData", date: todayYMD}) })
+        .then(res => res.json()).then(res => {
+            if(res.status === "success") {
+                populateSelects(res.players);
+                renderHistory(res.history);
+                showLoading(false);
+            }
+        }).catch(err => { 
+            console.log(err); alert("Gagal memuat data."); showLoading(false); 
         });
+    }
+
+    function populateSelects(playersData) {
+        globalPlayers = playersData; 
+    }
+
+    // FUNGSI MODAL & KARTU PEMAIN
+    function openPlayerModal(targetId) {
+        currentSelectTarget = targetId;
+        renderPlayerGrid();
+        document.getElementById('playerModal').classList.remove('hidden');
+    }
+
+    function closePlayerModal() {
+        document.getElementById('playerModal').classList.add('hidden');
+        currentSelectTarget = "";
+    }
+
+    function renderPlayerGrid() {
+        const grid = document.getElementById('playerGrid');
+        grid.innerHTML = "";
+        const prefix = currentSelectTarget.substring(0, 2); 
+        
+        const selectedNames = [
+            document.getElementById(prefix + 'tA_p1').value,
+            document.getElementById(prefix + 'tA_p2').value,
+            document.getElementById(prefix + 'tB_p1').value,
+            document.getElementById(prefix + 'tB_p2').value
+        ];
+
+        globalPlayers.forEach(p => {
+            const isSelected = selectedNames.includes(p.name);
+            const bgClass = isSelected ? "bg-black/80 opacity-40 cursor-not-allowed border-white/5" : "bg-black/40 hover:bg-brand-maroon/50 cursor-pointer border-white/10 hover:border-brand-rose";
+            
+            const cardHtml = `
+                <div onclick="${isSelected ? '' : `selectPlayer('${p.name}', '${p.photo}')`}" 
+                     class="flex flex-col items-center p-3 border rounded-xl transition ${bgClass}">
+                    <img src="${p.photo}" class="w-14 h-14 rounded-full object-cover mb-2 border border-white/20 shadow-lg bg-black">
+                    <span class="font-display uppercase tracking-wider text-xs text-center font-bold ${isSelected ? 'text-neutral-500' : 'text-white'} leading-tight">${p.name}</span>
+                </div>
+            `;
+            grid.innerHTML += cardHtml;
+        });
+    }
+
+    function selectPlayer(name, photo) {
+        document.getElementById(currentSelectTarget).value = name;
+        document.getElementById('name_' + currentSelectTarget).innerText = name;
+        document.getElementById('name_' + currentSelectTarget).classList.replace('text-neutral-400', 'text-white');
+        document.getElementById('img_' + currentSelectTarget).src = photo;
+        
+        closePlayerModal();
     }
 
     // TOMBOL SKOR CEPAT
@@ -273,27 +385,7 @@
         });
     }
 
-    function showLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
-    
-    window.onload = function() {
-        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getInitData", date: todayYMD}) })
-        .then(res => res.json()).then(res => {
-            if(res.status === "success") {
-                populateSelects(res.names);
-                renderHistory(res.history);
-                showLoading(false);
-            }
-        }).catch(err => { 
-            console.log(err); alert("Gagal memuat data."); showLoading(false); 
-        });
-    }
-
-    function populateSelects(names) {
-        const ids = ['p_tA_p1', 'p_tA_p2', 'p_tB_p1', 'p_tB_p2', 'a_tA_p1', 'a_tA_p2', 'a_tB_p1', 'a_tB_p2'];
-        let options = '<option value="">-- Pilih Pemain --</option>' + names.map(n => `<option value="${n}">${n}</option>`).join('');
-        ids.forEach(id => document.getElementById(id).innerHTML = options);
-    }
-
+    // LOAD HISTORY
     function fetchHistory() {
         showLoading(true);
         const selectedDate = document.getElementById('p_tanggal').value; 
@@ -313,18 +405,41 @@
             return; 
         }
         validData.forEach(row => {
+            // Indeks Sheet4: 0:Tanggal, 1:Nama, 2:Bulan, 3:Tahun, 4:Win, 5:Lose
             tbody.innerHTML += `
             <tr class="hover:bg-white/5 transition border-b border-white/5">
                 <td class="px-6 py-4 font-semibold">${row[1]}</td>
-                <td class="px-4 py-4 text-center font-bold text-green-400">${row[3]}</td>
-                <td class="px-4 py-4 text-center font-bold text-rose-500">${row[4]}</td>
+                <td class="px-4 py-4 text-center font-bold text-green-400">${row[4]}</td>
+                <td class="px-4 py-4 text-center font-bold text-rose-500">${row[5]}</td>
             </tr>`;
         });
     }
 
-    document.getElementById('playerForm').addEventListener('submit', function(e) { e.preventDefault(); submitMatchData('p_', 'submitPending'); });
-    document.getElementById('adminDirectForm').addEventListener('submit', function(e) { e.preventDefault(); submitMatchData('a_', 'submitDirect'); });
+    // VALIDASI SEBELUM SUBMIT
+    document.getElementById('playerForm').addEventListener('submit', function(e) { 
+        e.preventDefault(); 
+        if(!validateSelections('p_')) return;
+        submitMatchData('p_', 'submitPending'); 
+    });
+    
+    document.getElementById('adminDirectForm').addEventListener('submit', function(e) { 
+        e.preventDefault(); 
+        if(!validateSelections('a_')) return;
+        submitMatchData('a_', 'submitDirect'); 
+    });
 
+    function validateSelections(prefix) {
+        const inputs = ['tA_p1', 'tA_p2', 'tB_p1', 'tB_p2'];
+        for(let id of inputs) {
+            if(!document.getElementById(prefix + id).value) {
+                alert("Harap lengkapi semua 4 pemain terlebih dahulu!");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // SUBMIT DATA
     function submitMatchData(prefix, actionType) {
         showLoading(true);
         const dateVal = document.getElementById(prefix+'tanggal').value;
@@ -334,7 +449,9 @@
         const payload = {
             action: actionType,
             data: {
-                tanggal: dateVal, bulan: blnList[dObj.getMonth()],
+                tanggal: dateVal, 
+                bulan: blnList[dObj.getMonth()],
+                tahun: dObj.getFullYear(),
                 tA_p1: document.getElementById(prefix+'tA_p1').value,
                 tA_p2: document.getElementById(prefix+'tA_p2').value,
                 scoreA: document.getElementById(prefix+'scoreA').value,
@@ -354,7 +471,15 @@
             document.getElementById(prefix === 'p_' ? 'playerForm' : 'adminDirectForm').reset();
             document.getElementById(prefix+'tanggal').value = dateVal;
             resetScoreButtons(prefix); 
-            updateDropdowns(prefix); // Mengembalikan opsi nama yang terkunci
+            
+            // Reset Kartu Pemain ke tampilan Default
+            const inputs = ['tA_p1', 'tA_p2', 'tB_p1', 'tB_p2'];
+            inputs.forEach(id => {
+                document.getElementById(prefix + id).value = "";
+                document.getElementById('name_' + prefix + id).innerText = "Pilih Pemain";
+                document.getElementById('name_' + prefix + id).classList.replace('text-white', 'text-neutral-400');
+                document.getElementById('img_' + prefix + id).src = "https://ui-avatars.com/api/?name=Pilih&background=222&color=fff";
+            });
         });
     }
 
@@ -376,6 +501,7 @@
         } else { alert("Password Salah!"); }
     }
 
+    // LOAD PENDING (DIADMIN)
     function loadPending() {
         const list = document.getElementById('pendingList');
         list.innerHTML = `<p class="text-neutral-400 italic">Memuat antrean...</p>`;
@@ -386,14 +512,15 @@
             if(res.pending.length === 0) { list.innerHTML = `<p class="text-neutral-500">Tidak ada antrean verifikasi.</p>`; return; }
             
             res.pending.forEach(row => {
+                // Indeks Baru Sheet5: 0:ID, 1:Tanggal, 2:Bulan, 3:Tahun, 4:TimA1, 5:TimA2, 6:SkorA, 7:TimB1, 8:TimB2, 9:SkorB
                 list.innerHTML += `
                     <div class="bg-black/40 border-l-4 border-brand-rose p-4 sm:p-5 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4" id="card-${row[0]}">
                         <div>
                             <span class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Tanggal: ${row[1]}</span>
                             <p class="text-sm sm:text-base">
-                                <strong class="text-white">${row[3]} & ${row[4]}</strong> <span class="text-green-400 font-bold">(${row[5]})</span> 
+                                <strong class="text-white">${row[4]} & ${row[5]}</strong> <span class="text-green-400 font-bold">(${row[6]})</span> 
                                 <span class="mx-2 text-neutral-500">VS</span> 
-                                <strong class="text-white">${row[6]} & ${row[7]}</strong> <span class="text-green-400 font-bold">(${row[8]})</span>
+                                <strong class="text-white">${row[7]} & ${row[8]}</strong> <span class="text-green-400 font-bold">(${row[9]})</span>
                             </p>
                         </div>
                         <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
