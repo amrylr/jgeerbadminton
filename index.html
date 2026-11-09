@@ -69,7 +69,6 @@
     @keyframes dropIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 
     /* Beri ruang agar judul halaman tidak tertutup navbar yang melayang */
-    [data-page]:not([data-page="home"]) > section:first-child { padding-top: 5rem; }
 
     /* Home: marquee & stripe */
     .marquee { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 28s linear infinite; }
@@ -84,7 +83,7 @@
     .tab-btn[aria-selected="false"] { color: #a3a3a3; }
     .tab-btn[aria-selected="false"]:hover { color: #fff; background: rgba(255,255,255,.06); }
     .player-card { transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
-    .player-card:hover { transform: scale(1.06); border-color: #D6455D; box-shadow: 0 25px 50px -15px rgba(214,69,93,.45); z-index: 10; }
+    .player-card:hover { transform: translateY(-6px); border-color: #D6455D; box-shadow: 0 25px 50px -15px rgba(214,69,93,.45); z-index: 10; }
     @media (prefers-reduced-motion: reduce) { .player-card:hover { transform: none; } }
 
     /* =============================================================
@@ -141,6 +140,76 @@
     }
     .export-btn:hover:not(:disabled) { background: #7A1020; }
     .export-btn:disabled { opacity: .5; cursor: wait; }
+
+    /* =============================================================
+       TEMA MODERN: kartu kaca lembut, sudut besar, aksen gradien (navbar tidak diubah)
+       ============================================================= */
+    body { background: #0A0A0A; }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(52rem 34rem at 88% -8%, rgba(214,69,93,.17), transparent 62%),
+        radial-gradient(46rem 38rem at -12% 38%, rgba(122,16,32,.34), transparent 62%),
+        radial-gradient(40rem 30rem at 105% 96%, rgba(122,16,32,.26), transparent 62%);
+    }
+    .glass-card {
+      background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.10);
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+      box-shadow: 0 20px 50px -25px rgba(0,0,0,.85);
+    }
+    main .bg-brand-card {
+      background: linear-gradient(145deg, rgba(255,255,255,.065), rgba(255,255,255,.02));
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      border-color: rgba(255,255,255,.09);
+      box-shadow: 0 18px 45px -28px rgba(0,0,0,.85);
+    }
+    main .rounded-2xl { border-radius: 1.75rem; }
+    main .rounded-xl  { border-radius: 1.25rem; }
+    main a.bg-brand-card { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+    main a.bg-brand-card:hover { transform: translateY(-3px); box-shadow: 0 24px 50px -24px rgba(214,69,93,.45); }
+
+    /* Judul bergradien */
+    main h1 .text-brand-rose, main h2 .text-brand-rose {
+      background: linear-gradient(90deg, #ff7f93, #fbbf24); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    main .h-1.w-20 { background: linear-gradient(90deg, #D6455D, #fbbf24); border-radius: 9999px; }
+
+    /* Hero & banner halaman */
+    .hero { border-radius: 0 0 2.5rem 2.5rem; }
+    .page-hero {
+      position: relative; overflow: hidden;
+      max-width: 72rem; margin: 5.5rem max(.75rem, calc((100% - 72rem) / 2)) 0;
+      border-radius: 2rem; border: 1px solid rgba(255,255,255,.09);
+      background:
+        radial-gradient(28rem 14rem at 90% 0%, rgba(214,69,93,.30), transparent 70%),
+        linear-gradient(135deg, rgba(122,16,32,.55), rgba(18,10,12,.55));
+      box-shadow: 0 30px 60px -35px rgba(122,16,32,.8);
+    }
+    .info-strip {
+      max-width: 72rem; margin: 0 max(.75rem, calc((100% - 72rem) / 2));
+      border-radius: 2rem; border: 1px solid rgba(255,255,255,.09);
+      background: linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,.015));
+    }
+    .info-strip .font-display.text-brand-rose { background: linear-gradient(90deg, #ff7f93, #fbbf24); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    /* Tab, kartu pemain, SOP */
+    main [role="tablist"] { border-radius: 9999px; }
+    main .tab-btn { border-radius: 9999px; }
+    .player-card:hover { transform: translateY(-6px); }
+    .player-card > div.h-20 { height: 6rem; background: linear-gradient(135deg, #7A1020, #D6455D 62%, #fbbf24 150%); }
+    footer { background: transparent !important; border-color: rgba(255,255,255,.08) !important; }
+
+    /* Transisi halus saat pindah halaman */
+    [data-page]:not(.hidden) { animation: pageIn .45s ease; }
+    @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { [data-page]:not(.hidden) { animation: none; } main a.bg-brand-card:hover { transform: none; } }
+
+    main .export-btn {
+      border-radius: 9999px; padding: .9rem 1rem; font-size: .85rem; font-weight: 600; letter-spacing: .1em; color: #fff;
+      background: linear-gradient(135deg, #7A1020, #D6455D); box-shadow: 0 12px 28px -14px rgba(214,69,93,.8);
+    }
+    main .export-btn:hover:not(:disabled) { background: linear-gradient(135deg, #901529, #e85a72); }
 
     /* SOP: accordion */
     summary::-webkit-details-marker { display: none; }
@@ -208,7 +277,7 @@
     <!-- HALAMAN: HOME -->
     <div data-page="home" data-title="Beranda | PB Jgeer">
     <!-- HERO -->
-    <section class="relative isolate overflow-hidden bg-neutral-900">
+    <section class="hero relative isolate overflow-hidden bg-neutral-900">
       <img
         src="https://raw.githubusercontent.com/amrylr/jgeerbadminton/refs/heads/main/PB%20Jgeer%20Famiglia%F0%9F%A5%B3%20(1).webp"
         alt="Jgeer Famiglia"
@@ -230,16 +299,16 @@
         </p>
 
         <div class="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
-          <a href="#leaderboard" class="px-7 py-3 rounded bg-brand-maroon text-white border border-brand-rose/40 font-display uppercase tracking-wider font-semibold hover:bg-brand-rose transition">
+          <a href="#leaderboard" class="px-7 py-3 rounded-full bg-brand-maroon text-white border border-brand-rose/40 font-display uppercase tracking-wider font-semibold hover:bg-brand-rose transition">
             Lihat Leaderboard
           </a>
-          <a href="#roster" class="px-7 py-3 rounded border border-white/40 font-display uppercase tracking-wider font-semibold hover:border-brand-rose hover:text-brand-rose transition">
+          <a href="#roster" class="px-7 py-3 rounded-full border border-white/40 font-display uppercase tracking-wider font-semibold hover:border-brand-rose hover:text-brand-rose transition">
             Kenalan dengan Tim
           </a>
         </div>
 
         <!-- Countdown mabar berikutnya -->
-        <div class="mt-14 inline-block bg-black/65 backdrop-blur border border-brand-maroon rounded-xl px-5 sm:px-8 py-5">
+        <div class="mt-14 inline-block glass-card rounded-3xl px-5 sm:px-8 py-5">
           <p class="font-display uppercase tracking-widest text-xs text-brand-rose">Mabar Berikutnya</p>
           <p id="nextLabel" class="mt-1 text-sm text-neutral-300">Menghitung...</p>
           <div class="mt-3 grid grid-cols-4 gap-2 sm:gap-4 font-display">
@@ -253,13 +322,13 @@
     </section>
 
     <!-- PAPAN PENGUMUMAN -->
-    <section aria-label="Papan Pengumuman" class="bg-amber-400 text-black border-y-4 border-amber-600 stripe">
-      <div class="max-w-6xl mx-auto flex items-stretch">
-        <div class="shrink-0 flex items-center gap-2 bg-black text-amber-400 px-4 sm:px-6 py-3 font-display uppercase tracking-widest text-sm sm:text-base font-semibold">
+    <section aria-label="Papan Pengumuman" class="relative z-10 px-3 sm:px-6 -mt-6">
+      <div class="max-w-6xl mx-auto flex items-stretch overflow-hidden rounded-full glass-card">
+        <div class="shrink-0 flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 text-black px-4 sm:px-6 py-3 font-display uppercase tracking-widest text-sm sm:text-base font-semibold">
           <span aria-hidden="true">📢</span> Pengumuman
         </div>
         <div class="marquee-wrap overflow-hidden flex-1 flex items-center">
-          <p id="announcement" class="marquee py-3 font-bold text-sm sm:text-lg">
+          <p id="announcement" class="marquee py-3 font-semibold text-sm sm:text-lg text-amber-100">
             ‼️ Iuran kas perkok 5000 &nbsp;•&nbsp; Main sesuai jam datang &nbsp;•&nbsp; Datang tepat waktu! ‼️
           </p>
         </div>
@@ -305,7 +374,7 @@
     </section>
 
     <!-- INFO CEPAT -->
-    <section class="border-y border-brand-maroon/60 bg-brand-card">
+    <section class="info-strip">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         <div>
           <p class="text-3xl" aria-hidden="true">👥</p>
@@ -358,7 +427,7 @@
 
     <!-- HALAMAN: ROSTER -->
     <div data-page="roster" data-title="Roster | PB Jgeer" class="hidden">
-    <section class="relative overflow-hidden border-b border-brand-maroon/60 bg-gradient-to-b from-brand-maroon/50 to-brand-dark">
+    <section class="page-hero">
       <span class="absolute -right-8 -top-10 text-[16rem] leading-none opacity-[0.07] select-none" aria-hidden="true">👥</span>
       <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center sm:text-left">
         <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Season 2026</p>
@@ -381,7 +450,7 @@
 
     <!-- HALAMAN: LEADERBOARD -->
     <div data-page="leaderboard" data-title="Leaderboard | PB Jgeer" class="hidden">
-    <section class="relative overflow-hidden border-b border-brand-maroon/60 bg-gradient-to-b from-brand-maroon/50 to-brand-dark">
+    <section class="page-hero">
       <span class="absolute -right-8 -top-10 text-[16rem] leading-none opacity-[0.07] select-none" aria-hidden="true">🏆</span>
       <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center sm:text-left">
         <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Season 2026</p>
@@ -418,20 +487,6 @@
           </div>
         </div>
 
-        <!-- Download HD -->
-        <div class="px-4 sm:px-8 py-4 border-b border-white/10 bg-black/30 flex flex-col sm:flex-row sm:items-center gap-3">
-          <p class="font-display uppercase tracking-widest text-xs text-neutral-400">📥 Download HD</p>
-          <div class="grid grid-cols-2 sm:flex gap-2">
-            <button type="button" class="export-btn" data-kind="bulanan" data-export="feed45">Feed 4:5 · Top 5</button>
-            <button type="button" class="export-btn" data-kind="bulanan" data-export="story">Story 9:16 · Top 10</button>
-          </div>
-          <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer select-none sm:flex-1">
-            <input type="checkbox" id="opt-label-bulanan" checked class="w-4 h-4 accent-brand-rose" />
-            Tampilkan "Bulanan" &amp; periode di header poster
-          </label>
-          <span id="status-bulanan" class="text-xs text-neutral-400" aria-live="polite"></span>
-        </div>
-
         <!-- Podium Top 3 -->
         <div id="pod-bulanan" class="px-3 sm:px-8 pt-10 pb-6 bg-gradient-to-b from-brand-maroon/20 to-transparent"></div>
 
@@ -458,6 +513,29 @@
           <span class="text-sky-400 font-bold">WR %</span> = Win Rate.<br>
           <strong class="text-white">Rumus Klasemen:</strong> (Total Set Menang) dikurangi (Total Set Kalah).
         </div>
+
+        <!-- Download HD -->
+        <div class="px-4 sm:px-8 py-6 border-t border-white/10 bg-gradient-to-b from-black/30 to-brand-maroon/20">
+          <p class="font-display uppercase tracking-widest text-sm text-white">📥 Download Poster HD</p>
+          <p class="mt-1 text-xs text-neutral-400">Siap upload ke Instagram. Atur opsi, lalu pilih format.</p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer select-none rounded-xl bg-white/5 px-4 py-3">
+              <input type="checkbox" id="opt-label-bulanan" checked class="w-4 h-4 accent-brand-rose" />
+              Tampilkan "Bulanan" &amp; periode di header
+            </label>
+            <div class="flex items-center gap-3 rounded-xl bg-white/5 px-4 py-2.5 text-xs text-neutral-300">
+              <label class="flex items-center gap-2 cursor-pointer select-none whitespace-nowrap">
+                <input type="checkbox" id="opt-date-bulanan" checked class="w-4 h-4 accent-brand-rose" /> Tulis "Update"
+              </label>
+              <input type="date" id="date-bulanan" data-upd aria-label="Tanggal update" class="flex-1 min-w-0 bg-black/50 border border-white/20 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-brand-rose [color-scheme:dark]" />
+            </div>
+          </div>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button type="button" class="export-btn" data-kind="bulanan" data-export="feed45">Feed 4:5 · Top 5</button>
+            <button type="button" class="export-btn" data-kind="bulanan" data-export="story">Story 9:16 · Top 10</button>
+          </div>
+          <p id="status-bulanan" class="mt-3 text-xs text-neutral-400 min-h-[1rem]" aria-live="polite"></p>
+        </div>
       </div>
     </section>
 
@@ -473,20 +551,6 @@
             <select id="selTahunan" aria-label="Pilih periode" class="hidden text-xs bg-black/60 border border-white/20 rounded px-3 py-1.5 text-white focus:outline-none focus:border-brand-rose"></select>
             <button onclick="loadAll()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition">🔄 Refresh Data</button>
           </div>
-        </div>
-
-        <!-- Download HD -->
-        <div class="px-4 sm:px-8 py-4 border-b border-white/10 bg-black/30 flex flex-col sm:flex-row sm:items-center gap-3">
-          <p class="font-display uppercase tracking-widest text-xs text-neutral-400">📥 Download HD</p>
-          <div class="grid grid-cols-2 sm:flex gap-2">
-            <button type="button" class="export-btn" data-kind="tahunan" data-export="feed45">Feed 4:5 · Top 5</button>
-            <button type="button" class="export-btn" data-kind="tahunan" data-export="story">Story 9:16 · Top 10</button>
-          </div>
-          <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer select-none sm:flex-1">
-            <input type="checkbox" id="opt-label-tahunan" checked class="w-4 h-4 accent-brand-rose" />
-            Tampilkan "Tahunan" &amp; periode di header poster
-          </label>
-          <span id="status-tahunan" class="text-xs text-neutral-400" aria-live="polite"></span>
         </div>
 
         <!-- Podium Top 3 -->
@@ -515,13 +579,36 @@
           <span class="text-sky-400 font-bold">WR %</span> = Win Rate.<br>
           <strong class="text-white">Rumus Klasemen:</strong> (Total Set Menang) dikurangi (Total Set Kalah).
         </div>
+
+        <!-- Download HD -->
+        <div class="px-4 sm:px-8 py-6 border-t border-white/10 bg-gradient-to-b from-black/30 to-brand-maroon/20">
+          <p class="font-display uppercase tracking-widest text-sm text-white">📥 Download Poster HD</p>
+          <p class="mt-1 text-xs text-neutral-400">Siap upload ke Instagram. Atur opsi, lalu pilih format.</p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer select-none rounded-xl bg-white/5 px-4 py-3">
+              <input type="checkbox" id="opt-label-tahunan" checked class="w-4 h-4 accent-brand-rose" />
+              Tampilkan "Tahunan" &amp; periode di header
+            </label>
+            <div class="flex items-center gap-3 rounded-xl bg-white/5 px-4 py-2.5 text-xs text-neutral-300">
+              <label class="flex items-center gap-2 cursor-pointer select-none whitespace-nowrap">
+                <input type="checkbox" id="opt-date-tahunan" checked class="w-4 h-4 accent-brand-rose" /> Tulis "Update"
+              </label>
+              <input type="date" id="date-tahunan" data-upd aria-label="Tanggal update" class="flex-1 min-w-0 bg-black/50 border border-white/20 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-brand-rose [color-scheme:dark]" />
+            </div>
+          </div>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button type="button" class="export-btn" data-kind="tahunan" data-export="feed45">Feed 4:5 · Top 5</button>
+            <button type="button" class="export-btn" data-kind="tahunan" data-export="story">Story 9:16 · Top 10</button>
+          </div>
+          <p id="status-tahunan" class="mt-3 text-xs text-neutral-400 min-h-[1rem]" aria-live="polite"></p>
+        </div>
       </div>
     </section>
     </div>
 
     <!-- HALAMAN: SOP -->
     <div data-page="sop" data-title="SOP &amp; Tata Tertib | PB Jgeer" class="hidden">
-    <section class="border-b border-brand-maroon/60 bg-gradient-to-b from-brand-maroon/40 to-brand-dark">
+    <section class="page-hero">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
         <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">SOP &amp; Tata Tertib</p>
         <h1 class="mt-3 font-display font-bold uppercase text-4xl sm:text-6xl leading-[1.1]">
@@ -662,7 +749,7 @@
 
     <!-- HALAMAN: GALERI (grid foto statis, tertaut ke postingan Instagram) -->
     <div data-page="galeri" data-title="Galeri &amp; Dokumentasi | PB Jgeer" class="hidden">
-    <section class="border-b border-brand-maroon/60 bg-gradient-to-b from-brand-maroon/40 to-brand-dark">
+    <section class="page-hero">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Galeri &amp; Dokumentasi</p>
         <h1 class="mt-2 font-display font-bold uppercase text-4xl sm:text-6xl">
@@ -670,7 +757,7 @@
         </h1>
         <div class="mt-4 h-1 w-20 bg-brand-maroon rounded"></div>
         <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg leading-relaxed">
-          Kumpulan momen seru PB Jgeer di lapangan. Ketuk foto untuk melihat postingan aslinya di Instagram.
+          Kumpulan momen seru PB Jgeer di lapangan. Tiga momen pilihan kami. Ketuk foto untuk melihat postingan aslinya di Instagram.
         </p>
       </div>
     </section>
@@ -687,7 +774,7 @@
       </div>
 
       <!-- Grid diisi dari array GALERI di bagian script -->
-      <div id="galeriGrid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5"></div>
+      <div id="galeriGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6"></div>
     </section>
 
     <!-- Video YouTube dinonaktifkan agar galeri hanya berisi foto statis.
@@ -713,7 +800,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="border-t border-brand-maroon/60 bg-black">
+  <footer class="border-t">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-neutral-400">
       <p class="font-display uppercase tracking-widest text-white">PB <span class="text-brand-rose">Jgeer</span></p>
       <p>&copy; 2026 PB Jgeer</p>
@@ -737,14 +824,32 @@
     const LOGO_URL = 'https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png';
     const SITE_URL = 'amrylr.github.io/jgeerbadminton';
 
-    // GALERI: tiap item = 1 foto statis + link ke postingan Instagram aslinya.
-    // Ganti `foto` dengan URL gambar milik sendiri (mis. file di repo GitHub) agar stabil.
-    // Jika `foto` gagal dimuat, kartu tetap tampil dengan latar placeholder dan tetap bisa diklik.
+    // SUMBER FOTO = GITHUB (repo milik sendiri).
+    // Isi dengan nama file di folder basis di bawah, ATAU tempel link GitHub lengkap (blob/raw): otomatis diubah ke link raw.
+    // Roster : kolom Foto (E) di Sheet1, contoh  https://github.com/amrylr/roster/blob/<hash>/amry.jpg  atau cukup  amry.jpg
+    const GITHUB_ROSTER_BASE = 'https://raw.githubusercontent.com/amrylr/roster/main/';
+    const GITHUB_GALERI_BASE = 'https://raw.githubusercontent.com/amrylr/jgeerbadminton/main/galeri/';
+    // (Opsional) foto/PNG pemain smash ASLI untuk latar siluet poster: nama file di folder galeri atau link GitHub.
+    // PNG berlatar transparan paling bagus (jadi siluet murni). Kosongkan untuk memakai siluet bawaan.
+    let POSTER_SMASH_IMG = '';
+
+    // GALERI: 3 foto statis. `foto` = nama file (di GITHUB_GALERI_BASE) atau link GitHub; `ig` = link postingan Instagram aslinya.
+    // Jika foto belum ada/gagal dimuat, kartu tetap tampil dengan latar placeholder dan tetap bisa diklik.
     const GALERI = [
-      { ig: 'https://www.instagram.com/p/DcWHQfXpRFm/', foto: 'https://www.instagram.com/p/DcWHQfXpRFm/media/?size=l', caption: 'Momen Mabar #1' },
-      { ig: 'https://www.instagram.com/p/DU0uiO1D_M5/', foto: 'https://www.instagram.com/p/DU0uiO1D_M5/media/?size=l', caption: 'Momen Mabar #2' },
-      { ig: 'https://www.instagram.com/p/DGsQAiVPOVT/', foto: 'https://www.instagram.com/p/DGsQAiVPOVT/media/?size=l', caption: 'Momen Mabar #3' },
+      { ig: 'https://www.instagram.com/p/DcWHQfXpRFm/', foto: 'galeri-1.jpg', caption: 'Momen Mabar #1' },
+      { ig: 'https://www.instagram.com/p/DU0uiO1D_M5/', foto: 'galeri-2.jpg', caption: 'Momen Mabar #2' },
+      { ig: 'https://www.instagram.com/p/DGsQAiVPOVT/', foto: 'galeri-3.jpg', caption: 'Momen Mabar #3' },
     ];
+
+    // Ubah link GitHub (blob/raw) atau nama file menjadi URL gambar langsung (raw.githubusercontent.com)
+    function ghRaw(u, base) {
+      u = String(u == null ? '' : u).trim();
+      if (!u) return '';
+      const m = u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|raw)\/(.+)$/i);
+      if (m) return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3].split('?')[0]}`;
+      if (/^(https?:\/\/|data:)/i.test(u)) return u;
+      return base + encodeURI(u.replace(/^\/+/, ''));
+    }
 
     // =====================================================================
     // HELPER UMUM
@@ -862,20 +967,23 @@
     // GALERI STATIS
     // =====================================================================
     function renderGaleri() {
-      document.getElementById('galeriGrid').innerHTML = GALERI.map(g => `
+      document.getElementById('galeriGrid').innerHTML = GALERI.slice(0, 3).map(g => {
+        const src = ghRaw(g.foto, GITHUB_GALERI_BASE);
+        return `
         <a href="${esc(g.ig)}" target="_blank" rel="noopener noreferrer"
-           class="block overflow-hidden rounded-2xl bg-brand-card border border-white/10 hover:border-brand-rose transition-colors"
+           class="block overflow-hidden rounded-3xl bg-brand-card border border-white/10 hover:border-brand-rose/60"
            aria-label="${esc(g.caption)} - buka di Instagram">
-          <div class="relative aspect-square bg-gradient-to-br from-brand-maroon to-brand-card flex items-center justify-center">
-            <span class="text-5xl opacity-40" aria-hidden="true">📸</span>
-            <img src="${esc(g.foto)}" alt="${esc(g.caption)}" loading="lazy" decoding="async" referrerpolicy="no-referrer"
-                 class="absolute inset-0 w-full h-full object-cover" onerror="this.remove()" />
+          <div class="relative aspect-[4/5] bg-gradient-to-br from-brand-maroon/70 to-brand-dark flex items-center justify-center">
+            <span class="text-6xl opacity-30" aria-hidden="true">📸</span>
+            ${src ? `<img src="${esc(src)}" alt="${esc(g.caption)}" loading="lazy" decoding="async" referrerpolicy="no-referrer"
+                 class="absolute inset-0 w-full h-full object-cover" onerror="this.remove()" />` : ''}
+            <div class="absolute inset-x-0 bottom-0 p-4 sm:p-5 flex items-end justify-between gap-3 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
+              <span class="font-display uppercase tracking-wide text-lg truncate">${esc(g.caption)}</span>
+              <span class="shrink-0 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold">Instagram ↗</span>
+            </div>
           </div>
-          <div class="flex items-center justify-between gap-2 px-3 sm:px-4 py-3">
-            <span class="text-sm font-medium text-neutral-200 truncate">${esc(g.caption)}</span>
-            <span class="shrink-0 text-xs font-display uppercase tracking-wider text-brand-rose">Instagram ↗</span>
-          </div>
-        </a>`).join('');
+        </a>`;
+      }).join('');
     }
     renderGaleri();
 
@@ -963,7 +1071,8 @@
 
     function driveThumb(url, w = 256) {
       const m = String(url).match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=view&)?id=)([\w-]+)/);
-      return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${w}` : url;
+      if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${w}`;   // tetap didukung
+      return ghRaw(url, GITHUB_ROSTER_BASE);                                      // link GitHub / nama file -> raw
     }
     const avatar = (name, size) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=${size}&background=161616&color=D6455D&bold=true`;
 
@@ -1240,14 +1349,135 @@
       ctx.restore();
     }
 
-    // Lapangan bulutangkis (tampak atas) sebagai latar garis
+    // Tekstur halus: pola carbon fiber tipis + grain (opasitas sangat rendah)
+    function drawTexture(ctx, W, H) {
+      const t = document.createElement('canvas'); t.width = t.height = 8;
+      const g = t.getContext('2d');
+      g.fillStyle = 'rgba(255,255,255,1)';  g.fillRect(0, 0, 4, 4); g.fillRect(4, 4, 4, 4);
+      g.fillStyle = 'rgba(255,255,255,.4)'; g.fillRect(4, 0, 4, 4); g.fillRect(0, 4, 4, 4);
+      ctx.save();
+      ctx.globalAlpha = 0.035; ctx.fillStyle = ctx.createPattern(t, 'repeat'); ctx.fillRect(0, 0, W, H);
+
+      const n = document.createElement('canvas'); n.width = n.height = 220;
+      const nx = n.getContext('2d'), id = nx.createImageData(220, 220);
+      for (let i = 0; i < id.data.length; i += 4) {
+        const v = Math.random() * 255;
+        id.data[i] = id.data[i + 1] = id.data[i + 2] = v; id.data[i + 3] = 255;
+      }
+      nx.putImageData(id, 0, 0);
+      ctx.globalAlpha = 0.03; ctx.fillStyle = ctx.createPattern(n, 'repeat'); ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+    }
+
+    // Latar siluet pemain smash.
+    // - Jika POSTER_SMASH_IMG diisi (foto/PNG pemain asli): PNG berlatar transparan -> siluet murni; foto biasa -> dimonokrom maroon + dipudarkan.
+    // - Jika kosong: memakai siluet bawaan (digambar dengan kode, proporsi tubuh natural).
+    function drawSmashPlayer(ctx, W, H, img) {
+      const color = '#E8566D';
+      let o, w, h;
+
+      if (img) {
+        h = H * 0.66; w = h * img.width / img.height;
+        o = document.createElement('canvas'); o.width = Math.round(w); o.height = Math.round(h);
+        const g = o.getContext('2d');
+        g.drawImage(img, 0, 0, o.width, o.height);
+        // pojok transparan = PNG cutout
+        let cutout = false;
+        try {
+          const px = [[1, 1], [o.width - 2, 1], [1, o.height - 2], [o.width - 2, o.height - 2]];
+          cutout = px.every(([x, y]) => g.getImageData(x, y, 1, 1).data[3] < 20);
+        } catch (e) { /* abaikan */ }
+        if (cutout) {
+          g.globalCompositeOperation = 'source-in'; g.fillStyle = color; g.fillRect(0, 0, o.width, o.height);
+        } else {
+          g.globalCompositeOperation = 'saturation'; g.fillStyle = '#000'; g.fillRect(0, 0, o.width, o.height);   // hitam-putih
+          g.globalCompositeOperation = 'multiply';   g.fillStyle = color; g.fillRect(0, 0, o.width, o.height);    // tint maroon-rose
+          g.globalCompositeOperation = 'destination-in';
+          const rg = g.createRadialGradient(o.width / 2, o.height / 2, o.height * 0.12, o.width / 2, o.height / 2, o.height * 0.55);
+          rg.addColorStop(0, 'rgba(0,0,0,1)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
+          g.fillStyle = rg; g.fillRect(0, 0, o.width, o.height);
+        }
+      } else {
+        const cw = 440, ch = 720;
+        h = H * 0.80; w = h * cw / ch;
+        o = document.createElement('canvas'); o.width = cw; o.height = ch;
+        const g = o.getContext('2d');
+        g.fillStyle = g.strokeStyle = color; g.lineCap = g.lineJoin = 'round';
+        const Y = 120, P = (x, y) => [x, y + Y];
+        const dot = (p, r) => { g.beginPath(); g.arc(p[0], p[1], r, 0, Math.PI * 2); g.fill(); };
+        // anggota badan meruncing (pangkal besar -> ujung kecil) agar terlihat seperti otot, bukan garis tebal
+        const taper = (a, b, r1, r2) => {
+          const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy), nx = -dy / L, ny = dx / L;
+          g.beginPath();
+          g.moveTo(a[0] + nx * r1, a[1] + ny * r1); g.lineTo(b[0] + nx * r2, b[1] + ny * r2);
+          g.lineTo(b[0] - nx * r2, b[1] - ny * r2); g.lineTo(a[0] - nx * r1, a[1] - ny * r1);
+          g.closePath(); g.fill(); dot(a, r1); dot(b, r2);
+        };
+
+        // garis gerak (swoosh) di belakang pemain
+        g.save(); g.lineCap = 'round';
+        [[40, 470, 150, 330, 0.5, 5], [20, 540, 130, 380, 0.35, 4], [70, 420, 150, 280, 0.3, 3]].forEach(([x1, y1, x2, y2, a, lw]) => {
+          g.globalAlpha = a; g.lineWidth = lw; g.beginPath(); g.moveTo(x1, y1 + Y); g.quadraticCurveTo((x1 + x2) / 2 - 40, (y1 + y2) / 2 + Y, x2, y2 + Y); g.stroke();
+        });
+        g.restore();
+
+        // tungkai bawah: kaki depan menekuk, kaki belakang terlempar
+        taper(P(190, 352), P(132, 452), 25, 18); taper(P(132, 452), P(98, 560), 17, 10); taper(P(98, 560), P(54, 582), 10, 7);
+        taper(P(216, 352), P(278, 438), 24, 17); taper(P(278, 438), P(346, 520), 16, 9); taper(P(346, 520), P(394, 524), 9, 6);
+
+        // badan: bahu lebar -> pinggang ramping -> pinggul, melengkung ke belakang
+        g.beginPath();
+        let p0 = P(156, 210); g.moveTo(p0[0], p0[1]);
+        g.bezierCurveTo(...P(160, 260), ...P(174, 310), ...P(180, 354));
+        g.lineTo(...P(228, 356));
+        g.bezierCurveTo(...P(236, 310), ...P(250, 262), ...P(262, 208));
+        g.bezierCurveTo(...P(240, 186), ...P(184, 186), ...P(156, 210));
+        g.closePath(); g.fill();
+        taper(P(208, 196), P(212, 166), 17, 13);                                  // leher
+        g.save(); g.translate(...P(218, 138)); g.rotate(-0.3); g.beginPath(); g.ellipse(0, 0, 27, 33, 0, 0, Math.PI * 2); g.fill(); g.restore();   // kepala menengadah
+
+        // lengan pemukul: terangkat tinggi; lengan penyeimbang: menekuk ke depan
+        taper(P(252, 214), P(302, 150), 16, 12); taper(P(302, 150), P(331, 74), 12, 8); dot(P(333, 66), 10);
+        taper(P(160, 218), P(112, 252), 15, 11);  taper(P(112, 252), P(68, 214), 11, 7); dot(P(64, 210), 9);
+
+        // raket
+        g.lineWidth = 9; g.beginPath(); g.moveTo(...P(333, 66)); g.lineTo(...P(352, 10)); g.stroke();
+        g.save(); g.translate(...P(376, -52)); g.rotate(0.3);
+        g.lineWidth = 9; g.beginPath(); g.ellipse(0, 0, 40, 58, 0, 0, Math.PI * 2); g.stroke();
+        g.lineWidth = 2.5;
+        for (let i = -3; i <= 3; i++) { g.beginPath(); g.moveTo(i * 11, -52); g.lineTo(i * 11, 52); g.stroke(); }
+        for (let i = -4; i <= 4; i++) { g.beginPath(); g.moveTo(-36, i * 12); g.lineTo(36, i * 12); g.stroke(); }
+        g.restore();
+
+        // pudar ke bawah agar menyatu dengan latar
+        g.globalCompositeOperation = 'destination-in';
+        const m = g.createLinearGradient(0, 0, 0, ch);
+        m.addColorStop(0, 'rgba(0,0,0,1)'); m.addColorStop(0.7, 'rgba(0,0,0,.9)'); m.addColorStop(1, 'rgba(0,0,0,.15)');
+        g.fillStyle = m; g.fillRect(0, 0, cw, ch);
+      }
+
+      ctx.save();
+      ctx.globalAlpha = img ? 0.28 : 0.16;
+      ctx.drawImage(o, img ? W - w * 1.0 : W * 0.5 - w * 0.36, H * (img ? 0.15 : 0.12), w, h);
+      ctx.restore();
+    }
+
+    // Garis lapangan: merah maroon cerah/emas tipis + glow lembut, transparan agar tidak bentrok dengan kartu
     function drawCourt(ctx, W, H) {
+      const sc = ctx.getTransform().a;                       // shadowBlur tidak ikut ter-scale
       const m = 46, x0 = m, x1 = W - m, y0 = m, y1 = H - m;
       const cw = x1 - x0, ch = y1 - y0, net = y0 + ch / 2;
       const side = cw * 0.075, svc = (ch / 2) * 0.295, back = (ch / 2) * 0.114;
-      ctx.save();
-      ctx.strokeStyle = 'rgba(255,170,185,.14)'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+      ctx.save(); ctx.lineJoin = 'round';
+
+      // garis batas luar: emas tipis
+      ctx.strokeStyle = 'rgba(251,191,36,.30)'; ctx.lineWidth = 3;
+      ctx.shadowColor = 'rgba(251,191,36,.55)'; ctx.shadowBlur = 12 * sc;
       ctx.strokeRect(x0, y0, cw, ch);
+
+      // sideline, service line, back line, center line: merah maroon cerah
+      ctx.strokeStyle = 'rgba(255,92,116,.26)'; ctx.lineWidth = 3;
+      ctx.shadowColor = 'rgba(255,70,100,.6)'; ctx.shadowBlur = 12 * sc;
       ctx.beginPath();
       ctx.moveTo(x0 + side, y0); ctx.lineTo(x0 + side, y1);
       ctx.moveTo(x1 - side, y0); ctx.lineTo(x1 - side, y1);
@@ -1258,35 +1488,36 @@
       ctx.moveTo(W / 2, y0); ctx.lineTo(W / 2, net - svc);
       ctx.moveTo(W / 2, net + svc); ctx.lineTo(W / 2, y1);
       ctx.stroke();
-      ctx.strokeStyle = 'rgba(255,255,255,.09)'; ctx.lineWidth = 4; ctx.setLineDash([16, 12]);
-      ctx.beginPath(); ctx.moveTo(x0 - 12, net); ctx.lineTo(x1 + 12, net); ctx.stroke();
+
+      // net: dua garis putus-putus sejajar + simpul jaring, bayangan putih tipis
+      ctx.shadowBlur = 0; ctx.setLineDash([14, 10]);
+      ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x0 - 8, net + 7); ctx.lineTo(x1 + 8, net + 7); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,.34)'; ctx.lineWidth = 4;
+      ctx.shadowColor = 'rgba(255,255,255,.5)'; ctx.shadowBlur = 10 * sc;
+      ctx.beginPath(); ctx.moveTo(x0 - 8, net - 7); ctx.lineTo(x1 + 8, net - 7); ctx.stroke();
       ctx.restore();
     }
 
-    // Shuttlecock: gabus di (x,y), bulu membuka ke atas, lalu diputar sebesar rot
-    function drawShuttle(ctx, x, y, s, rot, alpha) {
-      const wTop = s * 0.62, wBot = s * 0.15, cork = s * 0.17, bulge = s * 0.10;
-      ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.globalAlpha = alpha;
-      const g = ctx.createLinearGradient(0, -s, 0, 0);
-      g.addColorStop(0, 'rgba(255,255,255,.96)'); g.addColorStop(1, 'rgba(236,205,212,.9)');
-      ctx.beginPath();
-      ctx.moveTo(-wBot / 2, -cork * 0.6);
-      ctx.lineTo(-wTop / 2, -s);
-      ctx.quadraticCurveTo(0, -s - bulge, wTop / 2, -s);
-      ctx.lineTo(wBot / 2, -cork * 0.6);
-      ctx.closePath(); ctx.fillStyle = g; ctx.fill();
-      ctx.strokeStyle = 'rgba(122,16,32,.55)'; ctx.lineWidth = Math.max(1.5, s * 0.012);
-      for (let i = -3; i <= 3; i++) {
-        const t = i / 3;
-        ctx.beginPath(); ctx.moveTo(t * wBot / 2, -cork * 0.6);
-        ctx.lineTo(t * wTop / 2, -s - (1 - t * t) * bulge * 0.5); ctx.stroke();
+    // Spotlight arena: berkas cahaya dari atas ke area podium (berlapis agar tepinya lembut) + kolam cahaya di lantai
+    function drawSpotlight(ctx, cx, bottomY, spread) {
+      ctx.save(); ctx.globalCompositeOperation = 'screen';
+      for (let i = 0; i < 6; i++) {
+        const k = 0.55 + i * 0.09, a = 1 / 6;
+        const gr = ctx.createLinearGradient(0, 0, 0, bottomY);
+        gr.addColorStop(0, `rgba(255,236,205,${0.20 * a})`);
+        gr.addColorStop(0.6, `rgba(255,222,180,${0.12 * a})`);
+        gr.addColorStop(1, 'rgba(255,205,150,0)');
+        ctx.fillStyle = gr;
+        ctx.beginPath();
+        ctx.moveTo(cx - 70 * k, 0); ctx.lineTo(cx + 70 * k, 0);
+        ctx.lineTo(cx + spread * k, bottomY); ctx.lineTo(cx - spread * k, bottomY);
+        ctx.closePath(); ctx.fill();
       }
-      ctx.strokeStyle = '#D6455D'; ctx.lineWidth = Math.max(3, s * 0.035);
-      ctx.beginPath(); ctx.moveTo(-wTop / 2 * 0.86, -s * 0.72); ctx.lineTo(wTop / 2 * 0.86, -s * 0.72); ctx.stroke();
-      const cg = ctx.createRadialGradient(-cork * 0.2, -cork * 0.7, 1, 0, -cork * 0.5, cork * 0.7);
-      cg.addColorStop(0, '#fff3e0'); cg.addColorStop(1, '#c9a27a');
-      ctx.beginPath(); ctx.ellipse(0, -cork * 0.5, cork * 0.55, cork * 0.55, 0, 0, Math.PI * 2);
-      ctx.fillStyle = cg; ctx.fill();
+      ctx.translate(0, bottomY); ctx.scale(1, 0.26);
+      const rg = ctx.createRadialGradient(cx, 0, 0, cx, 0, spread * 1.15);
+      rg.addColorStop(0, 'rgba(255,226,170,.30)'); rg.addColorStop(1, 'rgba(255,226,170,0)');
+      ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(cx, 0, spread * 1.15, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
     }
 
@@ -1313,7 +1544,7 @@
     }
 
     // ---------- Render poster langsung di canvas ----------
-    async function renderPoster(kind, fmtKey, showLabel, scale) {
+    async function renderPoster(kind, fmtKey, showLabel, scale, dateText) {
       const F = FORMATS[fmtKey];
       const st = state[kind];
       const board = st.boards[st.idx];
@@ -1330,22 +1561,23 @@
       const [logoURL, ...photoURLs] = await Promise.all([fetchDataURL(LOGO_URL), ...list.map(p => posterPhoto(p.nama))]);
       const [logo, ...photos] = await Promise.all([loadImage(logoURL), ...photoURLs.map(loadImage)]);
 
+      const smashURL = POSTER_SMASH_IMG ? await fetchDataURL(ghRaw(POSTER_SMASH_IMG, GITHUB_GALERI_BASE)) : null;
+      const smashImg = await loadImage(smashURL);
+
       const cv = document.createElement('canvas');
       cv.width = W * scale; cv.height = H * scale;
       const ctx = cv.getContext('2d');
       ctx.scale(scale, scale);
       ctx.textBaseline = 'alphabetic';
 
-      // ----- Latar: gradien maroon-hitam + lapangan + shuttlecock -----
-      const bg = ctx.createLinearGradient(0, 0, 0, H);
-      bg.addColorStop(0, '#2a0a12'); bg.addColorStop(0.5, '#14070b'); bg.addColorStop(1, '#070707');
+      // ----- Latar -----
+      // 1) Dasar: gradien radial hitam pekat (tengah/atas) -> maroon gelap (tepi/bawah)
+      const bg = ctx.createRadialGradient(W / 2, H * 0.28, 0, W / 2, H * 0.28, Math.hypot(W / 2, H * 0.78));
+      bg.addColorStop(0, '#0A0A0A'); bg.addColorStop(0.45, '#13070A'); bg.addColorStop(1, '#2B0A11');
       ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-      let rg = ctx.createRadialGradient(W / 2, 0, 0, W / 2, 0, H * 0.55);
-      rg.addColorStop(0, 'rgba(214,69,93,.50)'); rg.addColorStop(1, 'rgba(214,69,93,0)');
-      ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
-      rg = ctx.createRadialGradient(W, H, 0, W, H, 760);
-      rg.addColorStop(0, 'rgba(122,16,32,.6)'); rg.addColorStop(1, 'rgba(122,16,32,0)');
-      ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+      // 2) Tekstur carbon fiber + grain, 3) ilustrasi pemain smash, 4) garis lapangan
+      drawTexture(ctx, W, H);
+      drawSmashPlayer(ctx, W, H, smashImg);
       drawCourt(ctx, W, H);
 
       // ----- Header -----
@@ -1366,14 +1598,11 @@
       const titleW = wLead + wBoard;
       const titleBase = top + logoH + 16 + Math.round(tSize * 0.85);
       ctx.save();
-      ctx.shadowColor = 'rgba(214,69,93,.55)'; ctx.shadowBlur = 30;
+      ctx.shadowColor = 'rgba(214,69,93,.55)'; ctx.shadowBlur = 30 * scale;
       ctx.textAlign = 'left';
       ctx.fillStyle = '#fff'; ctx.fillText('LEADER', (W - titleW) / 2, titleBase);
       ctx.fillStyle = '#D6455D'; ctx.fillText('BOARD', (W - titleW) / 2 + wLead, titleBase);
       ctx.restore();
-      // Shuttlecock di kiri-kanan baris brand (di atas judul, tidak menabrak teks)
-      drawShuttle(ctx, 112, top + 96, 92, -0.45, 1);
-      drawShuttle(ctx, W - 112, top + 96, 92, 0.45, 1);
 
       let headerBottom = titleBase + 10;
       if (showLabel && board) {
@@ -1387,17 +1616,28 @@
         ctx.fillStyle = '#fff'; spaced(ctx, txt, cx + 32, cy + 34, sp);
         headerBottom = cy + ch;
       }
+      if (dateText) {
+        const t = 'UPDATE · ' + dateText.toUpperCase();
+        ctx.font = `500 24px ${FONT_B}`; ctx.textAlign = 'left';
+        const sp = 3, tw = spacedWidth(ctx, t, sp), by = headerBottom + 42;
+        ctx.fillStyle = 'rgba(255,255,255,.75)';
+        spaced(ctx, t, (W - tw) / 2, by, sp);
+        headerBottom = by + 8;
+      }
 
       // ----- Tata letak vertikal: podium + baris, dipusatkan di zona kosong -----
       const ps = F.ps, S = v => Math.round(v * ps);
       const podH = S(570), rowH = F.rowH, rowGap = 12, footH = 44;
       const rowsH = rest.length ? rest.length * rowH + (rest.length - 1) * rowGap : 0;
       const footTop = H - F.padBottom - footH;
-      const zoneTop = headerBottom + 24, zoneBottom = footTop - 24;
-      const content = podH + (rowsH ? 40 + rowsH : 0);
+      const zoneTop = headerBottom + 16, zoneBottom = footTop - 16;
+      const content = podH + (rowsH ? 32 + rowsH : 0);
       const startY = zoneTop + Math.max(0, (zoneBottom - zoneTop - content) / 2);
       const podBottom = startY + podH;
-      const rowsTop = podBottom + 40;
+      const rowsTop = podBottom + 32;
+
+      // ----- Spotlight arena di atas podium -----
+      drawSpotlight(ctx, W / 2, podBottom + 6, 400);
 
       // ----- Podium Top 3 -----
       const bw = 304;
@@ -1415,7 +1655,7 @@
         const bgr = ctx.createLinearGradient(0, blockTop, 0, podBottom);
         bgr.addColorStop(0, hexA(k.c, 0.40)); bgr.addColorStop(1, 'rgba(20,7,11,.96)');
         ctx.save();
-        ctx.shadowColor = hexA(k.c, 0.45); ctx.shadowBlur = 40;
+        ctx.shadowColor = hexA(k.c, 0.45); ctx.shadowBlur = 40 * scale;
         rr(ctx, k.cx - bw / 2, blockTop, bw, k.bh, [28, 28, 0, 0]);
         ctx.fillStyle = bgr; ctx.fill();
         ctx.restore();
@@ -1446,7 +1686,7 @@
         // foto + cincin + lencana
         const R = k.d / 2 + 8, photoBottom = nameBase - 62, cy = photoBottom - R;
         ctx.save();
-        ctx.shadowColor = hexA(k.c, 0.7); ctx.shadowBlur = 36;
+        ctx.shadowColor = hexA(k.c, 0.7); ctx.shadowBlur = 36 * scale;
         ctx.beginPath(); ctx.arc(k.cx, cy, R, 0, Math.PI * 2); ctx.fillStyle = k.c; ctx.fill();
         ctx.restore();
         ctx.beginPath(); ctx.arc(k.cx, cy, R - 4, 0, Math.PI * 2); ctx.fillStyle = '#0B0B0B'; ctx.fill();
@@ -1518,6 +1758,16 @@
       document.getElementById('status-' + kind).textContent = msg || '';
     }
 
+    const BULAN_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    function fmtTanggal(iso) {
+      const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      return m ? `${+m[3]} ${BULAN_ID[+m[2] - 1]} ${m[1]}` : '';
+    }
+    (function () {                                   // tanggal update default = hari ini
+      const d = new Date(), iso = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+      document.querySelectorAll('input[data-upd]').forEach(i => { i.value = iso; });
+    })();
+
     async function exportBoard(kind, fmtKey) {
       if (!state[kind].ranked.length) { document.getElementById('status-' + kind).textContent = 'Belum ada data untuk diunduh.'; return; }
 
@@ -1525,9 +1775,10 @@
       setExportBusy(kind, true, 'Memproses gambar...');
       try {
         const showLabel = document.getElementById('opt-label-' + kind).checked;
+        const dateText = document.getElementById('opt-date-' + kind).checked ? fmtTanggal(document.getElementById('date-' + kind).value) : '';
         let canvas;
-        try { canvas = await renderPoster(kind, fmtKey, showLabel, 2); }   // 2160 px (HD)
-        catch (e) { console.warn(e); canvas = await renderPoster(kind, fmtKey, showLabel, 1); }
+        try { canvas = await renderPoster(kind, fmtKey, showLabel, 2, dateText); }   // 2160 px (HD)
+        catch (e) { console.warn(e); canvas = await renderPoster(kind, fmtKey, showLabel, 1, dateText); }
 
         const blob = await new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error('toBlob gagal')), 'image/png'));
         const label = (state[kind].boards[state[kind].idx] || {}).label || '';
