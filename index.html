@@ -829,9 +829,10 @@
     // Roster : kolom Foto (E) di Sheet1, contoh  https://github.com/amrylr/roster/blob/<hash>/amry.jpg  atau cukup  amry.jpg
     const GITHUB_ROSTER_BASE = 'https://raw.githubusercontent.com/amrylr/roster/main/';
     const GITHUB_GALERI_BASE = 'https://raw.githubusercontent.com/amrylr/jgeerbadminton/main/galeri/';
-    // (Opsional) foto/PNG pemain smash ASLI untuk latar siluet poster: nama file di folder galeri atau link GitHub.
-    // PNG berlatar transparan paling bagus (jadi siluet murni). Kosongkan untuk memakai siluet bawaan.
-    let POSTER_SMASH_IMG = '';
+    // Foto pemain smash untuk latar siluet poster. Default: "Jumping smash" oleh Muktasim Azlan di Unsplash (Unsplash License).
+    // Bisa diganti dengan nama file di folder galeri / link GitHub / link gambar lain. PNG berlatar transparan -> siluet murni.
+    // Isi '' untuk memakai siluet gambar bawaan. Jika foto gagal dimuat, poster tampil tanpa ilustrasi.
+    let POSTER_SMASH_IMG = 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1400&q=80&fm=jpg&fit=crop';
 
     // GALERI: 3 foto statis. `foto` = nama file (di GITHUB_GALERI_BASE) atau link GitHub; `ig` = link postingan Instagram aslinya.
     // Jika foto belum ada/gagal dimuat, kartu tetap tampil dengan latar placeholder dan tetap bisa diklik.
@@ -1262,7 +1263,7 @@
 
     function fetchDataURL(url) {
       const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 6000);
+      const timer = setTimeout(() => ctrl.abort(), 10000);
       return fetch(url, { mode: 'cors', referrerPolicy: 'no-referrer', signal: ctrl.signal })
         .then(r => { if (!r.ok) throw new Error('http'); return r.blob(); })
         .then(b => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(b); }))
@@ -1373,11 +1374,13 @@
     // - Jika POSTER_SMASH_IMG diisi (foto/PNG pemain asli): PNG berlatar transparan -> siluet murni; foto biasa -> dimonokrom maroon + dipudarkan.
     // - Jika kosong: memakai siluet bawaan (digambar dengan kode, proporsi tubuh natural).
     function drawSmashPlayer(ctx, W, H, img) {
+      if (!img && POSTER_SMASH_IMG) return;          // foto dipilih tapi gagal dimuat -> tanpa ilustrasi
       const color = '#E8566D';
       let o, w, h;
 
       if (img) {
-        h = H * 0.66; w = h * img.width / img.height;
+        const ar = img.width / img.height;           // muat di area latar, portrait maupun landscape
+        h = Math.min(H * 0.72, W * 0.95 / ar); w = h * ar;
         o = document.createElement('canvas'); o.width = Math.round(w); o.height = Math.round(h);
         const g = o.getContext('2d');
         g.drawImage(img, 0, 0, o.width, o.height);
@@ -1392,10 +1395,11 @@
         } else {
           g.globalCompositeOperation = 'saturation'; g.fillStyle = '#000'; g.fillRect(0, 0, o.width, o.height);   // hitam-putih
           g.globalCompositeOperation = 'multiply';   g.fillStyle = color; g.fillRect(0, 0, o.width, o.height);    // tint maroon-rose
-          g.globalCompositeOperation = 'destination-in';
-          const rg = g.createRadialGradient(o.width / 2, o.height / 2, o.height * 0.12, o.width / 2, o.height / 2, o.height * 0.55);
+          g.globalCompositeOperation = 'destination-in';   // pudar elips di tepi agar menyatu dengan latar
+          g.save(); g.translate(o.width / 2, o.height / 2); g.scale(o.width / o.height, 1);
+          const rg = g.createRadialGradient(0, 0, o.height * 0.14, 0, 0, o.height * 0.52);
           rg.addColorStop(0, 'rgba(0,0,0,1)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
-          g.fillStyle = rg; g.fillRect(0, 0, o.width, o.height);
+          g.fillStyle = rg; g.fillRect(-o.width, -o.height, o.width * 2, o.height * 2); g.restore();
         }
       } else {
         const cw = 440, ch = 720;
