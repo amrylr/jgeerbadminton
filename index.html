@@ -467,9 +467,9 @@
     <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 text-center sm:text-left">
       <div role="tablist" aria-label="Periode klasemen" class="inline-flex w-full sm:w-auto p-1.5 rounded-xl bg-brand-card border border-white/10 font-display uppercase tracking-wider text-sm sm:text-base">
         <button role="tab" id="tab-bulanan" data-tab="bulanan" aria-controls="panel-bulanan" aria-selected="true"
-                class="tab-btn flex-1 sm:flex-none px-5 sm:px-8 py-3 rounded-lg font-semibold">📅 Bulanan</button>
+                class="tab-btn flex-1 sm:flex-none px-5 sm:px-8 py-3 rounded-lg font-semibold">Bulanan</button>
         <button role="tab" id="tab-tahunan" data-tab="tahunan" aria-controls="panel-tahunan" aria-selected="false"
-                class="tab-btn flex-1 sm:flex-none px-5 sm:px-8 py-3 rounded-lg font-semibold">🗓️ Tahunan</button>
+                class="tab-btn flex-1 sm:flex-none px-5 sm:px-8 py-3 rounded-lg font-semibold">Tahunan</button>
       </div>
     </section>
 
@@ -479,7 +479,6 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 sm:px-8 py-5 bg-gradient-to-r from-brand-maroon/80 to-brand-card border-b border-white/10">
           <div>
             <h2 class="font-display uppercase text-2xl font-bold tracking-wide">Klasemen Bulanan</h2>
-            <p class="text-xs text-neutral-300">Sistem Perhitungan Utama: Selisih Set (+/-)</p>
           </div>
           <div class="flex items-center gap-2 self-start sm:self-center">
             <select id="selBulanan" aria-label="Pilih periode" class="hidden text-xs bg-black/60 border border-white/20 rounded px-3 py-1.5 text-white focus:outline-none focus:border-brand-rose"></select>
@@ -521,18 +520,18 @@
           <div class="mt-4 grid gap-3 sm:grid-cols-2">
             <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer select-none rounded-xl bg-white/5 px-4 py-3">
               <input type="checkbox" id="opt-label-bulanan" checked class="w-4 h-4 accent-brand-rose" />
-              Tampilkan "Bulanan" &amp; periode di header
+              Tampilkan Bulan &amp; periode
             </label>
             <div class="flex items-center gap-3 rounded-xl bg-white/5 px-4 py-2.5 text-xs text-neutral-300">
               <label class="flex items-center gap-2 cursor-pointer select-none whitespace-nowrap">
-                <input type="checkbox" id="opt-date-bulanan" checked class="w-4 h-4 accent-brand-rose" /> Tulis "Update"
+                <input type="checkbox" id="opt-date-bulanan" checked class="w-4 h-4 accent-brand-rose" /> Tulis tanggal
               </label>
               <input type="date" id="date-bulanan" data-upd aria-label="Tanggal update" class="flex-1 min-w-0 bg-black/50 border border-white/20 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-brand-rose [color-scheme:dark]" />
             </div>
           </div>
           <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button type="button" class="export-btn" data-kind="bulanan" data-export="feed45">Feed 4:5 · Top 5</button>
-            <button type="button" class="export-btn" data-kind="bulanan" data-export="story">Story 9:16 · Top 10</button>
+            <button type="button" class="export-btn" data-kind="bulanan" data-export="feed45">Ukuran 4:5 · Top 5</button>
+            <button type="button" class="export-btn" data-kind="bulanan" data-export="story">Ukuran 9:16 · Top 10</button>
           </div>
           <p id="status-bulanan" class="mt-3 text-xs text-neutral-400 min-h-[1rem]" aria-live="polite"></p>
         </div>
@@ -587,7 +586,7 @@
           <div class="mt-4 grid gap-3 sm:grid-cols-2">
             <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer select-none rounded-xl bg-white/5 px-4 py-3">
               <input type="checkbox" id="opt-label-tahunan" checked class="w-4 h-4 accent-brand-rose" />
-              Tampilkan "Tahunan" &amp; periode di header
+              Tampilkan Tahun &amp; periode
             </label>
             <div class="flex items-center gap-3 rounded-xl bg-white/5 px-4 py-2.5 text-xs text-neutral-300">
               <label class="flex items-center gap-2 cursor-pointer select-none whitespace-nowrap">
