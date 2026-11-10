@@ -3,21 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Hasil | PB Jgeer</title>
+    <title>Report | PB Jgeer</title>
     <!-- Open Graph / WhatsApp Preview Meta Tags -->
-<meta property="og:type" content="website" />
-<meta property="og:title" content="Input Hasil Pertandingan | PB Jgeer" />
-<meta property="og:description" content="Portal input skor harian pertandingan ganda PB Jgeer. Mari ngesang dan bersenang-senang!" />
-<meta property="og:url" content="https://amrylr.github.io/jgeerbadminton/" />
-<meta property="og:image" content="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:site_name" content="PB Jgeer Badminton" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Input & Recap Pertandingan | PB Jgeer" />
+    <meta property="og:description" content="Portal input skor harian pertandingan ganda PB Jgeer. Mari ngesang dan bersenang-senang!" />
+    <meta property="og:url" content="https://amrylr.github.io/jgeerbadminton/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="PB Jgeer Badminton" />
 
-<!-- Standard Meta Tags (Untuk Browser & SEO dasar) -->
-<meta name="title" content="Input Hasil Pertandingan | PB Jgeer" />
-<meta name="description" content="Portal input skor harian pertandingan ganda PB Jgeer. Mari ngesang dan bersenang-senang!" />
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -31,18 +27,58 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
     <style>
-        #loadingOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 999; backdrop-filter: blur(4px); }
-        .spinner { border: 4px solid rgba(255,255,255,0.1); border-left-color: #D6455D; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* Tampilan nama yang di-disable agar lebih rapi di beberapa browser */
-        select option:disabled { color: #555; background: #222; }
-        /* Hilangkan panah input number */
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-    </style>
+    body { font-family: 'Inter', sans-serif; background: #0A0A0A; }
+    html { background: #0A0A0A; }
+    #loadingOverlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: flex; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(8px); }
+    .spinner { border: 4px solid rgba(255,255,255,.1); border-left-color: #D6455D; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    :root { --glass-line: rgba(255,255,255,.17); }
+    /* NAVBAR (identik dengan index) */
+    .nav-glass { background: rgba(11,11,11,.35); -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%); border: 1px solid rgba(255,255,255,.10); box-shadow: 0 8px 30px -12px rgba(0,0,0,.55); transition: background .3s, box-shadow .3s, border-color .3s; }
+    #siteHeader.is-scrolled .nav-glass { background: rgba(11,11,11,.78); border-color: rgba(214,69,93,.35); box-shadow: 0 14px 40px -12px rgba(122,16,32,.7); }
+    #navBar { transition: height .3s; } #siteHeader.is-scrolled #navBar { height: 3.25rem; }
+    .nav-link { position: relative; transition: color .2s, background .2s, transform .2s; }
+    .nav-link:hover { background: rgba(255,255,255,.08); transform: translateY(-1px); }
+    .nav-link::after { content: ''; position: absolute; left: 50%; bottom: 4px; height: 2px; width: 0; background: #D6455D; border-radius: 2px; transform: translateX(-50%); transition: width .25s; }
+    .nav-link:hover::after { width: 40%; }
+    .nav-link[aria-current="page"] { background: #7A1020; color: #fff; font-weight: 600; } .nav-link[aria-current="page"]::after { display: none; }
+    #mobileMenu:not(.hidden) { animation: dropIn .2s ease; } @keyframes dropIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+    /* Glassmorphism */
+    body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background:
+        radial-gradient(34rem 26rem at 90% -4%, rgba(214,69,93,.42), transparent 62%), radial-gradient(38rem 32rem at -10% 34%, rgba(122,16,32,.70), transparent 62%),
+        radial-gradient(30rem 24rem at 72% 58%, rgba(155,28,75,.30), transparent 64%), radial-gradient(34rem 26rem at 8% 100%, rgba(251,191,36,.14), transparent 64%),
+        radial-gradient(40rem 30rem at 105% 100%, rgba(122,16,32,.50), transparent 62%); }
+    main { position: relative; isolation: isolate; }
+    main::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background:
+        radial-gradient(26rem 22rem at 92% 6%, rgba(214,69,93,.45), transparent 65%), radial-gradient(28rem 24rem at 4% 22%, rgba(122,16,32,.75), transparent 65%),
+        radial-gradient(24rem 20rem at 96% 42%, rgba(155,28,75,.38), transparent 65%), radial-gradient(28rem 22rem at 2% 62%, rgba(251,191,36,.16), transparent 65%),
+        radial-gradient(28rem 24rem at 94% 80%, rgba(122,16,32,.70), transparent 65%); }
+    .glass-card, main .bg-brand-card { background: linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.03)); -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
+        border: 1px solid var(--glass-line); box-shadow: inset 0 1px 0 rgba(255,255,255,.24), 0 24px 50px -26px rgba(0,0,0,.75); border-radius: 1.75rem; }
+    main .rounded-xl { border-radius: 1.25rem; } main .rounded-2xl { border-radius: 1.75rem; }
+    main .bg-black\/40, main .bg-black\/30 { background: rgba(255,255,255,.045); }
+    .page-hero { position: relative; overflow: hidden; max-width: 72rem; margin: 5.5rem max(.75rem, calc((100% - 72rem) / 2)) 0; border-radius: 2rem;
+        background: radial-gradient(28rem 14rem at 90% 0%, rgba(214,69,93,.38), transparent 70%), linear-gradient(135deg, rgba(122,16,32,.50), rgba(255,255,255,.06));
+        -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%); border: 1px solid var(--glass-line); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 30px 60px -35px rgba(122,16,32,.85); }
+    main h1 .text-brand-rose, main h2.grad { background: linear-gradient(90deg, #ff7f93, #fbbf24); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    main .h-1.w-20 { background: linear-gradient(90deg, #D6455D, #fbbf24); border-radius: 9999px; }
+    main select, main input[type="date"], main input[type="password"] { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.22); color-scheme: dark; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    main select option { background: #1a0a0e; color: #fff; }
+    main [role="tablist"] { border-radius: 9999px; }
+    .tab-btn { transition: all .25s; border-radius: 9999px; }
+    .tab-btn[aria-selected="true"] { background: linear-gradient(135deg, rgba(122,16,32,.95), rgba(214,69,93,.75)); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 8px 22px -8px rgba(214,69,93,.7); color: #fff; }
+    .tab-btn[aria-selected="false"] { color: #a3a3a3; } .tab-btn[aria-selected="false"]:hover { color: #fff; background: rgba(255,255,255,.06); }
+    .export-btn { border-radius: 9999px; padding: .6rem 1.2rem; font-family: 'Oswald', sans-serif; font-size: .85rem; font-weight: 600; letter-spacing: .1em; color: #fff; text-transform: uppercase;
+        background: linear-gradient(135deg, #7A1020, #D6455D); border: 1px solid rgba(255,255,255,.22); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 12px 28px -14px rgba(214,69,93,.8); transition: background .2s, opacity .2s; }
+    .export-btn:hover:not(:disabled) { background: linear-gradient(135deg, #901529, #e85a72); } .export-btn:disabled { opacity: .5; cursor: wait; }
+    .ghost-btn { border-radius: 9999px; padding: .6rem 1.2rem; font-family: 'Oswald', sans-serif; font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); transition: background .2s; }
+    .ghost-btn:hover { background: rgba(255,255,255,.16); }
+    .day-card { transition: transform .25s, border-color .25s; } .day-card:hover { transform: translateY(-3px); border-color: rgba(214,69,93,.6); }
+    #toTop { background: rgba(122,16,32,.55); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px -10px rgba(0,0,0,.7); }
+    footer { -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); background: rgba(255,255,255,.03) !important; border-color: rgba(255,255,255,.08) !important; }
+    @media (prefers-reduced-motion: reduce) { #mobileMenu:not(.hidden) { animation: none; } .day-card:hover { transform: none; } }
+</style>
 </head>
 <body class="bg-brand-dark text-white antialiased min-h-screen flex flex-col font-body">
 
@@ -53,97 +89,132 @@
     </div>
 </div>
 
-<!-- NAVBAR DENGAN LOGO & TOMBOL LEADERBOARD -->
-<header class="sticky top-0 z-50 bg-brand-dark/95 backdrop-blur border-b border-brand-maroon/60">
-    <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <a href="https://amrylr.github.io/jgeerbadminton/" class="flex items-center gap-2 group cursor-pointer hover:opacity-90 transition">
-            <img src="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" alt="Logo PB Jgeer" class="h-10 w-auto" />
-            <span class="font-display text-2xl font-bold tracking-wide uppercase">
-                PB <span class="text-brand-rose group-hover:text-white transition">Jgeer</span>
-            </span>
+<!-- NAVBAR (floating, rounded, glassmorphism) -->
+  <header id="siteHeader" class="fixed inset-x-0 top-0 z-50 px-3 sm:px-6 pt-3 pointer-events-none">
+    <div class="max-w-6xl mx-auto pointer-events-auto">
+      <nav id="navBar" class="nav-glass h-14 sm:h-16 px-3 sm:px-5 flex items-center justify-between rounded-2xl" aria-label="Navigasi utama">
+        <a href="index.html#home" class="flex items-center gap-2 group">
+          <img src="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" alt="Logo PB Jgeer" class="h-9 sm:h-10 w-auto" />
+          <span class="font-display text-xl sm:text-2xl font-bold tracking-wide uppercase">PB <span class="text-brand-rose group-hover:text-white transition">Jgeer</span></span>
         </a>
-        <ul class="flex items-center gap-2 font-display uppercase tracking-wider text-sm">
-            <li><a href="https://amrylr.github.io/jgeerbadminton/#leaderboard" class="hidden sm:inline-block px-4 py-2 rounded text-neutral-400 hover:text-brand-rose hover:bg-white/5 transition mr-2">🏆 Leaderboard</a></li>
-            <li><button id="btnPlayer" onclick="switchTab('player')" class="px-5 py-2 rounded bg-brand-maroon text-white font-semibold transition shadow-[0_4px_14px_0_rgba(122,16,32,0.39)]">Pemain</button></li>
-            <li><button id="btnAdmin" onclick="switchTab('admin')" class="px-5 py-2 rounded text-neutral-400 hover:text-brand-rose hover:bg-white/5 transition">Admin</button></li>
+        <ul class="hidden md:flex items-center gap-1 font-display uppercase tracking-wider text-sm">
+          <li><a href="index.html#home" data-nav="home" class="nav-link block px-4 py-2 rounded-xl">Home</a></li>
+          <li><a href="index.html#roster" data-nav="roster" class="nav-link block px-4 py-2 rounded-xl">Roster</a></li>
+          <li><a href="index.html#leaderboard" data-nav="leaderboard" class="nav-link block px-4 py-2 rounded-xl">Leaderboard</a></li>
+          <li><a href="index.html#sop" data-nav="sop" class="nav-link block px-4 py-2 rounded-xl">SOP</a></li>
+          <li><a href="index.html#galeri" data-nav="galeri" class="nav-link block px-4 py-2 rounded-xl">Galeri</a></li>
+          <li><a href="report.html" data-nav="report" class="nav-link block px-4 py-2 rounded-xl" aria-current="page">Report</a></li>
         </ul>
-    </nav>
-</header>
+        <button id="menuBtn" class="md:hidden p-2 rounded-xl hover:bg-white/10 transition" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </nav>
+      <div id="mobileMenu" class="nav-glass hidden md:hidden mt-2 rounded-2xl overflow-hidden">
+        <ul class="p-2 flex flex-col font-display uppercase tracking-wider">
+          <li><a href="index.html#home" data-nav="home" class="nav-link block px-4 py-3 rounded-xl">Home</a></li>
+          <li><a href="index.html#roster" data-nav="roster" class="nav-link block px-4 py-3 rounded-xl">Roster</a></li>
+          <li><a href="index.html#leaderboard" data-nav="leaderboard" class="nav-link block px-4 py-3 rounded-xl">Leaderboard</a></li>
+          <li><a href="index.html#sop" data-nav="sop" class="nav-link block px-4 py-3 rounded-xl">SOP</a></li>
+          <li><a href="index.html#galeri" data-nav="galeri" class="nav-link block px-4 py-3 rounded-xl">Galeri</a></li>
+          <li><a href="report.html" data-nav="report" class="nav-link block px-4 py-3 rounded-xl" aria-current="page">Report</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
 
-<main class="max-w-5xl mx-auto px-4 sm:px-6 py-10 w-full flex-1">
+<main class="flex-1">
+<section class="page-hero">
+  <span class="absolute -right-8 -top-10 text-[16rem] leading-none opacity-[0.07] select-none" aria-hidden="true">🏸</span>
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center sm:text-left">
+    <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Season 2026</p>
+    <h1 class="mt-2 font-display font-bold uppercase text-4xl sm:text-6xl leading-tight">Input &amp; <span class="text-brand-rose">Recap</span></h1>
+    <div class="mt-4 h-1 w-20 bg-brand-maroon rounded mx-auto sm:mx-0"></div>
+    <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg mx-auto sm:mx-0">Catat skor harian, verifikasi, lalu unduh poster recap seluruh pertandingan per hari.</p>
+  </div>
+</section>
+<div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 w-full">
+    
+    <!-- TABS -->
+    <div class="flex justify-center mb-10 overflow-x-auto pb-2">
+        <div role="tablist" class="inline-flex p-1.5 rounded-xl bg-black/40 border border-white/10 font-display uppercase tracking-wider text-sm sm:text-base whitespace-nowrap">
+            <button role="tab" id="btnPlayer" onclick="switchTab('player')" aria-selected="true" class="tab-btn px-6 py-2.5 font-semibold">Pemain</button>
+            <button role="tab" id="btnAdmin" onclick="switchTab('admin')" aria-selected="false" class="tab-btn px-6 py-2.5 font-semibold">Admin</button>
+            <button role="tab" id="btnRecap" onclick="switchTab('recap')" aria-selected="false" class="tab-btn px-6 py-2.5 font-semibold">Match Recap</button>
+        </div>
+    </div>
     
     <!-- HALAMAN PEMAIN -->
     <div id="playerView" class="space-y-8">
-        <div class="rounded-2xl bg-brand-card border border-white/10 p-6 sm:p-8 shadow-2xl">
-            <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-1">Input Pertandingan</h2>
+        <div class="glass-card p-6 sm:p-8">
+            <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-1 text-brand-rose">Input Pertandingan</h2>
             <p class="text-sm text-neutral-400 mb-6">Data yang dikirim akan masuk ke antrean verifikasi Admin.</p>
             
             <form id="playerForm" class="space-y-6">
                 <div>
                     <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Tanggal Pertandingan</label>
-                    <input type="date" id="p_tanggal" class="w-full bg-black/60 border border-white/20 rounded px-4 py-3 text-white focus:outline-none focus:border-brand-rose transition" required onchange="fetchHistory()">
+                    <input type="date" id="p_tanggal" class="w-full rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-rose transition" required onchange="fetchHistory()">
                 </div>
                 
                 <div class="grid gap-6 md:grid-cols-2">
-                    <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
+                    <div class="bg-black/30 border border-white/5 p-5 rounded-xl">
                         <label class="font-display uppercase tracking-widest text-brand-rose text-sm mb-3 block">Tim A</label>
                         
                         <!-- Kartu Pemain A1 -->
-                        <div onclick="openPlayerModal('p_tA_p1')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
-                            <img id="img_p_tA_p1" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                        <div onclick="openPlayerModal('p_tA_p1')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tA_p1" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=161616&color=D6455D&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
                             <span id="name_p_tA_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
                         </div>
                         <input type="hidden" id="p_tA_p1" required>
 
                         <!-- Kartu Pemain A2 -->
-                        <div onclick="openPlayerModal('p_tA_p2')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
-                            <img id="img_p_tA_p2" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                        <div onclick="openPlayerModal('p_tA_p2')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tA_p2" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=161616&color=D6455D&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
                             <span id="name_p_tA_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
                         </div>
                         <input type="hidden" id="p_tA_p2" required>
                         
                         <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Skor Menang (Win)</label>
                         <div class="flex gap-2 mb-2">
-                            <button type="button" id="btn-p_A-2" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 2)">2</button>
-                            <button type="button" id="btn-p_A-1" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 1)">1</button>
-                            <button type="button" id="btn-p_A-0" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 0)">0</button>
+                            <button type="button" id="btn-p_A-2" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 2)">2</button>
+                            <button type="button" id="btn-p_A-1" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 1)">1</button>
+                            <button type="button" id="btn-p_A-0" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 0)">0</button>
                         </div>
-                        <input type="number" id="p_scoreA" class="w-full bg-black/50 border border-white/5 rounded px-3 py-2 text-neutral-500 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik tombol skor di atas">
+                        <input type="number" id="p_scoreA" class="w-full bg-black/50 border border-white/5 rounded-lg px-3 py-2 text-neutral-400 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik tombol skor">
                     </div>
 
-                    <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
+                    <div class="bg-black/30 border border-white/5 p-5 rounded-xl">
                         <label class="font-display uppercase tracking-widest text-neutral-300 text-sm mb-3 block">Tim B</label>
                         
                         <!-- Kartu Pemain B1 -->
-                        <div onclick="openPlayerModal('p_tB_p1')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
-                            <img id="img_p_tB_p1" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                        <div onclick="openPlayerModal('p_tB_p1')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tB_p1" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=161616&color=D6455D&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
                             <span id="name_p_tB_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
                         </div>
                         <input type="hidden" id="p_tB_p1" required>
 
                         <!-- Kartu Pemain B2 -->
-                        <div onclick="openPlayerModal('p_tB_p2')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
-                            <img id="img_p_tB_p2" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                        <div onclick="openPlayerModal('p_tB_p2')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tB_p2" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=161616&color=D6455D&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
                             <span id="name_p_tB_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
                         </div>
                         <input type="hidden" id="p_tB_p2" required>
                         
                         <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Skor Menang (Win)</label>
                         <div class="flex gap-2 mb-2">
-                            <button type="button" id="btn-p_B-2" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 2)">2</button>
-                            <button type="button" id="btn-p_B-1" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 1)">1</button>
-                            <button type="button" id="btn-p_B-0" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 0)">0</button>
+                            <button type="button" id="btn-p_B-2" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 2)">2</button>
+                            <button type="button" id="btn-p_B-1" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 1)">1</button>
+                            <button type="button" id="btn-p_B-0" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 0)">0</button>
                         </div>
-                        <input type="number" id="p_scoreB" class="w-full bg-black/50 border border-white/5 rounded px-3 py-2 text-neutral-500 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik tombol skor di atas">
+                        <input type="number" id="p_scoreB" class="w-full bg-black/50 border border-white/5 rounded-lg px-3 py-2 text-neutral-400 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik tombol skor">
                     </div>
                 </div>
-                <button type="submit" class="w-full py-4 rounded-xl bg-brand-rose hover:bg-brand-maroon text-white font-display font-bold uppercase tracking-wider transition shadow-lg">Kirim Antrean</button>
+                <button type="submit" class="export-btn w-full py-4 text-center block !text-lg !rounded-xl shadow-lg border-0">Kirim Antrean</button>
             </form>
         </div>
 
         <!-- Riwayat Tabel -->
-        <div class="rounded-2xl bg-brand-card border border-white/10 shadow-2xl overflow-hidden">
-            <div class="px-6 py-5 bg-gradient-to-r from-brand-maroon/80 to-brand-card border-b border-white/10">
+        <div class="glass-card overflow-hidden">
+            <div class="px-6 py-5 bg-gradient-to-r from-brand-maroon/80 to-transparent border-b border-white/10">
                 <h2 class="font-display uppercase text-xl font-bold tracking-wide">Riwayat Hari Ini (Terverifikasi)</h2>
             </div>
             <div class="overflow-x-auto">
@@ -163,111 +234,181 @@
 
     <!-- HALAMAN ADMIN -->
     <div id="adminView" class="hidden space-y-8">
-        <div id="adminLogin" class="max-w-md mx-auto rounded-2xl bg-brand-card border border-white/10 p-8 shadow-2xl text-center">
-            <span class="text-4xl mb-4 block" aria-hidden="true">🔒</span>
+        <div id="adminLogin" class="max-w-md mx-auto glass-card p-8 text-center">
+            <span class="text-4xl mb-4 block" aria-hidden="true">🛡️</span>
             <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-6">Akses Admin</h2>
-            <input type="password" id="adminPwd" placeholder="Masukkan Password" class="w-full bg-black/60 border border-white/20 rounded px-4 py-3 text-white text-center tracking-widest mb-4 outline-none">
-            <button onclick="checkAdmin()" class="w-full py-3 rounded bg-white text-black font-display font-bold uppercase tracking-wider hover:bg-gray-200 transition">Buka Kunci</button>
+            <input type="password" id="adminPwd" placeholder="Masukkan Password" class="w-full rounded-xl px-4 py-3 text-white text-center tracking-widest mb-4 outline-none">
+            <button onclick="checkAdmin()" class="export-btn w-full py-3 block text-center !rounded-xl border-0">Buka Kunci</button>
         </div>
 
         <div id="adminDashboard" class="hidden space-y-8">
-            <!-- Pending List -->
-            <div class="rounded-2xl bg-brand-card border border-white/10 shadow-2xl p-6 sm:p-8">
+            <div class="glass-card p-6 sm:p-8">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="font-display uppercase text-2xl font-bold tracking-wide">Antrean Verifikasi</h2>
-                    <button onclick="loadPending()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition">🔄 Refresh</button>
+                    <button onclick="loadPending()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition">🔄 Refresh</button>
                 </div>
                 <div id="pendingList" class="space-y-4"></div>
             </div>
 
-            <!-- Direct Input -->
-            <div class="rounded-2xl bg-brand-card border border-brand-maroon/60 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-brand-maroon text-white text-xs font-bold px-3 py-1 rounded-bl-lg">NO VERIFY</div>
+            <div class="glass-card border-brand-maroon/60 p-6 sm:p-8 relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-brand-maroon text-white text-xs font-bold px-3 py-1 rounded-bl-lg shadow-lg">NO VERIFY</div>
                 <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-1 text-brand-rose">Input Langsung</h2>
-                <p class="text-sm text-neutral-400 mb-6">Data dikirim akan langsung menjumlahkan skor di Valid.</p>
+                <p class="text-sm text-neutral-400 mb-6">Data akan langsung dikalkulasikan ke klasemen.</p>
                 
                 <form id="adminDirectForm" class="space-y-6">
                     <div>
                         <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Tanggal</label>
-                        <input type="date" id="a_tanggal" class="w-full bg-black/60 border border-white/20 rounded px-4 py-3 text-white outline-none" required>
+                        <input type="date" id="a_tanggal" class="w-full rounded-xl px-4 py-3 text-white outline-none" required>
                     </div>
                     
                     <div class="grid gap-6 md:grid-cols-2">
-                        <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
+                        <div class="bg-black/30 border border-white/5 p-5 rounded-xl">
                             <label class="font-display uppercase tracking-widest text-brand-rose text-sm mb-3 block">Tim A</label>
                             
-                            <!-- Kartu Admin A1 -->
-                            <div onclick="openPlayerModal('a_tA_p1')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
-                                <img id="img_a_tA_p1" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                            <div onclick="openPlayerModal('a_tA_p1')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tA_p1" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=161616&color=D6455D&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
                                 <span id="name_a_tA_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
                             </div>
                             <input type="hidden" id="a_tA_p1" required>
 
-                            <!-- Kartu Admin A2 -->
-                            <div onclick="openPlayerModal('a_tA_p2')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
-                                <img id="img_a_tA_p2" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                            <div onclick="openPlayerModal('a_tA_p2')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tA_p2" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=161616&color=D6455D&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
                                 <span id="name_a_tA_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
                             </div>
                             <input type="hidden" id="a_tA_p2" required>
 
                             <div class="flex gap-2 mb-2">
-                                <button type="button" id="btn-a_A-2" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 2)">2</button>
-                                <button type="button" id="btn-a_A-1" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 1)">1</button>
-                                <button type="button" id="btn-a_A-0" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 0)">0</button>
+                                <button type="button" id="btn-a_A-2" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 2)">2</button>
+                                <button type="button" id="btn-a_A-1" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 1)">1</button>
+                                <button type="button" id="btn-a_A-0" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 0)">0</button>
                             </div>
-                            <input type="number" id="a_scoreA" class="w-full bg-black/50 border border-white/5 rounded px-3 py-2 text-neutral-500 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik skor di atas">
+                            <input type="number" id="a_scoreA" class="w-full bg-black/50 border border-white/5 rounded-lg px-3 py-2 text-neutral-400 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik skor di atas">
                         </div>
-                        <div class="bg-black/40 border border-white/5 p-5 rounded-xl">
+                        
+                        <div class="bg-black/30 border border-white/5 p-5 rounded-xl">
                             <label class="font-display uppercase tracking-widest text-neutral-300 text-sm mb-3 block">Tim B</label>
                             
-                            <!-- Kartu Admin B1 -->
-                            <div onclick="openPlayerModal('a_tB_p1')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
-                                <img id="img_a_tB_p1" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                            <div onclick="openPlayerModal('a_tB_p1')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tB_p1" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=161616&color=D6455D&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
                                 <span id="name_a_tB_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
                             </div>
                             <input type="hidden" id="a_tB_p1" required>
 
-                            <!-- Kartu Admin B2 -->
-                            <div onclick="openPlayerModal('a_tB_p2')" class="w-full bg-brand-card border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
-                                <img id="img_a_tB_p2" src="https://ui-avatars.com/api/?name=Pilih&background=222&color=fff" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition">
+                            <div onclick="openPlayerModal('a_tB_p2')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tB_p2" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=161616&color=D6455D&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
                                 <span id="name_a_tB_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
                             </div>
                             <input type="hidden" id="a_tB_p2" required>
 
                             <div class="flex gap-2 mb-2">
-                                <button type="button" id="btn-a_B-2" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 2)">2</button>
-                                <button type="button" id="btn-a_B-1" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 1)">1</button>
-                                <button type="button" id="btn-a_B-0" class="flex-1 py-2 rounded font-bold bg-brand-card border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 0)">0</button>
+                                <button type="button" id="btn-a_B-2" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 2)">2</button>
+                                <button type="button" id="btn-a_B-1" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 1)">1</button>
+                                <button type="button" id="btn-a_B-0" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 0)">0</button>
                             </div>
-                            <input type="number" id="a_scoreB" class="w-full bg-black/50 border border-white/5 rounded px-3 py-2 text-neutral-500 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik skor di atas">
+                            <input type="number" id="a_scoreB" class="w-full bg-black/50 border border-white/5 rounded-lg px-3 py-2 text-neutral-400 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik skor di atas">
                         </div>
                     </div>
-                    <button type="submit" class="w-full py-4 rounded-xl bg-brand-maroon hover:bg-red-800 text-white font-display font-bold uppercase tracking-wider transition">Input Langsung ke Valid</button>
+                    <button type="submit" class="export-btn w-full py-4 text-center block !text-lg !rounded-xl shadow-lg border-0 bg-brand-maroon hover:bg-brand-rose">Input Langsung ke Valid</button>
                 </form>
             </div>
         </div>
     </div>
-    
+
+    <!-- HALAMAN MATCH RECAP -->
+    <div id="recapView" class="hidden space-y-8">
+        <div class="glass-card p-6 sm:p-8">
+            <div class="flex flex-wrap items-start justify-between gap-3 mb-6">
+                <div>
+                    <h2 class="grad font-display uppercase text-2xl font-bold tracking-wide mb-1 text-brand-rose">Poster Match Recap</h2>
+                    <p class="text-sm text-neutral-400">Pilih hari. Satu poster berisi seluruh pertandingan di hari itu (data Sheet 6).</p>
+                </div>
+                <button onclick="loadRecapData()" class="ghost-btn">🔄 Muat Ulang</button>
+            </div>
+            <label class="flex flex-wrap items-center gap-3 rounded-xl bg-white/5 px-4 py-3 text-xs text-neutral-300 mb-3">
+                Maksimal pertandingan per poster
+                <select id="recapSplit" class="rounded-lg px-3 py-1.5 text-white outline-none">
+                    <option value="0">Semua dalam 1 poster</option><option value="6">6 (pecah otomatis)</option><option value="8">8 (pecah otomatis)</option>
+                </select>
+            </label>
+            <p id="recapStatus" class="text-xs text-neutral-400 min-h-[1rem] mb-3" aria-live="polite">Memuat...</p>
+            <div id="recapList" class="grid gap-4 sm:grid-cols-2"></div>
+        </div>
+    </div>
+
+    <!-- MODAL PREVIEW POSTER -->
+    <div id="posterModal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="glass-card w-full max-w-md p-4 flex flex-col max-h-[92vh]">
+            <div class="overflow-y-auto rounded-2xl"><img id="posterImg" alt="Preview poster" class="w-full rounded-2xl"></div>
+            <div class="flex gap-3 mt-4">
+                <button class="export-btn flex-1" onclick="downloadPoster(curDay, this)">Download HD</button>
+                <button class="ghost-btn" onclick="document.getElementById('posterModal').classList.add('hidden')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL PILIH PEMAIN -->
-    <div id="playerModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-brand-card w-full max-w-2xl rounded-2xl border border-white/10 p-6 shadow-2xl flex flex-col h-[75vh]">
+    <div id="playerModal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md transition-opacity">
+        <div class="glass-card w-full max-w-2xl border border-white/10 p-6 flex flex-col h-[75vh]">
             <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-3">
                 <h3 class="font-display uppercase text-xl font-bold tracking-wide text-white">Pilih Pemain</h3>
                 <button onclick="closePlayerModal()" class="text-neutral-400 hover:text-brand-rose text-3xl font-bold transition">&times;</button>
             </div>
             <div id="playerGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 overflow-y-auto pr-2 pb-4">
-                <!-- Grid pemain dipopulate oleh Javascript -->
+                <!-- Grid diisi JS -->
             </div>
         </div>
     </div>
 
+</div>
 </main>
 
-<script>
-    // --- GANTI URL DI BAWAH INI DENGAN URL DEPLOY BARU ANDA ---
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjQxPCSFAvAQEiK-p-HdkgkcRguZ_pXt5DtL0McQSExXGY4cmviN3PBnOmA6nOD5AN/exec"; 
+<footer class="border-t">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-neutral-400">
+    <p class="font-display uppercase tracking-widest text-white">PB <span class="text-brand-rose">Jgeer</span></p><p>&copy; 2026 PB Jgeer</p>
+  </div>
+</footer>
+<button id="toTop" class="hidden fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full text-white border border-brand-rose/50 hover:bg-brand-rose transition" aria-label="Kembali ke atas">
+  <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 15 6-6 6 6"/></svg>
+</button>
 
-    // PENGATURAN TANGGAL HARI INI & LIMITASI TANGGAL
+<script>
+    // =====================================================================
+    // KONFIGURASI UMUM
+    // =====================================================================
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjQxPCSFAvAQEiK-p-HdkgkcRguZ_pXt5DtL0McQSExXGY4cmviN3PBnOmA6nOD5AN/exec"; 
+    
+    // GID SHEET 6 untuk Fitur Recap Poster
+    const SHEET_ID = '1kgZAmiJjMhBfk9Sk8vHUtS0OCq6wr1_4-egr_KpIfao';
+    const SHEET_RECAP = { gid: '245165715' };
+    const pad = n => String(n).padStart(2, '0');
+    const toNum = v => { const n = parseFloat(str(v).replace(',', '.')); return isFinite(n) ? n : 0; };
+    
+    const LOGO_URL = 'https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png';
+    const GITHUB_ROSTER_BASE = 'https://raw.githubusercontent.com/amrylr/roster/main/';
+
+    // Utility text format & url parsing
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+    const str = v => (v == null ? '' : String(v).trim());
+    const norm = v => str(v).toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+
+    function ghRaw(u, base) {
+        u = String(u == null ? '' : u).trim();
+        if (!u) return '';
+        const m = u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|raw)\/(.+)$/i);
+        if (m) return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3].split('?')[0]}`;
+        if (/^(https?:\/\/|data:)/i.test(u)) return u;
+        return base + encodeURI(u.replace(/^\/+/, ''));
+    }
+
+    function driveThumb(url, w = 256) {
+        const m = String(url).match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=view&)?id=)([\w-]+)/);
+        if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${w}`; 
+        return ghRaw(url, GITHUB_ROSTER_BASE); 
+    }
+    
+    const avatar = (name, size = 256) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=${size}&background=161616&color=D6455D&bold=true`;
+
+    // State Globals
     const tzOffset = (new Date()).getTimezoneOffset() * 60000; 
     const localDate = new Date(Date.now() - tzOffset);
     const todayYMD = localDate.toISOString().split('T')[0]; 
@@ -275,18 +416,19 @@
     const pTanggal = document.getElementById('p_tanggal');
     const aTanggal = document.getElementById('a_tanggal');
     
-    pTanggal.value = todayYMD;
-    pTanggal.max = todayYMD; 
-    aTanggal.value = todayYMD;
-    aTanggal.max = todayYMD;
+    pTanggal.value = todayYMD; pTanggal.max = todayYMD; 
+    aTanggal.value = todayYMD; aTanggal.max = todayYMD;
 
-    // VARIABEL GLOBAL BARU
     let globalPlayers = [];
     let currentSelectTarget = "";
+    const photoMap = new Map();
+    let recapMatches = [];
 
     function showLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
     
+    // Inisialisasi
     window.onload = function() {
+        loadRoster();
         fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getInitData", date: todayYMD}) })
         .then(res => res.json()).then(res => {
             if(res.status === "success") {
@@ -299,11 +441,34 @@
         });
     }
 
-    function populateSelects(playersData) {
-        globalPlayers = playersData; 
+    function populateSelects(playersData) { globalPlayers = playersData; }   // foto diambil dari roster (GitHub), bukan dari Drive
+
+    function findTables(grid) {
+        const tables = [];
+        grid.forEach((row, r) => row.forEach((cell, c) => {
+            if (!/^nama/.test(norm(cell))) return;
+            const headers = []; for (let cc = c; cc < row.length && str(row[cc]) !== ''; cc++) headers.push({ key: norm(row[cc]), col: cc });
+            const rows = []; for (let rr_ = r + 1; rr_ < grid.length && str((grid[rr_] || [])[c]) !== ''; rr_++) rows.push(grid[rr_]);
+            tables.push({ r, c, headers, rows });
+        }));
+        return tables;
+    }
+    function extractRoster(grid) {
+        const t = findTables(grid)[0]; if (!t) return [];
+        const h = t.headers.find(x => /foto|photo|gambar|avatar|image|img/.test(x.key) && x.col !== t.c);
+        return t.rows.map(r => ({ nama: str(r[t.c]), foto: h ? str(r[h.col]) : '' })).filter(p => p.nama);
+    }
+    async function loadRoster() {
+        try {
+            const list = extractRoster(await fetchGrid({ gid: '0' }));
+            photoMap.clear(); list.forEach(p => { if (p.foto) photoMap.set(norm(p.nama), p.foto); });
+            if (!globalPlayers.length) globalPlayers = list.map(p => ({ name: p.nama }));
+        } catch (e) { console.warn('Roster gagal dimuat:', e); }
     }
 
-    // FUNGSI MODAL & KARTU PEMAIN
+    // =====================================================================
+    // LOGIKA UI INPUT & ADMIN
+    // =====================================================================
     function openPlayerModal(targetId) {
         currentSelectTarget = targetId;
         renderPlayerGrid();
@@ -330,32 +495,31 @@
         globalPlayers.forEach(p => {
             const isSelected = selectedNames.includes(p.name);
             const bgClass = isSelected ? "bg-black/80 opacity-40 cursor-not-allowed border-white/5" : "bg-black/40 hover:bg-brand-maroon/50 cursor-pointer border-white/10 hover:border-brand-rose";
+            const src = photoFor(p.name, 256);
             
             const cardHtml = `
-                <div onclick="${isSelected ? '' : `selectPlayer('${p.name}', '${p.photo}')`}" 
+                <div onclick="${isSelected ? '' : `selectPlayer('${p.name}', '${src}')`}" 
                      class="flex flex-col items-center p-3 border rounded-xl transition ${bgClass}">
-                    <img src="${p.photo}" class="w-14 h-14 rounded-full object-cover mb-2 border border-white/20 shadow-lg bg-black">
-                    <span class="font-display uppercase tracking-wider text-xs text-center font-bold ${isSelected ? 'text-neutral-500' : 'text-white'} leading-tight">${p.name}</span>
+                    <img src="${esc(src)}" loading="lazy" referrerpolicy="no-referrer" class="w-14 h-14 rounded-full object-cover mb-2 border border-white/20 shadow-lg bg-black">
+                    <span class="font-display uppercase tracking-wider text-xs text-center font-bold ${isSelected ? 'text-neutral-500' : 'text-white'} leading-tight">${esc(p.name)}</span>
                 </div>
             `;
             grid.innerHTML += cardHtml;
         });
     }
 
-    function selectPlayer(name, photo) {
+    function selectPlayer(name, photoSrc) {
         document.getElementById(currentSelectTarget).value = name;
         document.getElementById('name_' + currentSelectTarget).innerText = name;
         document.getElementById('name_' + currentSelectTarget).classList.replace('text-neutral-400', 'text-white');
-        document.getElementById('img_' + currentSelectTarget).src = photo;
-        
+        document.getElementById('img_' + currentSelectTarget).src = photoSrc;
         closePlayerModal();
     }
 
-    // TOMBOL SKOR CEPAT
     function setScore(prefix, team, val) {
         const opponent = team === 'A' ? 'B' : 'A';
-        
         document.getElementById(prefix + 'score' + team).value = val;
+        
         if (val === 2) document.getElementById(prefix + 'score' + opponent).value = 0;
         else if (val === 1) document.getElementById(prefix + 'score' + opponent).value = 1;
         else if (val === 0) document.getElementById(prefix + 'score' + opponent).value = 2;
@@ -366,10 +530,10 @@
                 const btn = document.getElementById(`btn-${prefix}${t}-${v}`);
                 if (String(v) === currentVal) {
                     btn.classList.add('bg-brand-rose', 'border-brand-rose', 'text-white');
-                    btn.classList.remove('bg-brand-card', 'border-white/10', 'text-neutral-400');
+                    btn.classList.remove('bg-white/5', 'border-white/10', 'text-neutral-400');
                 } else {
                     btn.classList.remove('bg-brand-rose', 'border-brand-rose', 'text-white');
-                    btn.classList.add('bg-brand-card', 'border-white/10', 'text-neutral-400');
+                    btn.classList.add('bg-white/5', 'border-white/10', 'text-neutral-400');
                 }
             });
         });
@@ -380,19 +544,18 @@
             [0, 1, 2].forEach(v => {
                 const btn = document.getElementById(`btn-${prefix}${t}-${v}`);
                 btn.classList.remove('bg-brand-rose', 'border-brand-rose', 'text-white');
-                btn.classList.add('bg-brand-card', 'border-white/10', 'text-neutral-400');
+                btn.classList.add('bg-white/5', 'border-white/10', 'text-neutral-400');
             });
         });
     }
 
-    // LOAD HISTORY
     function fetchHistory() {
         showLoading(true);
         const selectedDate = document.getElementById('p_tanggal').value; 
         fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getHistory", date: selectedDate}) })
         .then(res => res.json()).then(res => {
             renderHistory(res.history); showLoading(false);
-        });
+        }).catch(() => showLoading(false));
     }
 
     function renderHistory(data) {
@@ -405,41 +568,31 @@
             return; 
         }
         validData.forEach(row => {
-            // Indeks Sheet4: 0:Tanggal, 1:Nama, 2:Bulan, 3:Tahun, 4:Win, 5:Lose
             tbody.innerHTML += `
             <tr class="hover:bg-white/5 transition border-b border-white/5">
-                <td class="px-6 py-4 font-semibold">${row[1]}</td>
+                <td class="px-6 py-4 font-semibold">${esc(row[1])}</td>
                 <td class="px-4 py-4 text-center font-bold text-green-400">${row[4]}</td>
                 <td class="px-4 py-4 text-center font-bold text-rose-500">${row[5]}</td>
             </tr>`;
         });
     }
 
-    // VALIDASI SEBELUM SUBMIT
     document.getElementById('playerForm').addEventListener('submit', function(e) { 
-        e.preventDefault(); 
-        if(!validateSelections('p_')) return;
-        submitMatchData('p_', 'submitPending'); 
+        e.preventDefault(); if(validateSelections('p_')) submitMatchData('p_', 'submitPending'); 
     });
     
     document.getElementById('adminDirectForm').addEventListener('submit', function(e) { 
-        e.preventDefault(); 
-        if(!validateSelections('a_')) return;
-        submitMatchData('a_', 'submitDirect'); 
+        e.preventDefault(); if(validateSelections('a_')) submitMatchData('a_', 'submitDirect'); 
     });
 
     function validateSelections(prefix) {
         const inputs = ['tA_p1', 'tA_p2', 'tB_p1', 'tB_p2'];
         for(let id of inputs) {
-            if(!document.getElementById(prefix + id).value) {
-                alert("Harap lengkapi semua 4 pemain terlebih dahulu!");
-                return false;
-            }
+            if(!document.getElementById(prefix + id).value) { alert("Harap lengkapi semua 4 pemain terlebih dahulu!"); return false; }
         }
         return true;
     }
 
-    // SUBMIT DATA
     function submitMatchData(prefix, actionType) {
         showLoading(true);
         const dateVal = document.getElementById(prefix+'tanggal').value;
@@ -449,48 +602,44 @@
         const payload = {
             action: actionType,
             data: {
-                tanggal: dateVal, 
-                bulan: blnList[dObj.getMonth()],
-                tahun: dObj.getFullYear(),
-                tA_p1: document.getElementById(prefix+'tA_p1').value,
-                tA_p2: document.getElementById(prefix+'tA_p2').value,
+                tanggal: dateVal, bulan: blnList[dObj.getMonth()], tahun: dObj.getFullYear(),
+                tA_p1: document.getElementById(prefix+'tA_p1').value, tA_p2: document.getElementById(prefix+'tA_p2').value,
                 scoreA: document.getElementById(prefix+'scoreA').value,
-                tB_p1: document.getElementById(prefix+'tB_p1').value,
-                tB_p2: document.getElementById(prefix+'tB_p2').value,
+                tB_p1: document.getElementById(prefix+'tB_p1').value, tB_p2: document.getElementById(prefix+'tB_p2').value,
                 scoreB: document.getElementById(prefix+'scoreB').value
             }
         };
 
         fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json()).then(res => {
-            showLoading(false);
-            alert("Data Berhasil Dikirim!");
+            showLoading(false); alert("Data Berhasil Dikirim!");
             if(actionType === 'submitDirect') loadPending(); 
             if(actionType === 'submitPending') fetchHistory(); 
             
             document.getElementById(prefix === 'p_' ? 'playerForm' : 'adminDirectForm').reset();
-            document.getElementById(prefix+'tanggal').value = dateVal;
-            resetScoreButtons(prefix); 
+            document.getElementById(prefix+'tanggal').value = dateVal; resetScoreButtons(prefix); 
             
-            // Reset Kartu Pemain ke tampilan Default
-            const inputs = ['tA_p1', 'tA_p2', 'tB_p1', 'tB_p2'];
-            inputs.forEach(id => {
+            ['tA_p1', 'tA_p2', 'tB_p1', 'tB_p2'].forEach(id => {
                 document.getElementById(prefix + id).value = "";
                 document.getElementById('name_' + prefix + id).innerText = "Pilih Pemain";
                 document.getElementById('name_' + prefix + id).classList.replace('text-white', 'text-neutral-400');
-                document.getElementById('img_' + prefix + id).src = "https://ui-avatars.com/api/?name=Pilih&background=222&color=fff";
+                document.getElementById('img_' + prefix + id).src = avatar("Pilih", 256);
             });
-        });
+        }).catch(() => { alert("Error submit data"); showLoading(false); });
     }
 
     function switchTab(tab) {
-        document.getElementById('btnPlayer').className = tab === 'player' ? 'px-5 py-2 rounded bg-brand-maroon text-white font-semibold transition shadow-[0_4px_14px_0_rgba(122,16,32,0.39)]' : 'px-5 py-2 rounded text-neutral-400 hover:text-brand-rose hover:bg-white/5 transition';
-        document.getElementById('btnAdmin').className = tab === 'admin' ? 'px-5 py-2 rounded bg-brand-maroon text-white font-semibold transition shadow-[0_4px_14px_0_rgba(122,16,32,0.39)]' : 'px-5 py-2 rounded text-neutral-400 hover:text-brand-rose hover:bg-white/5 transition';
+        ['player', 'admin', 'recap'].forEach(t => {
+            const btn = document.getElementById('btn' + t.charAt(0).toUpperCase() + t.slice(1));
+            if(btn) btn.setAttribute('aria-selected', tab === t ? 'true' : 'false');
+        });
         
         document.getElementById('playerView').style.display = tab === 'player' ? 'block' : 'none';
         document.getElementById('adminView').style.display = tab === 'admin' ? 'block' : 'none';
+        document.getElementById('recapView').style.display = tab === 'recap' ? 'block' : 'none';
         
         if (tab === 'player') fetchHistory();
+        if (tab === 'recap' && recapMatches.length === 0) loadRecapData();
     }
 
     function checkAdmin() {
@@ -501,7 +650,6 @@
         } else { alert("Password Salah!"); }
     }
 
-    // LOAD PENDING (DIADMIN)
     function loadPending() {
         const list = document.getElementById('pendingList');
         list.innerHTML = `<p class="text-neutral-400 italic">Memuat antrean...</p>`;
@@ -512,7 +660,6 @@
             if(res.pending.length === 0) { list.innerHTML = `<p class="text-neutral-500">Tidak ada antrean verifikasi.</p>`; return; }
             
             res.pending.forEach(row => {
-                // Indeks Baru Sheet5: 0:ID, 1:Tanggal, 2:Bulan, 3:Tahun, 4:TimA1, 5:TimA2, 6:SkorA, 7:TimB1, 8:TimB2, 9:SkorB
                 list.innerHTML += `
                     <div class="bg-black/40 border-l-4 border-brand-rose p-4 sm:p-5 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4" id="card-${row[0]}">
                         <div>
@@ -525,7 +672,7 @@
                         </div>
                         <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
                             <button class="flex-1 sm:flex-none bg-green-600 hover:bg-green-500 text-white px-5 py-2 rounded font-semibold transition shadow-lg text-sm" onclick="verifyMatch('${row[0]}')">Setujui</button>
-                            <button class="flex-1 sm:flex-none bg-brand-card border border-white/10 hover:bg-brand-rose hover:border-brand-rose text-neutral-300 hover:text-white px-5 py-2 rounded font-semibold transition shadow-lg text-sm" onclick="deleteMatch('${row[0]}')">Tolak</button>
+                            <button class="flex-1 sm:flex-none bg-white/5 border border-white/10 hover:bg-brand-rose hover:border-brand-rose text-neutral-300 hover:text-white px-5 py-2 rounded font-semibold transition shadow-lg text-sm" onclick="deleteMatch('${row[0]}')">Tolak</button>
                         </div>
                     </div>`;
             });
@@ -534,28 +681,357 @@
 
     function verifyMatch(id) {
         showLoading(true);
-        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "verifyMatch", id: id}) })
-        .then(res => res.json()).then(res => {
-            showLoading(false);
-            if(res.status === "success") {
-                document.getElementById(`card-${id}`).style.display = 'none';
-                fetchHistory(); 
-            }
+        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "verifyMatch", id: id}) }).then(res => res.json()).then(res => {
+            showLoading(false); if(res.status === "success") { document.getElementById(`card-${id}`).style.display = 'none'; fetchHistory(); }
         });
     }
 
     function deleteMatch(id) {
         if(!confirm("Yakin ingin menolak dan menghapus data antrean ini?")) return;
-        
         showLoading(true);
-        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "deleteMatch", id: id}) })
-        .then(res => res.json()).then(res => {
-            showLoading(false);
-            if(res.status === "success") {
-                document.getElementById(`card-${id}`).style.display = 'none';
-            }
+        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "deleteMatch", id: id}) }).then(res => res.json()).then(res => {
+            showLoading(false); if(res.status === "success") document.getElementById(`card-${id}`).style.display = 'none';
         });
     }
+
+    // =====================================================================
+    // FITUR UNDUH POSTER MATCH RECAP (DARI SPREADSHEET SHEET 6)
+    // =====================================================================
+    
+    // Fetch CSV helper
+    function parseCSV(text) {
+        const rows = []; let row = [], cell = '', q = false;
+        for (let i = 0; i < text.length; i++) {
+            const ch = text[i];
+            if (q) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+            else if (ch === '"') q = true;
+            else if (ch === ',') { row.push(cell); cell = ''; }
+            else if (ch === '\n' || ch === '\r') {
+                if (ch === '\r' && text[i + 1] === '\n') i++;
+                row.push(cell); rows.push(row); row = []; cell = '';
+            } else cell += ch;
+        }
+        if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+        return rows;
+    }
+    
+    async function fetchCSV(url) {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return parseCSV(await res.text());
+    }
+
+    function jsonpGrid(url) {
+        return new Promise((resolve, reject) => {
+            const cb = '__gv' + Math.random().toString(36).slice(2);
+            const s = document.createElement('script');
+            const done = () => { clearTimeout(timer); delete window[cb]; s.remove(); };
+            const timer = setTimeout(() => { done(); reject(new Error('timeout')); }, 10000);
+            window[cb] = r => {
+                done();
+                if (!r || r.status !== 'ok') { reject(new Error('gviz error')); return; }
+                const val = c => !c ? '' : (c.v != null ? (typeof c.v === 'string' && /^Date\(/.test(c.v) && c.f ? c.f : c.v) : (c.f ?? ''));
+                const grid = r.table.rows.map(row => row.c.map(val));
+                const labels = r.table.cols.map(c => c.label || '');
+                if (labels.some(Boolean)) grid.unshift(labels);
+                resolve(grid);
+            };
+            s.onerror = () => { done(); reject(new Error('script diblokir')); };
+            s.src = url + (url.includes('?') ? '&' : '?') + 'headers=0&tqx=responseHandler:' + cb;
+            document.head.appendChild(s);
+        });
+    }
+
+    async function fetchGrid(cfg) {
+        const base = `https://docs.google.com/spreadsheets/d/${SHEET_ID}`;
+        const targets = cfg.gid ? [`gid=${cfg.gid}`] : [];
+        for (const tg of targets) {
+            try { const g = await fetchCSV(`${base}/export?format=csv&${tg}`); if (g.length) return g; } catch(e){}
+            try { const g = await fetchCSV(`${base}/gviz/tq?tqx=out:csv&${tg}`); if (g.length) return g; } catch(e){}
+            try { const g = await jsonpGrid(`${base}/gviz/tq?${tg}`); if (g.length) return g; } catch(e){}
+        }
+        throw new Error("Gagal load data Spreadsheet.");
+    }
+
+    const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    const BLN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    let recapDays = [], curDay = -1;
+
+    function parseTgl(v) {
+        v = str(v); let m;
+        if ((m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return new Date(+m[1], m[2] - 1, +m[3]);
+        if ((m = v.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/))) return new Date(+m[3], m[2] - 1, +m[1]);
+        if ((m = v.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/))) { const i = BLN.findIndex(b => b.toLowerCase().slice(0, 3) === m[2].toLowerCase().slice(0, 3)); if (i >= 0) return new Date(+m[3], i, +m[1]); }
+        const d = new Date(v); return isNaN(d) ? null : d;
+    }
+
+    async function loadRecapData() {
+        const list = document.getElementById('recapList'), st = document.getElementById('recapStatus');
+        st.textContent = 'Mengambil data pertandingan...'; list.innerHTML = '';
+        try {
+            const grid = await fetchGrid(SHEET_RECAP);
+            const h = grid[0].map(s => String(s).toLowerCase().replace(/[^a-z0-9]/g, ''));
+            const f = (re, d) => { const i = h.findIndex(x => re.test(x)); return i >= 0 ? i : d; };
+            const A = '(tima|teama|pemaina|playera|^a)\\D*', B = '(timb|teamb|pemainb|playerb|^b)\\D*';
+            const c = { t: f(/tanggal|tgl|date/, 1), a1: f(new RegExp(A + '1$'), 4), a2: f(new RegExp(A + '2$'), 5), sa: f(/(skor|score).*a$/, 6),
+                        b1: f(new RegExp(B + '1$'), 7), b2: f(new RegExp(B + '2$'), 8), sb: f(/(skor|score).*b$/, 9) };
+            const days = new Map();
+            for (let i = 1; i < grid.length; i++) {
+                const r = grid[i], d = parseTgl(r[c.t]);
+                if (!d || !str(r[c.a1]) || !str(r[c.b1])) continue;
+                const key = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+                if (!days.has(key)) days.set(key, { key, date: d, matches: [] });
+                days.get(key).matches.push({ A1: str(r[c.a1]), A2: str(r[c.a2]), B1: str(r[c.b1]), B2: str(r[c.b2]), a: toNum(r[c.sa]), b: toNum(r[c.sb]) });
+            }
+            recapDays = [...days.values()].sort((x, y) => y.date - x.date).map(d => ({ ...d,
+                label: `${HARI[d.date.getDay()]}, ${d.date.getDate()} ${BLN[d.date.getMonth()]} ${d.date.getFullYear()}`,
+                players: new Set(d.matches.flatMap(m => [m.A1, m.A2, m.B1, m.B2]).filter(Boolean)).size }));
+            if (!recapDays.length) { st.textContent = 'Tidak ada pertandingan terbaca. Header sheet: ' + grid[0].join(' | '); return; }
+            st.textContent = `${recapDays.length} hari pertandingan ditemukan.`;
+            list.innerHTML = recapDays.slice(0, 30).map((d, i) => `
+                <div class="day-card glass-card p-5 flex flex-col gap-4">
+                    <div>
+                        <p class="font-display uppercase tracking-wide text-lg font-bold">${esc(d.label)}</p>
+                        <p class="text-sm text-neutral-400 mt-1"><span class="text-brand-rose font-semibold">${d.matches.length}</span> pertandingan &middot; ${d.players} pemain</p>
+                    </div>
+                    <div class="flex gap-2 mt-auto">
+                        <button class="ghost-btn flex-1" onclick="previewPoster(${i}, this)">Preview</button>
+                        <button class="export-btn flex-1" onclick="downloadPoster(${i}, this)">📥 Download</button>
+                    </div>
+                </div>`).join('');
+        } catch (err) { console.error(err); st.innerHTML = `<span class="text-rose-500">Gagal memuat data: ${esc(err.message)}</span>`; }
+    }
+
+    // Tools Penggambar Canvas
+    function fetchDataURL(url) {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 10000);
+        return fetch(url, { mode: 'cors', referrerPolicy: 'no-referrer', signal: ctrl.signal })
+            .then(r => { if (!r.ok) throw new Error('http'); return r.blob(); })
+            .then(b => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(b); }))
+            .catch(() => null).finally(() => clearTimeout(timer));
+    }
+    
+    function loadImage(src) {
+        return new Promise(res => { if (!src) return res(null); const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
+    }
+
+    function initialsAvatar(name, size = 256) {
+        const c = document.createElement('canvas'); c.width = c.height = size; const g = c.getContext('2d');
+        g.fillStyle = '#1c1c1c'; g.fillRect(0, 0, size, size);
+        const parts = str(name).split(/\s+/).filter(Boolean);
+        const ini = ((parts[0] || '?')[0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+        g.fillStyle = '#D6455D'; g.font = `700 ${size * 0.42}px Oswald, sans-serif`;
+        g.textAlign = 'center'; g.textBaseline = 'middle';
+        g.fillText(ini, size / 2, size / 2 + size * 0.03);
+        return c.toDataURL('image/png');
+    }
+
+    const photoFor = (name, w = 400) => { const f = photoMap.get(norm(name)); return f ? driveThumb(f, w) : avatar(name, w); };
+    async function posterPhoto(name) {
+        if (!photoMap.get(norm(name))) return initialsAvatar(name);
+        return (await fetchDataURL(photoFor(name, 400))) || initialsAvatar(name);
+    }
+
+    function rr(ctx, x, y, w, h, r) {
+        const [tl, tr, br, bl] = Array.isArray(r) ? r : [r, r, r, r];
+        ctx.beginPath(); ctx.moveTo(x + tl, y);
+        ctx.lineTo(x + w - tr, y); ctx.arcTo(x + w, y, x + w, y + tr, tr);
+        ctx.lineTo(x + w, y + h - br); ctx.arcTo(x + w, y + h, x + w - br, y + h, br);
+        ctx.lineTo(x + bl, y + h); ctx.arcTo(x, y + h, x, y + h - bl, bl);
+        ctx.lineTo(x, y + tl); ctx.arcTo(x, y, x + tl, y, tl);
+        ctx.closePath();
+    }
+
+    function drawCircleImage(ctx, img, cx, cy, r) {
+        ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.closePath(); ctx.clip();
+        if (img) {
+            const s = Math.min(img.width, img.height);
+            const sx = (img.width - s) / 2; const sy = (img.height - s) * 0.2;
+            ctx.drawImage(img, sx, sy, s, s, cx - r, cy - r, r * 2, r * 2);
+        } else { ctx.fillStyle = '#1c1c1c'; ctx.fillRect(cx - r, cy - r, r * 2, r * 2); }
+        ctx.restore();
+    }
+
+    function drawTexture(ctx, W, H) {
+        const t = document.createElement('canvas'); t.width = t.height = 8; const g = t.getContext('2d');
+        g.fillStyle = 'rgba(255,255,255,1)';  g.fillRect(0, 0, 4, 4); g.fillRect(4, 4, 4, 4);
+        g.fillStyle = 'rgba(255,255,255,.4)'; g.fillRect(4, 0, 4, 4); g.fillRect(0, 4, 4, 4);
+        ctx.save(); ctx.globalAlpha = 0.035; ctx.fillStyle = ctx.createPattern(t, 'repeat'); ctx.fillRect(0, 0, W, H);
+        const n = document.createElement('canvas'); n.width = n.height = 220;
+        const nx = n.getContext('2d'), id = nx.createImageData(220, 220);
+        for (let i = 0; i < id.data.length; i += 4) { const v = Math.random() * 255; id.data[i] = id.data[i+1] = id.data[i+2] = v; id.data[i+3] = 255; }
+        nx.putImageData(id, 0, 0);
+        ctx.globalAlpha = 0.03; ctx.fillStyle = ctx.createPattern(n, 'repeat'); ctx.fillRect(0, 0, W, H);
+        ctx.restore();
+    }
+
+    function drawCourt(ctx, W, H) {
+        const sc = ctx.getTransform().a;
+        const m = 46, x0 = m, x1 = W - m, y0 = m, y1 = H - m;
+        const cw = x1 - x0, ch = y1 - y0, net = y0 + ch / 2;
+        const side = cw * 0.075, svc = (ch / 2) * 0.295, back = (ch / 2) * 0.114;
+        ctx.save(); ctx.lineJoin = 'round';
+        ctx.strokeStyle = 'rgba(251,191,36,.30)'; ctx.lineWidth = 3;
+        ctx.shadowColor = 'rgba(251,191,36,.55)'; ctx.shadowBlur = 12 * sc;
+        ctx.strokeRect(x0, y0, cw, ch);
+        ctx.strokeStyle = 'rgba(255,92,116,.26)'; ctx.lineWidth = 3;
+        ctx.shadowColor = 'rgba(255,70,100,.6)'; ctx.shadowBlur = 12 * sc;
+        ctx.beginPath();
+        ctx.moveTo(x0 + side, y0); ctx.lineTo(x0 + side, y1); ctx.moveTo(x1 - side, y0); ctx.lineTo(x1 - side, y1);
+        ctx.moveTo(x0, net - svc); ctx.lineTo(x1, net - svc); ctx.moveTo(x0, net + svc); ctx.lineTo(x1, net + svc);
+        ctx.moveTo(x0, y0 + back); ctx.lineTo(x1, y0 + back); ctx.moveTo(x0, y1 - back); ctx.lineTo(x1, y1 - back);
+        ctx.moveTo(W / 2, y0); ctx.lineTo(W / 2, net - svc); ctx.moveTo(W / 2, net + svc); ctx.lineTo(W / 2, y1);
+        ctx.stroke();
+        ctx.shadowBlur = 0; ctx.setLineDash([14, 10]);
+        ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0 - 8, net + 7); ctx.lineTo(x1 + 8, net + 7); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,255,255,.34)'; ctx.lineWidth = 4; ctx.shadowColor = 'rgba(255,255,255,.5)'; ctx.shadowBlur = 10 * sc;
+        ctx.beginPath(); ctx.moveTo(x0 - 8, net - 7); ctx.lineTo(x1 + 8, net - 7); ctx.stroke();
+        ctx.restore();
+    }
+
+    const FD = "Oswald, 'Arial Narrow', sans-serif", FB = "Inter, Arial, sans-serif";
+    const spacedW = (ctx, t, sp) => [...t].reduce((a, ch) => a + ctx.measureText(ch).width, 0) + sp * Math.max([...t].length - 1, 0);
+    const spaced = (ctx, t, x, y, sp) => { let cx = x; for (const ch of [...t]) { ctx.fillText(ch, cx, y); cx += ctx.measureText(ch).width + sp; } };
+    function fitFont(ctx, text, maxW, size, weight) { let s = size; ctx.font = `${weight} ${s}px ${FD}`; while (ctx.measureText(text).width > maxW && s > 14) { s--; ctx.font = `${weight} ${s}px ${FD}`; } return s; }
+    function drawInstagram(ctx, x, y, s, color) {
+        ctx.save(); ctx.translate(x, y); ctx.scale(s / 24, s / 24); ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.lineCap = 'round';
+        rr(ctx, 3, 3, 18, 18, 5); ctx.stroke(); ctx.beginPath(); ctx.arc(12, 12, 4, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(17.5, 6.5, 1.1, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill(); ctx.restore();
+    }
+    function drawSpotlight(ctx, cx, bottomY, spread) {
+        ctx.save(); ctx.globalCompositeOperation = 'screen';
+        for (let i = 0; i < 6; i++) {
+            const k = 0.55 + i * 0.09, gr = ctx.createLinearGradient(0, 0, 0, bottomY);
+            gr.addColorStop(0, 'rgba(255,236,205,.033)'); gr.addColorStop(.6, 'rgba(255,222,180,.02)'); gr.addColorStop(1, 'rgba(255,205,150,0)');
+            ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(cx - 70 * k, 0); ctx.lineTo(cx + 70 * k, 0); ctx.lineTo(cx + spread * k, bottomY); ctx.lineTo(cx - spread * k, bottomY); ctx.closePath(); ctx.fill();
+        }
+        ctx.restore();
+    }
+    // Blur latar (turun-skala berulang, jalan di semua browser termasuk Safari) untuk efek kaca buram
+    function blurred(src) {
+        let c = src;
+        for (let i = 0; i < 3; i++) { const n = document.createElement('canvas'); n.width = Math.max(8, c.width >> 1); n.height = Math.max(8, c.height >> 1); const g = n.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(c, 0, 0, n.width, n.height); c = n; }
+        return c;
+    }
+    // Kartu kaca: latar yang diburamkan + lapisan putih transparan + tepi bercahaya
+    function glass(ctx, blur, W, H, SC, x, y, w, h, r, tint = .10, edge = .30) {
+        ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 30 * SC; ctx.shadowOffsetY = 12 * SC; rr(ctx, x, y, w, h, r); ctx.fillStyle = '#12060a'; ctx.fill(); ctx.restore();
+        ctx.save(); rr(ctx, x, y, w, h, r); ctx.clip(); ctx.drawImage(blur, 0, 0, W, H);
+        const g = ctx.createLinearGradient(x, y, x + w, y + h); g.addColorStop(0, `rgba(255,255,255,${tint + .07})`); g.addColorStop(1, `rgba(255,255,255,${tint * .35})`);
+        ctx.fillStyle = g; ctx.fillRect(x, y, w, h); ctx.restore();
+        ctx.save(); rr(ctx, x + .75, y + .75, w - 1.5, h - 1.5, r);
+        const b = ctx.createLinearGradient(x, y, x, y + h); b.addColorStop(0, `rgba(255,255,255,${edge + .2})`); b.addColorStop(.5, `rgba(255,255,255,${edge * .5})`); b.addColorStop(1, `rgba(255,255,255,${edge * .7})`);
+        ctx.strokeStyle = b; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+    }
+    const photoCache = new Map();
+    function posterImg(name) {
+        const k = norm(name);
+        if (!photoCache.has(k)) photoCache.set(k, (async () => loadImage((photoMap.get(k) && await fetchDataURL(photoFor(name, 300))) || initialsAvatar(name)))());
+        return photoCache.get(k);
+    }
+
+    async function renderPoster(day, list, part, parts, SC) {
+        const W = 1080, PX = 60, CW = W - PX * 2, CH = 150, GAP = 18, TOP = 430, FOOT = 160;
+        const content = list.length * (CH + GAP) - GAP;
+        const H = Math.max(1350, TOP + content + FOOT);
+        if (document.fonts && document.fonts.load) await Promise.all(['700 96px Oswald', '600 30px Oswald', '600 24px Inter', '500 24px Inter'].map(f => document.fonts.load(f).catch(() => null)));
+        const names = [...new Set(list.flatMap(m => [m.A1, m.A2, m.B1, m.B2]).filter(Boolean))];
+        const [logo, ...pics] = await Promise.all([fetchDataURL(LOGO_URL).then(loadImage), ...names.map(posterImg)]);
+        const img = n => pics[names.indexOf(n)];
+        const mk = () => { const c = document.createElement('canvas'); c.width = W * SC; c.height = H * SC; const x = c.getContext('2d'); x.scale(SC, SC); x.textBaseline = 'alphabetic'; return [c, x]; };
+
+        // Latar: radial #0A0A0A -> #2B0A11, tekstur, cahaya warna (agar efek kaca terlihat), garis lapangan, spotlight
+        const [bgc, bg] = mk();
+        const gr = bg.createRadialGradient(W / 2, H * .28, 0, W / 2, H * .28, Math.hypot(W / 2, H * .8)); gr.addColorStop(0, '#0A0A0A'); gr.addColorStop(.45, '#13070A'); gr.addColorStop(1, '#2B0A11');
+        bg.fillStyle = gr; bg.fillRect(0, 0, W, H);
+        drawTexture(bg, W, H);
+        [[W * .95, H * .06, 520, 'rgba(214,69,93,.50)'], [0, H * .30, 560, 'rgba(122,16,32,.80)'], [W, H * .52, 480, 'rgba(155,28,75,.42)'], [W * .05, H * .78, 480, 'rgba(251,191,36,.20)'], [W * .92, H * .96, 560, 'rgba(122,16,32,.75)']]
+            .forEach(([x, y, r, col]) => { const g = bg.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)'); bg.fillStyle = g; bg.fillRect(0, 0, W, H); });
+        drawCourt(bg, W, H); drawSpotlight(bg, W / 2, TOP - 20, 380);
+        const blur = blurred(bgc);
+        const [cv, ctx] = mk(); ctx.drawImage(bgc, 0, 0, W, H);
+
+        // Header
+        const top = 64, logoH = 70;
+        ctx.font = `700 44px ${FD}`; const wPB = spacedW(ctx, 'PB ', 4), wJG = spacedW(ctx, 'JGEER', 4), lw = logo ? logoH * logo.width / logo.height : 0;
+        let bx = (W - (lw + (logo ? 18 : 0) + wPB + 4 + wJG)) / 2;
+        if (logo) { ctx.drawImage(logo, bx, top, lw, logoH); bx += lw + 18; }
+        ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; spaced(ctx, 'PB ', bx, top + logoH / 2 + 15, 4); ctx.fillStyle = '#D6455D'; spaced(ctx, 'JGEER', bx + wPB + 4, top + logoH / 2 + 15, 4);
+        const ts = fitFont(ctx, 'MATCH RECAP', 860, 120, 700), wM = ctx.measureText('MATCH ').width, wR = ctx.measureText('RECAP').width, tb = top + logoH + 14 + Math.round(ts * .85);
+        ctx.save(); ctx.shadowColor = 'rgba(214,69,93,.55)'; ctx.shadowBlur = 30 * SC; ctx.fillStyle = '#fff'; ctx.fillText('MATCH ', (W - wM - wR) / 2, tb); ctx.fillStyle = '#D6455D'; ctx.fillText('RECAP', (W - wM - wR) / 2 + wM, tb); ctx.restore();
+        const dTxt = day.label.toUpperCase(); ctx.font = `600 28px ${FD}`;
+        const cw = spacedW(ctx, dTxt, 5) + 72, cx0 = (W - cw) / 2, cy0 = tb + 28;
+        glass(ctx, blur, W, H, SC, cx0, cy0, cw, 56, 28, .12, .34); ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; spaced(ctx, dTxt, cx0 + 36, cy0 + 38, 5);
+        const sum = `${day.matches.length} PERTANDINGAN  ·  ${day.players} PEMAIN` + (parts > 1 ? `  ·  PART ${part}/${parts}` : '');
+        ctx.font = `500 24px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.75)'; spaced(ctx, sum, (W - spacedW(ctx, sum, 3)) / 2, cy0 + 56 + 44, 3);
+
+        // Kartu pertandingan
+        const y0 = TOP + Math.max(0, (H - FOOT - TOP - content) / 2), cy = i => y0 + i * (CH + GAP);
+        const WIN = '#4ade80', DRAW = '#fbbf24';
+        const avatarAt = (im, x, y, r, col) => {
+            ctx.save(); ctx.shadowColor = col === '#fff' ? 'rgba(214,69,93,.35)' : col + '66'; ctx.shadowBlur = 22 * SC; ctx.beginPath(); ctx.arc(x, y, r + 3, 0, Math.PI * 2); ctx.fillStyle = '#12060a'; ctx.fill(); ctx.restore();
+            drawCircleImage(ctx, im, x, y, r); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.lineWidth = 4; ctx.strokeStyle = col; ctx.stroke();
+        };
+        list.forEach((m, i) => {
+            const x = PX, y = cy(i), mid = y + CH / 2, a = m.a, b = m.b, aw = a > b, bw = b > a, dr = a === b;
+            const cA = aw ? WIN : dr ? DRAW : '#fff', cB = bw ? WIN : dr ? DRAW : '#fff';
+            glass(ctx, blur, W, H, SC, x, y, CW, CH, 32, .10, .30);
+            if (!dr) {   // semburat hijau di sisi pemenang
+                ctx.save(); rr(ctx, x, y, CW, CH, 32); ctx.clip();
+                const wx = aw ? x : x + CW, wg = ctx.createLinearGradient(wx, 0, x + CW / 2, 0); wg.addColorStop(0, 'rgba(74,222,128,.20)'); wg.addColorStop(1, 'rgba(74,222,128,0)'); ctx.fillStyle = wg; ctx.fillRect(x, y, CW, CH); ctx.restore();
+            }
+            avatarAt(img(m.A1), x + 68, mid, 34, cA); avatarAt(img(m.A2), x + 130, mid, 34, cA);
+            avatarAt(img(m.B1), x + CW - 130, mid, 34, cB); avatarAt(img(m.B2), x + CW - 68, mid, 34, cB);
+            const nameMax = CW / 2 - 90 - 186;
+            [[m.A1, 'left', x + 186, cA, aw], [m.A2, 'left', x + 186, cA, aw], [m.B1, 'right', x + CW - 186, cB, bw], [m.B2, 'right', x + CW - 186, cB, bw]].forEach(([n, al, nx, col, won], k) => {
+                const t = String(n).toUpperCase(); fitFont(ctx, t, nameMax, 28, 600); ctx.textAlign = al; ctx.fillStyle = won ? col : 'rgba(255,255,255,.92)'; ctx.fillText(t, nx, mid + (k % 2 ? 34 : -6));
+            });
+            ctx.textAlign = 'center'; ctx.font = `600 15px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.55)'; const lb = `MATCH ${pad(i + 1)}`; spaced(ctx, lb, x + CW / 2 - spacedW(ctx, lb, 3) / 2, y + 38, 3);
+            ctx.textAlign = 'left'; ctx.font = `700 66px ${FD}`; const segs = [[String(a), cA], [' – ', '#D6455D'], [String(b), cB]], tw = segs.reduce((s, [t]) => s + ctx.measureText(t).width, 0);
+            let sx = x + CW / 2 - tw / 2; ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 8 * SC; segs.forEach(([t, c]) => { ctx.fillStyle = c; ctx.fillText(t, sx, y + 108); sx += ctx.measureText(t).width; }); ctx.restore();
+        });
+
+        // Footer
+        ctx.font = `600 26px ${FB}`; const user = 'jgeer_badminton', uw = ctx.measureText(user).width, fx = (W - (30 + 12 + uw)) / 2, fy = H - 96;
+        drawInstagram(ctx, fx, fy - 15, 30, '#D6455D'); ctx.fillStyle = '#d4d4d8'; ctx.textAlign = 'left'; ctx.fillText(user, fx + 42, fy + 9);
+        // ctx.font = `500 20px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.40)'; ctx.textAlign = 'center'; ctx.fillText('amrylr.github.io/jgeerbadminton', W / 2, fy + 50);
+        return cv;
+    }
+
+    const chunks = day => { const n = +document.getElementById('recapSplit').value || 9999, out = []; for (let k = 0; k < day.matches.length; k += n) out.push(day.matches.slice(k, k + n)); return out; };
+    const toBlob = cv => new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('toBlob gagal')), 'image/png'));
+
+    async function previewPoster(i, btn) {
+        const day = recapDays[i], old = btn.innerText; btn.disabled = true; btn.innerText = 'Memproses...';
+        try {
+            const p = chunks(day); curDay = i;
+            document.getElementById('posterImg').src = URL.createObjectURL(await toBlob(await renderPoster(day, p[0], 1, p.length, 1)));
+            document.getElementById('posterModal').classList.remove('hidden');
+        } catch (e) { console.error(e); alert('Gagal membuat preview: ' + e.message); }
+        btn.disabled = false; btn.innerText = old;
+    }
+
+    async function downloadPoster(i, btn) {
+        const day = recapDays[i], p = chunks(day), old = btn.innerText; btn.disabled = true; btn.innerText = 'Memproses...';
+        try {
+            for (let k = 0; k < p.length; k++) {
+                let cv; try { cv = await renderPoster(day, p[k], k + 1, p.length, 2); } catch (e) { cv = await renderPoster(day, p[k], k + 1, p.length, 1); }   // 2160 px (HD)
+                const a = document.createElement('a'); a.href = URL.createObjectURL(await toBlob(cv));
+                a.download = `jgeer-match-recap-${day.key}${p.length > 1 ? '-part' + (k + 1) : ''}.png`;
+                document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+                await new Promise(r => setTimeout(r, 400));
+            }
+        } catch (e) { console.error(e); alert('Gagal membuat poster: ' + e.message); }
+        btn.disabled = false; btn.innerText = old;
+    }
+
+    // Navbar: menu mobile, efek scroll, tombol ke atas (sama dengan index)
+    const mb = document.getElementById('menuBtn'), mm = document.getElementById('mobileMenu'), sh = document.getElementById('siteHeader'), tt = document.getElementById('toTop');
+    mb.addEventListener('click', () => { const o = mm.classList.toggle('hidden') === false; mb.setAttribute('aria-expanded', o); });
+    document.addEventListener('click', e => { if (!sh.contains(e.target)) { mm.classList.add('hidden'); mb.setAttribute('aria-expanded', 'false'); } });
+    addEventListener('scroll', () => { sh.classList.toggle('is-scrolled', scrollY > 20); tt.classList.toggle('hidden', scrollY < 400); }, { passive: true });
+    tt.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
 </script>
 </body>
 </html>
