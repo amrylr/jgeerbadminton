@@ -78,6 +78,15 @@
     #toTop { background: rgba(122,16,32,.55); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px -10px rgba(0,0,0,.7); }
     footer { -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); background: rgba(255,255,255,.03) !important; border-color: rgba(255,255,255,.08) !important; }
     @media (prefers-reduced-motion: reduce) { #mobileMenu:not(.hidden) { animation: none; } .day-card:hover { transform: none; } }
+    .date-btn { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .1rem; border-radius: 1.25rem; color: #fff; cursor: pointer;
+        background: linear-gradient(145deg, rgba(255,255,255,.10), rgba(255,255,255,.03)); border: 1px solid rgba(255,255,255,.18); box-shadow: inset 0 1px 0 rgba(255,255,255,.22);
+        -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); transition: transform .2s, border-color .2s, background .2s; }
+    .date-btn:hover { transform: translateY(-2px); border-color: rgba(214,69,93,.6); }
+    .date-btn .dw, .date-btn .dm { font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: #d4d4d8; }
+    .date-btn b { font-family: 'Oswald', sans-serif; font-size: 1.9rem; line-height: 1; font-weight: 700; }
+    .date-btn i { font-style: normal; font-size: .6rem; margin-top: .2rem; padding: .05rem .5rem; border-radius: 9999px; background: rgba(214,69,93,.3); color: #ffd7de; }
+    .date-btn.active { background: linear-gradient(145deg, rgba(122,16,32,.95), rgba(214,69,93,.75)); border-color: rgba(255,255,255,.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 12px 28px -10px rgba(214,69,93,.8); }
+    .date-btn.active i { background: rgba(255,255,255,.25); color: #fff; }
 </style>
 </head>
 <body class="bg-brand-dark text-white antialiased min-h-screen flex flex-col font-body">
@@ -97,25 +106,27 @@
           <img src="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" alt="Logo PB Jgeer" class="h-9 sm:h-10 w-auto" />
           <span class="font-display text-xl sm:text-2xl font-bold tracking-wide uppercase">PB <span class="text-brand-rose group-hover:text-white transition">Jgeer</span></span>
         </a>
-        <ul class="hidden md:flex items-center gap-1 font-display uppercase tracking-wider text-sm">
+        <ul class="hidden lg:flex items-center gap-1 font-display uppercase tracking-wider text-sm">
           <li><a href="index.html#home" data-nav="home" class="nav-link block px-4 py-2 rounded-xl">Home</a></li>
-          <li><a href="index.html#roster" data-nav="roster" class="nav-link block px-4 py-2 rounded-xl">Roster</a></li>
+          <li><a href="index.html#roster" data-nav="roster" class="nav-link block px-4 py-2 rounded-xl">Player</a></li>
           <li><a href="index.html#leaderboard" data-nav="leaderboard" class="nav-link block px-4 py-2 rounded-xl">Leaderboard</a></li>
           <li><a href="index.html#sop" data-nav="sop" class="nav-link block px-4 py-2 rounded-xl">SOP</a></li>
           <li><a href="index.html#galeri" data-nav="galeri" class="nav-link block px-4 py-2 rounded-xl">Galeri</a></li>
+          <li><a href="index.html#hof" data-nav="hof" class="nav-link block px-4 py-2 rounded-xl">Hall of Fame</a></li>
           <li><a href="report.html" data-nav="report" class="nav-link block px-4 py-2 rounded-xl" aria-current="page">Report</a></li>
         </ul>
-        <button id="menuBtn" class="md:hidden p-2 rounded-xl hover:bg-white/10 transition" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
+        <button id="menuBtn" class="lg:hidden p-2 rounded-xl hover:bg-white/10 transition" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </nav>
-      <div id="mobileMenu" class="nav-glass hidden md:hidden mt-2 rounded-2xl overflow-hidden">
+      <div id="mobileMenu" class="nav-glass hidden lg:hidden mt-2 rounded-2xl overflow-hidden">
         <ul class="p-2 flex flex-col font-display uppercase tracking-wider">
           <li><a href="index.html#home" data-nav="home" class="nav-link block px-4 py-3 rounded-xl">Home</a></li>
-          <li><a href="index.html#roster" data-nav="roster" class="nav-link block px-4 py-3 rounded-xl">Roster</a></li>
+          <li><a href="index.html#roster" data-nav="roster" class="nav-link block px-4 py-3 rounded-xl">Player</a></li>
           <li><a href="index.html#leaderboard" data-nav="leaderboard" class="nav-link block px-4 py-3 rounded-xl">Leaderboard</a></li>
           <li><a href="index.html#sop" data-nav="sop" class="nav-link block px-4 py-3 rounded-xl">SOP</a></li>
           <li><a href="index.html#galeri" data-nav="galeri" class="nav-link block px-4 py-3 rounded-xl">Galeri</a></li>
+          <li><a href="index.html#hof" data-nav="hof" class="nav-link block px-4 py-3 rounded-xl">Hall of Fame</a></li>
           <li><a href="report.html" data-nav="report" class="nav-link block px-4 py-3 rounded-xl" aria-current="page">Report</a></li>
         </ul>
       </div>
@@ -320,19 +331,20 @@
             <div class="flex flex-wrap items-start justify-between gap-3 mb-6">
                 <div>
                     <h2 class="grad font-display uppercase text-2xl font-bold tracking-wide mb-1 text-brand-rose">Poster Match Recap</h2>
-                    <p class="text-sm text-neutral-400">Pilih hari. Satu poster berisi seluruh pertandingan di hari itu (data Sheet 6).</p>
+                    <p class="text-sm text-neutral-400">Pilih tanggal untuk melihat rekap pertandingan, lalu unduh posternya. Satu poster (format Story Instagram 9:16) berisi seluruh pertandingan hari itu (data Sheet 6).</p>
                 </div>
                 <button onclick="loadRecapData()" class="ghost-btn">🔄 Muat Ulang</button>
             </div>
             <label class="flex flex-wrap items-center gap-3 rounded-xl bg-white/5 px-4 py-3 text-xs text-neutral-300 mb-3">
                 Maksimal pertandingan per poster
                 <select id="recapSplit" class="rounded-lg px-3 py-1.5 text-white outline-none">
-                    <option value="0">Semua dalam 1 poster</option><option value="6">6 (pecah otomatis)</option><option value="8">8 (pecah otomatis)</option>
+                    <option value="9">Maks. 9 (otomatis pecah jika lebih)</option><option value="8">Maks. 8</option><option value="6">Maks. 6</option>
                 </select>
             </label>
             <p id="recapStatus" class="text-xs text-neutral-400 min-h-[1rem] mb-3" aria-live="polite">Memuat...</p>
-            <div id="recapList" class="grid gap-4 sm:grid-cols-2"></div>
+            <div id="recapList" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 max-h-[26rem] overflow-y-auto p-1"></div>
         </div>
+        <div id="recapDetail" class="glass-card p-5 sm:p-8 hidden"></div>
     </div>
 
     <!-- MODAL PREVIEW POSTER -->
@@ -788,18 +800,35 @@
                 players: new Set(d.matches.flatMap(m => [m.A1, m.A2, m.B1, m.B2]).filter(Boolean)).size }));
             if (!recapDays.length) { st.textContent = 'Tidak ada pertandingan terbaca. Header sheet: ' + grid[0].join(' | '); return; }
             st.textContent = `${recapDays.length} hari pertandingan ditemukan.`;
-            list.innerHTML = recapDays.slice(0, 30).map((d, i) => `
-                <div class="day-card glass-card p-5 flex flex-col gap-4">
-                    <div>
-                        <p class="font-display uppercase tracking-wide text-lg font-bold">${esc(d.label)}</p>
-                        <p class="text-sm text-neutral-400 mt-1"><span class="text-brand-rose font-semibold">${d.matches.length}</span> pertandingan &middot; ${d.players} pemain</p>
-                    </div>
-                    <div class="flex gap-2 mt-auto">
-                        <button class="ghost-btn flex-1" onclick="previewPoster(${i}, this)">Preview</button>
-                        <button class="export-btn flex-1" onclick="downloadPoster(${i}, this)">📥 Download</button>
-                    </div>
-                </div>`).join('');
+            list.innerHTML = recapDays.map((d, i) => `
+                <button type="button" class="date-btn" data-i="${i}" aria-pressed="false" onclick="selectDay(${i}, true)">
+                    <span class="dw">${HARI[d.date.getDay()].slice(0, 3)}</span><b>${d.date.getDate()}</b><span class="dm">${BLN[d.date.getMonth()].slice(0, 3)} ${d.date.getFullYear()}</span><i>${d.matches.length} match</i>
+                </button>`).join('');
+            selectDay(0);
         } catch (err) { console.error(err); st.innerHTML = `<span class="text-rose-500">Gagal memuat data: ${esc(err.message)}</span>`; }
+    }
+
+    function selectDay(i, scroll) {
+        const d = recapDays[i]; if (!d) return;
+        document.querySelectorAll('.date-btn').forEach(b => { const on = +b.dataset.i === i; b.classList.toggle('active', on); b.setAttribute('aria-pressed', on); });
+        const av = n => `<img src="${esc(photoFor(n, 96))}" alt="" loading="lazy" onerror="this.onerror=null;this.src='${esc(avatar(n, 96))}'" class="w-8 h-8 rounded-full object-cover ring-2 ring-white/30 flex-none">`;
+        const team = (a, b, win, right) => [a, b].map(n => `<div class="flex items-center gap-2 min-w-0 ${right ? 'flex-row-reverse text-right' : ''}">${av(n)}<span class="truncate text-sm sm:text-base font-semibold ${win ? 'text-emerald-400' : 'text-white'}">${esc(n)}</span></div>`).join('');
+        const rows = d.matches.map((m, k) => {
+            const aw = m.a > m.b, bw = m.b > m.a, cl = (w) => w ? 'text-emerald-400' : (m.a === m.b ? 'text-amber-300' : 'text-white');
+            return `<div class="bg-white/5 border border-white/10 rounded-2xl p-3 sm:p-4">
+                <p class="font-display uppercase text-[10px] tracking-[0.2em] text-neutral-400 text-center mb-2">Match ${pad(k + 1)}</p>
+                <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
+                    <div class="flex flex-col gap-1.5 min-w-0">${team(m.A1, m.A2, aw, false)}</div>
+                    <div class="font-display text-3xl sm:text-4xl font-bold whitespace-nowrap"><span class="${cl(aw)}">${m.a}</span><span class="text-brand-rose mx-1">–</span><span class="${cl(bw)}">${m.b}</span></div>
+                    <div class="flex flex-col gap-1.5 min-w-0">${team(m.B1, m.B2, bw, true)}</div>
+                </div></div>`;
+        }).join('');
+        const el = document.getElementById('recapDetail'); el.classList.remove('hidden');
+        el.innerHTML = `<div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+                <div><h3 class="font-display uppercase text-xl sm:text-2xl font-bold">${esc(d.label)}</h3><p class="text-sm text-neutral-400"><span class="text-brand-rose font-semibold">${d.matches.length}</span> pertandingan &middot; ${d.players} pemain</p></div>
+                <div class="flex gap-2"><button class="ghost-btn" onclick="previewPoster(${i}, this)">Preview</button><button class="export-btn" onclick="downloadPoster(${i}, this)">📥 Download Poster</button></div>
+            </div><div class="space-y-3">${rows}</div>`;
+        if (scroll) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // Tools Penggambar Canvas
@@ -932,9 +961,8 @@
     }
 
     async function renderPoster(day, list, part, parts, SC) {
-        const W = 1080, PX = 60, CW = W - PX * 2, CH = 150, GAP = 18, TOP = 430, FOOT = 160;
-        const content = list.length * (CH + GAP) - GAP;
-        const H = Math.max(1350, TOP + content + FOOT);
+        const W = 1080, H = 1920, PX = 60, CW = W - PX * 2, GAP = 18, TOP = 520, BOT = H - 250;   // Story 9:16, area aman UI Instagram
+        const CH = Math.max(108, Math.min(150, Math.floor((BOT - TOP + GAP) / list.length) - GAP)), kf = CH / 150, content = list.length * (CH + GAP) - GAP;
         if (document.fonts && document.fonts.load) await Promise.all(['700 96px Oswald', '600 30px Oswald', '600 24px Inter', '500 24px Inter'].map(f => document.fonts.load(f).catch(() => null)));
         const names = [...new Set(list.flatMap(m => [m.A1, m.A2, m.B1, m.B2]).filter(Boolean))];
         const [logo, ...pics] = await Promise.all([fetchDataURL(LOGO_URL).then(loadImage), ...names.map(posterImg)]);
@@ -953,7 +981,7 @@
         const [cv, ctx] = mk(); ctx.drawImage(bgc, 0, 0, W, H);
 
         // Header
-        const top = 64, logoH = 70;
+        const top = 150, logoH = 70;
         ctx.font = `700 44px ${FD}`; const wPB = spacedW(ctx, 'PB ', 4), wJG = spacedW(ctx, 'JGEER', 4), lw = logo ? logoH * logo.width / logo.height : 0;
         let bx = (W - (lw + (logo ? 18 : 0) + wPB + 4 + wJG)) / 2;
         if (logo) { ctx.drawImage(logo, bx, top, lw, logoH); bx += lw + 18; }
@@ -967,7 +995,7 @@
         ctx.font = `500 24px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.75)'; spaced(ctx, sum, (W - spacedW(ctx, sum, 3)) / 2, cy0 + 56 + 44, 3);
 
         // Kartu pertandingan
-        const y0 = TOP + Math.max(0, (H - FOOT - TOP - content) / 2), cy = i => y0 + i * (CH + GAP);
+        const y0 = TOP + Math.max(0, (BOT - TOP - content) / 2), cy = i => y0 + i * (CH + GAP);
         const WIN = '#4ade80', DRAW = '#fbbf24';
         const avatarAt = (im, x, y, r, col) => {
             ctx.save(); ctx.shadowColor = col === '#fff' ? 'rgba(214,69,93,.35)' : col + '66'; ctx.shadowBlur = 22 * SC; ctx.beginPath(); ctx.arc(x, y, r + 3, 0, Math.PI * 2); ctx.fillStyle = '#12060a'; ctx.fill(); ctx.restore();
@@ -981,25 +1009,25 @@
                 ctx.save(); rr(ctx, x, y, CW, CH, 32); ctx.clip();
                 const wx = aw ? x : x + CW, wg = ctx.createLinearGradient(wx, 0, x + CW / 2, 0); wg.addColorStop(0, 'rgba(74,222,128,.20)'); wg.addColorStop(1, 'rgba(74,222,128,0)'); ctx.fillStyle = wg; ctx.fillRect(x, y, CW, CH); ctx.restore();
             }
-            avatarAt(img(m.A1), x + 68, mid, 34, cA); avatarAt(img(m.A2), x + 130, mid, 34, cA);
-            avatarAt(img(m.B1), x + CW - 130, mid, 34, cB); avatarAt(img(m.B2), x + CW - 68, mid, 34, cB);
-            const nameMax = CW / 2 - 90 - 186;
-            [[m.A1, 'left', x + 186, cA, aw], [m.A2, 'left', x + 186, cA, aw], [m.B1, 'right', x + CW - 186, cB, bw], [m.B2, 'right', x + CW - 186, cB, bw]].forEach(([n, al, nx, col, won], k) => {
-                const t = String(n).toUpperCase(); fitFont(ctx, t, nameMax, 28, 600); ctx.textAlign = al; ctx.fillStyle = won ? col : 'rgba(255,255,255,.92)'; ctx.fillText(t, nx, mid + (k % 2 ? 34 : -6));
+            const ar = 34 * kf, ax = 68 * kf, ad = 62 * kf, nx = 186 * kf;
+            avatarAt(img(m.A1), x + ax, mid, ar, cA); avatarAt(img(m.A2), x + ax + ad, mid, ar, cA);
+            avatarAt(img(m.B1), x + CW - ax - ad, mid, ar, cB); avatarAt(img(m.B2), x + CW - ax, mid, ar, cB);
+            const nameMax = CW / 2 - 90 - nx;
+            [[m.A1, 'left', x + nx, cA, aw], [m.A2, 'left', x + nx, cA, aw], [m.B1, 'right', x + CW - nx, cB, bw], [m.B2, 'right', x + CW - nx, cB, bw]].forEach(([n, al, nx, col, won], k) => {
+                const t = String(n).toUpperCase(); fitFont(ctx, t, nameMax, 28 * kf, 600); ctx.textAlign = al; ctx.fillStyle = won ? col : 'rgba(255,255,255,.92)'; ctx.fillText(t, nx, mid + (k % 2 ? 34 * kf : -6 * kf));
             });
-            ctx.textAlign = 'center'; ctx.font = `600 15px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.55)'; const lb = `MATCH ${pad(i + 1)}`; spaced(ctx, lb, x + CW / 2 - spacedW(ctx, lb, 3) / 2, y + 38, 3);
-            ctx.textAlign = 'left'; ctx.font = `700 66px ${FD}`; const segs = [[String(a), cA], [' – ', '#D6455D'], [String(b), cB]], tw = segs.reduce((s, [t]) => s + ctx.measureText(t).width, 0);
-            let sx = x + CW / 2 - tw / 2; ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 8 * SC; segs.forEach(([t, c]) => { ctx.fillStyle = c; ctx.fillText(t, sx, y + 108); sx += ctx.measureText(t).width; }); ctx.restore();
+            ctx.textAlign = 'center'; ctx.font = `600 15px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.55)'; const lb = `MATCH ${pad(i + 1)}`; spaced(ctx, lb, x + CW / 2 - spacedW(ctx, lb, 3) / 2, y + 38 * kf, 3);
+            ctx.textAlign = 'left'; ctx.font = `700 ${Math.round(66 * kf)}px ${FD}`; const segs = [[String(a), cA], [' – ', '#D6455D'], [String(b), cB]], tw = segs.reduce((s, [t]) => s + ctx.measureText(t).width, 0);
+            let sx = x + CW / 2 - tw / 2; ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 8 * SC; segs.forEach(([t, c]) => { ctx.fillStyle = c; ctx.fillText(t, sx, y + 108 * kf); sx += ctx.measureText(t).width; }); ctx.restore();
         });
 
-        // Footer
-        ctx.font = `600 26px ${FB}`; const user = 'jgeer_badminton', uw = ctx.measureText(user).width, fx = (W - (30 + 12 + uw)) / 2, fy = H - 96;
+        // Footer (jauh dari tepi bawah agar tidak tertutup kolom balasan Story)
+        ctx.font = `600 26px ${FB}`; const user = 'jgeer_badminton', uw = ctx.measureText(user).width, fx = (W - (30 + 12 + uw)) / 2, fy = H - 200;
         drawInstagram(ctx, fx, fy - 15, 30, '#D6455D'); ctx.fillStyle = '#d4d4d8'; ctx.textAlign = 'left'; ctx.fillText(user, fx + 42, fy + 9);
-        // ctx.font = `500 20px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.40)'; ctx.textAlign = 'center'; ctx.fillText('amrylr.github.io/jgeerbadminton', W / 2, fy + 50);
         return cv;
     }
 
-    const chunks = day => { const n = +document.getElementById('recapSplit').value || 9999, out = []; for (let k = 0; k < day.matches.length; k += n) out.push(day.matches.slice(k, k + n)); return out; };
+    const chunks = day => { const n = +document.getElementById('recapSplit').value || 9, out = []; for (let k = 0; k < day.matches.length; k += n) out.push(day.matches.slice(k, k + n)); return out; };
     const toBlob = cv => new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('toBlob gagal')), 'image/png'));
 
     async function previewPoster(i, btn) {
