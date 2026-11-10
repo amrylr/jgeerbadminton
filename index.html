@@ -287,6 +287,23 @@
     details[open] > .doc-body { animation: fadeIn .25s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
     @media (prefers-reduced-motion: reduce) { details[open] > .doc-body { animation: none; } }
+
+    /* Player (lingkaran), Event Selanjutnya, Hall of Fame */
+    .pl-ring { border-radius: 9999px; padding: 3px; background: linear-gradient(145deg, #ff7f93, #7A1020 55%, #fbbf24); box-shadow: 0 10px 26px -10px rgba(214,69,93,.7); transition: transform .3s; }
+    .pl:hover .pl-ring { transform: translateY(-4px) scale(1.04); }
+    .pl-ring img { border-radius: 9999px; border: 3px solid #0A0A0A; width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #161616; }
+    .ev-hero { border-radius: 2rem; border: 1px solid rgba(255,255,255,.18); background: linear-gradient(135deg, rgba(122,16,32,.55), rgba(255,255,255,.06));
+        -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 30px 60px -30px rgba(122,16,32,.9); }
+    .ev-overlay { background: radial-gradient(30rem 16rem at 100% 0%, rgba(214,69,93,.40), transparent 70%), radial-gradient(24rem 14rem at 0% 100%, rgba(251,191,36,.14), transparent 70%); }
+    #evBg { transition: opacity .8s; }
+    .ev-chip, .hof-badge { display: inline-flex; align-items: center; gap: .4rem; padding: .3rem .9rem; border-radius: 9999px; font-family: 'Oswald', sans-serif; font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; color: #fff;
+        background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+    .ev-tile { border-radius: 1.25rem; padding: .9rem .25rem; background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2); box-shadow: inset 0 1px 0 rgba(255,255,255,.25); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+    .ev-tile b { display: block; font-family: 'Oswald', sans-serif; font-size: 2rem; line-height: 1; } .ev-tile span { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: #d4d4d8; }
+    .hof-card { box-shadow: 0 24px 50px -26px rgba(0,0,0,.8); transition: transform .3s, border-color .3s; } .hof-card:hover { transform: translateY(-4px); border-color: rgba(251,191,36,.6); }
+    .hof-glass { background: linear-gradient(145deg, rgba(255,255,255,.16), rgba(255,255,255,.05)); border: 1px solid rgba(255,255,255,.26); box-shadow: inset 0 1px 0 rgba(255,255,255,.3);
+        -webkit-backdrop-filter: blur(18px) saturate(170%); backdrop-filter: blur(18px) saturate(170%); }
+    @media (prefers-reduced-motion: reduce) { .pl:hover .pl-ring, .hof-card:hover { transform: none; } }
   </style>
 </head>
 
@@ -312,29 +329,31 @@
         </a>
 
         <!-- Menu desktop -->
-        <ul class="hidden md:flex items-center gap-1 font-display uppercase tracking-wider text-sm">
+        <ul class="hidden lg:flex items-center gap-1 font-display uppercase tracking-wider text-sm">
           <li><a href="#home" data-nav="home" class="nav-link block px-4 py-2 rounded-xl">Home</a></li>
-          <li><a href="#roster" data-nav="roster" class="nav-link block px-4 py-2 rounded-xl">Roster</a></li>
+          <li><a href="#roster" data-nav="roster" class="nav-link block px-4 py-2 rounded-xl">Player</a></li>
           <li><a href="#leaderboard" data-nav="leaderboard" class="nav-link block px-4 py-2 rounded-xl">Leaderboard</a></li>
           <li><a href="#sop" data-nav="sop" class="nav-link block px-4 py-2 rounded-xl">SOP</a></li>
           <li><a href="#galeri" data-nav="galeri" class="nav-link block px-4 py-2 rounded-xl">Galeri</a></li>
+          <li><a href="#hof" data-nav="hof" class="nav-link block px-4 py-2 rounded-xl">Hall of Fame</a></li>
           <li><a href="report.html" data-nav="report" class="nav-link block px-4 py-2 rounded-xl">Report</a></li>
         </ul>
 
         <!-- Tombol hamburger (mobile) -->
-        <button id="menuBtn" class="md:hidden p-2 rounded-xl hover:bg-white/10 transition" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
+        <button id="menuBtn" class="lg:hidden p-2 rounded-xl hover:bg-white/10 transition" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </nav>
 
       <!-- Menu mobile -->
-      <div id="mobileMenu" class="nav-glass hidden md:hidden mt-2 rounded-2xl overflow-hidden">
+      <div id="mobileMenu" class="nav-glass hidden lg:hidden mt-2 rounded-2xl overflow-hidden">
         <ul class="p-2 flex flex-col font-display uppercase tracking-wider">
           <li><a href="#home" data-nav="home" class="nav-link block px-4 py-3 rounded-xl">Home</a></li>
-          <li><a href="#roster" data-nav="roster" class="nav-link block px-4 py-3 rounded-xl">Roster</a></li>
+          <li><a href="#roster" data-nav="roster" class="nav-link block px-4 py-3 rounded-xl">Player</a></li>
           <li><a href="#leaderboard" data-nav="leaderboard" class="nav-link block px-4 py-3 rounded-xl">Leaderboard</a></li>
           <li><a href="#sop" data-nav="sop" class="nav-link block px-4 py-3 rounded-xl">SOP</a></li>
           <li><a href="#galeri" data-nav="galeri" class="nav-link block px-4 py-3 rounded-xl">Galeri</a></li>
+          <li><a href="#hof" data-nav="hof" class="nav-link block px-4 py-3 rounded-xl">Hall of Fame</a></li>
           <li><a href="report.html" data-nav="report" class="nav-link block px-4 py-3 rounded-xl">Report</a></li>
         </ul>
       </div>
@@ -442,13 +461,34 @@
       </div>
     </section>
 
+    <!-- HERO EVENT SELANJUTNYA -->
+    <section id="nextEvent" class="max-w-6xl mx-auto px-4 sm:px-6 -mt-12 sm:-mt-16 mb-16 sm:mb-24 relative z-10">
+      <div class="ev-hero relative overflow-hidden">
+        <img id="evBg" alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover opacity-0" />
+        <div class="ev-overlay absolute inset-0"></div>
+        <div class="relative grid lg:grid-cols-[1.3fr_1fr] gap-8 p-6 sm:p-10 items-center">
+          <div>
+            <span class="ev-chip">📣 Event Selanjutnya</span>
+            <h2 id="evName" class="mt-4 font-display font-bold uppercase text-3xl sm:text-5xl leading-tight break-words"></h2>
+            <p id="evDesc" class="mt-3 text-neutral-200 sm:text-lg"></p>
+            <div class="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm sm:text-base text-neutral-100 font-medium"><span id="evDate"></span><span id="evPlace" class="hidden"></span></div>
+            <a id="evLink" href="#" target="_blank" rel="noopener" class="hidden mt-6 inline-block px-7 py-3 rounded-full bg-brand-maroon text-white border border-brand-rose/40 font-display uppercase tracking-wider font-semibold hover:bg-brand-rose transition"></a>
+          </div>
+          <div id="evCount" class="grid grid-cols-4 gap-2 sm:gap-3 text-center" aria-label="Hitung mundur event">
+            <div class="ev-tile"><b data-u>00</b><span>Hari</span></div><div class="ev-tile"><b data-u>00</b><span>Jam</span></div>
+            <div class="ev-tile"><b data-u>00</b><span>Menit</span></div><div class="ev-tile"><b data-u>00</b><span>Detik</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- INFO CEPAT -->
     <section class="info-strip">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         <div>
           <p class="text-3xl" aria-hidden="true">👥</p>
           <p class="mt-1 font-display text-3xl font-bold text-brand-rose">36</p>
-          <p class="text-xs uppercase tracking-widest text-neutral-400">Anggota Aktif</p>
+          <p class="text-xs uppercase tracking-widest text-neutral-400">Player Aktif</p>
         </div>
         <div>
           <p class="text-3xl" aria-hidden="true">🗓️</p>
@@ -473,10 +513,10 @@
       <h2 class="font-display uppercase font-bold text-2xl sm:text-3xl mb-8">
         Akses <span class="text-brand-rose">Cepat</span>
       </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <a href="#roster" class="flex items-center gap-4 p-5 rounded-xl bg-brand-card border border-white/10 hover:border-brand-rose transition">
           <span class="text-3xl" aria-hidden="true">🧑‍🤝‍🧑</span>
-          <div><h3 class="font-display uppercase tracking-wide font-semibold">Roster</h3><p class="text-sm text-neutral-400">Daftar anggota & level main</p></div>
+          <div><h3 class="font-display uppercase tracking-wide font-semibold">Player</h3><p class="text-sm text-neutral-400">Daftar player & julukan</p></div>
         </a>
         <a href="#leaderboard" class="flex items-center gap-4 p-5 rounded-xl bg-brand-card border border-white/10 hover:border-brand-rose transition">
           <span class="text-3xl" aria-hidden="true">🏆</span>
@@ -490,18 +530,22 @@
           <span class="text-3xl" aria-hidden="true">📸</span>
           <div><h3 class="font-display uppercase tracking-wide font-semibold">Galeri</h3><p class="text-sm text-neutral-400">Foto & momen seru bareng</p></div>
         </a>
+        <a href="#hof" class="flex items-center gap-4 p-5 rounded-xl bg-brand-card border border-white/10 hover:border-brand-rose transition">
+          <span class="text-3xl" aria-hidden="true">🏅</span>
+          <div><h3 class="font-display uppercase tracking-wide font-semibold">Hall of Fame</h3><p class="text-sm text-neutral-400">Juara event-event sebelumnya</p></div>
+        </a>
       </div>
     </section>
     </div>
 
     <!-- HALAMAN: ROSTER -->
-    <div data-page="roster" data-title="Roster | PB Jgeer" class="hidden">
+    <div data-page="roster" data-title="Player | PB Jgeer" class="hidden">
     <section class="page-hero">
       <span class="absolute -right-8 -top-10 text-[16rem] leading-none opacity-[0.07] select-none" aria-hidden="true">👥</span>
       <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center sm:text-left">
         <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Season 2026</p>
         <h1 class="mt-2 font-display font-bold uppercase text-4xl sm:text-6xl leading-tight">
-          Roster <span class="text-brand-rose">Tim</span>
+          Player <span class="text-brand-rose">Jgeer</span>
         </h1>
         <div class="mt-4 h-1 w-20 bg-brand-maroon rounded mx-auto sm:mx-0"></div>
         <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg mx-auto sm:mx-0">
@@ -511,8 +555,8 @@
     </section>
 
     <section class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
-      <div id="rosterGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        <p class="col-span-full text-center py-10 text-neutral-400 animate-pulse">Memuat data roster dari Google Sheets...</p>
+      <div id="rosterGrid" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-x-3 gap-y-7 sm:gap-x-6 sm:gap-y-10">
+        <p class="col-span-full text-center py-10 text-neutral-400 animate-pulse">Memuat data player dari Google Sheets...</p>
       </div>
     </section>
     </div>
@@ -804,6 +848,24 @@
     </article>
     </div>
 
+    <!-- HALAMAN: HALL OF FAME -->
+    <div data-page="hof" data-title="Hall of Fame | PB Jgeer" class="hidden">
+    <section class="page-hero">
+      <span class="absolute -right-8 -top-10 text-[16rem] leading-none opacity-[0.07] select-none" aria-hidden="true">🏆</span>
+      <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center sm:text-left">
+        <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Jgeer Legends</p>
+        <h1 class="mt-2 font-display font-bold uppercase text-4xl sm:text-6xl leading-tight">Hall of <span class="text-brand-rose">Fame</span></h1>
+        <div class="mt-4 h-1 w-20 bg-brand-maroon rounded mx-auto sm:mx-0"></div>
+        <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg mx-auto sm:mx-0">Para juara dari event-event PB Jgeer. Nama yang tercatat di sini akan dikenang.</p>
+      </div>
+    </section>
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+      <div id="hofGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+        <p class="col-span-full text-center py-10 text-neutral-400 animate-pulse">Memuat Hall of Fame dari Google Sheets...</p>
+      </div>
+    </section>
+    </div>
+
     <!-- HALAMAN: GALERI (grid foto statis, tertaut ke postingan Instagram) -->
     <div data-page="galeri" data-title="Galeri &amp; Dokumentasi | PB Jgeer" class="hidden">
     <section class="page-hero">
@@ -834,8 +896,8 @@
       <div id="galeriGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6"></div>
     </section>
 
-    <!-- Video YouTube dinonaktifkan agar galeri hanya berisi foto statis.
-        Untuk mengaktifkan lagi, hapus tanda komentar pada blok di bawah ini. -->
+    Video YouTube dinonaktifkan agar galeri hanya berisi foto statis.
+         Untuk mengaktifkan lagi, hapus tanda komentar pada blok di bawah ini.
     <section class="border-t border-brand-maroon/60 bg-brand-card">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <h2 class="font-display uppercase font-semibold text-2xl sm:text-3xl tracking-wide mb-8">🎬 Video <span class="text-brand-rose">Mabar</span></h2>
@@ -877,6 +939,19 @@
     const SHEET_ROSTER  = { gid: '0' };
     const SHEET_BULANAN = { gid: '1721494674' };
     const SHEET_TAHUNAN = { gid: '1795527929' };
+    // Sheet 7 (Hall of Fame). Jika nama tab berbeda, ganti dengan gid: { gid: '123456789' } (angka setelah gid= di URL sheet)
+    const SHEET_HOF = { name: ['Sheet7', 'Sheet 7', 'Hall of Fame', 'HallOfFame'] };
+    // Sheet 8 (Event selanjutnya). Jika nama tab berbeda, ganti dengan gid: { gid: '123456789' }
+    const SHEET_EVENT = { name: ['Sheet8', 'Sheet 8', 'Event', 'Event Selanjutnya'] };
+    // Tampilan bawaan hero event (dipakai selama Sheet 8 kosong / belum ada event mendatang). tanggal: 'YYYY-MM-DDTHH:mm:00+07:00' (kosongkan jika belum ada). Kosongkan field yang tidak dipakai.
+    const NEXT_EVENT = {
+      nama: 'Segera Diumumkan',
+      tanggal: '',
+      lokasi: '',
+      deskripsi: 'Pantau terus halaman ini untuk info event Jgeer selanjutnya.',
+      link: '', linkLabel: 'Info & Pendaftaran',
+      poster: '',          // opsional: URL gambar latar hero
+    };
 
     const LOGO_URL = 'https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png';
     const SITE_URL = 'amrylr.github.io/jgeerbadminton';
@@ -1161,25 +1236,99 @@
 
     function renderRoster(list) {
       const el = document.getElementById('rosterGrid');
-      if (!list.length) { el.innerHTML = `<p class="col-span-full text-center py-10 text-neutral-400">Belum ada data roster di spreadsheet.</p>`; return; }
+      if (!list.length) { el.innerHTML = `<p class="col-span-full text-center py-10 text-neutral-400">Belum ada data player di spreadsheet.</p>`; return; }
       el.innerHTML = list.map(p => {
-        const cap = /kapten|ketua|captain/i.test(p.jabatan)
-          ? `<span class="absolute top-3 right-3 text-[11px] font-display uppercase tracking-widest bg-black/60 border border-amber-400/70 text-amber-300 px-2.5 py-1 rounded-full">👑 ${esc(p.jabatan)}</span>` : '';
         const src = p.foto ? driveThumb(p.foto) : avatar(p.nama, 256);
         return `
-        <article class="player-card relative overflow-hidden rounded-2xl bg-brand-card border border-white/10 text-center">
-          <div class="h-20 bg-gradient-to-r from-brand-maroon to-brand-rose/70"></div>
-          ${cap}
-          <div class="px-6 pb-7 -mt-12">
-            <img src="${esc(src)}" alt="Foto ${esc(p.nama)}" width="96" height="96" loading="lazy"
-                 onerror="this.onerror=null;this.src='${esc(avatar(p.nama, 256))}'"
-                 class="mx-auto w-24 h-24 rounded-full object-cover border-4 border-brand-card ring-2 ring-brand-rose" />
-            <h3 class="mt-4 font-display uppercase text-2xl font-semibold tracking-wide">${esc(p.nama)}</h3>
-            ${p.kategori ? `<span class="mt-2 inline-block px-3 py-1 rounded-full bg-brand-maroon text-xs font-semibold uppercase tracking-wider">${esc(p.kategori)}</span>` : ''}
-            ${p.julukan ? `<p class="mt-4 text-brand-rose font-semibold">${esc(p.julukan)}</p>` : ''}
+        <article class="pl text-center">
+          <div class="pl-ring mx-auto w-full max-w-[9rem]">
+            <img src="${esc(src)}" alt="Foto ${esc(p.nama)}" width="144" height="144" loading="lazy"
+                 onerror="this.onerror=null;this.src='${esc(avatar(p.nama, 256))}'" />
           </div>
+          <h3 class="mt-3 font-display uppercase font-semibold tracking-wide leading-tight text-[13px] sm:text-base break-words">${esc(p.nama)}</h3>
+          ${p.julukan ? `<p class="mt-1 text-brand-rose font-semibold leading-tight text-[11px] sm:text-sm break-words">${esc(p.julukan)}</p>` : ''}
         </article>`;
       }).join('');
+    }
+
+    // =====================================================================
+    // HALL OF FAME (Sheet 7): nama pemain, nama turnamen, tanggal, foto (latar kartu)
+    // =====================================================================
+    function parseTglHof(v) {
+      v = str(v); let m;
+      if ((m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return new Date(+m[1], m[2] - 1, +m[3]);
+      if ((m = v.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/))) return new Date(+m[3], m[2] - 1, +m[1]);
+      if ((m = v.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/))) { const i = BULAN.findIndex(b => b.slice(0, 3) === m[2].toLowerCase().slice(0, 3)); if (i >= 0) return new Date(+m[3], i, +m[1]); }
+      return null;
+    }
+    const fmtTglHof = d => `${d.getDate()} ${BULAN[d.getMonth()][0].toUpperCase() + BULAN[d.getMonth()].slice(1)} ${d.getFullYear()}`;
+
+    function extractHof(grid) {
+      if (!grid || grid.length < 2) return [];
+      const hd = grid[0].map(norm), used = new Set();
+      const pick = (re, d) => { let i = hd.findIndex((x, k) => re.test(x) && !used.has(k)); if (i < 0 && d < hd.length && !used.has(d)) i = d; if (i >= 0) used.add(i); return i; };
+      const cT = pick(/turnamen|tournament|event|kejuaraan|lomba/, 1), cD = pick(/tanggal|tgl|date|waktu/, 2), cF = pick(/foto|photo|gambar|image|img/, 3), cP = pick(/pemain|player|juara|nama/, 0);
+      const rows = grid.slice(1).map((r, i) => {
+        const raw = str(r[cD]), d = parseTglHof(raw);
+        return { i, nama: str(r[cP]), turnamen: str(r[cT]), date: d, tgl: d ? fmtTglHof(d) : raw, foto: cF >= 0 ? str(r[cF]) : '' };
+      }).filter(r => r.nama);
+      return rows.sort((a, b) => (b.date ? b.date.getTime() : -Infinity) - (a.date ? a.date.getTime() : -Infinity) || a.i - b.i);
+    }
+
+    function renderHof(rows) {
+      const el = document.getElementById('hofGrid');
+      if (!rows.length) { el.innerHTML = `<p class="col-span-full text-center py-10 text-neutral-400">Belum ada juara yang tercatat.</p>`; return; }
+      el.innerHTML = rows.map(r => `
+        <article class="hof-card group relative overflow-hidden rounded-3xl aspect-[4/5] border border-white/15 bg-gradient-to-br from-brand-maroon to-neutral-900">
+          <div class="absolute inset-0 flex items-center justify-center text-8xl opacity-20" aria-hidden="true">🏆</div>
+          ${r.foto ? `<img src="${esc(driveThumb(r.foto, 900))}" alt="Juara ${esc(r.nama)}" loading="lazy" onerror="this.remove()" class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-105" />` : ''}
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/30"></div>
+          <span class="hof-badge absolute top-4 left-4">🏆 Juara</span>
+          <div class="hof-glass absolute inset-x-3 bottom-3 p-4 sm:p-5 rounded-2xl">
+            <h3 class="font-display uppercase text-2xl sm:text-3xl font-bold leading-tight break-words">${esc(r.nama)}</h3>
+            ${r.turnamen ? `<p class="mt-1 text-brand-rose font-semibold uppercase tracking-wide text-sm">${esc(r.turnamen)}</p>` : ''}
+            ${r.tgl ? `<p class="mt-1 text-xs text-neutral-300">🗓️ ${esc(r.tgl)}</p>` : ''}
+          </div>
+        </article>`).join('');
+    }
+
+    // =====================================================================
+    // HERO EVENT SELANJUTNYA (isi/ubah data di NEXT_EVENT)
+    // =====================================================================
+let evTimer;
+    // Sheet 8: ambil event terdekat yang belum lewat. Kolom: nama event, tanggal, (jam), lokasi, deskripsi, link, poster/foto
+    function extractNextEvent(grid) {
+      if (!grid || grid.length < 2) return null;
+      const hd = grid[0].map(norm), used = new Set(), p2 = n => String(n).padStart(2, '0');
+      const pick = (re, d) => { let i = hd.findIndex((x, k) => re.test(x) && !used.has(k)); if (i < 0 && d >= 0 && d < hd.length && !used.has(d)) i = d; if (i >= 0) used.add(i); return i; };
+      const cD = pick(/tanggal|tgl|date/, 1), cJ = pick(/jam|waktu|pukul|time/, -1), cLk = pick(/link|url|daftar|pendaftaran/, -1), cP = pick(/poster|foto|gambar|banner|image|img/, -1),
+            cL = pick(/lokasi|tempat|venue/, -1), cK = pick(/deskripsi|keterangan|detail|catatan/, -1), cN = pick(/event|acara|nama|turnamen/, 0);
+      const get = (r, c) => c >= 0 ? str(r[c]) : '';
+      const list = grid.slice(1).map(r => {
+        const raw = get(r, cD), d = parseTglHof(raw); if (!d || !get(r, cN)) return null;
+        const tm = (get(r, cJ).match(/(\d{1,2})[:.](\d{2})/) || raw.match(/(\d{1,2}):(\d{2})/)), ada = !!tm;
+        const iso = `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}T${tm ? p2(tm[1]) + ':' + tm[2] : '00:00'}:00+07:00`;
+        const foto = get(r, cP);
+        return { nama: get(r, cN), tanggal: iso, adaJam: ada, lokasi: get(r, cL), deskripsi: get(r, cK), link: get(r, cLk), linkLabel: 'Info & Pendaftaran', poster: foto ? driveThumb(foto, 1400) : '' };
+      }).filter(e => e && Date.parse(e.tanggal) + (e.adaJam ? 6 : 24) * 36e5 >= Date.now());
+      return list.sort((a, b) => Date.parse(a.tanggal) - Date.parse(b.tanggal))[0] || null;
+    }
+
+    function renderNextEvent() {
+      const e = NEXT_EVENT, $ = id => document.getElementById(id);
+      $('evName').textContent = e.nama; $('evDesc').textContent = e.deskripsi; $('evDesc').classList.toggle('hidden', !e.deskripsi);
+      const d = e.tanggal ? new Date(e.tanggal) : null, ok = d && !isNaN(d), tz = { timeZone: 'Asia/Jakarta' };
+      $('evDate').textContent = ok ? '🗓️ ' + d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', ...tz })
+        + ((e.adaJam ?? e.tanggal.length > 10) ? ' · ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', ...tz }).replace('.', ':') + ' WIB' : '') : '🗓️ Tanggal segera diumumkan';
+      $('evPlace').classList.toggle('hidden', !e.lokasi); $('evPlace').textContent = '📍 ' + e.lokasi;
+      const a = $('evLink'); a.classList.toggle('hidden', !e.link); if (e.link) { a.href = e.link; a.textContent = e.linkLabel; }
+      if (e.poster) { const im = $('evBg'); im.onload = () => { im.style.opacity = .35; }; im.src = e.poster; }
+      const c = $('evCount'); c.classList.toggle('hidden', !ok); if (!ok) return;
+      const tick = () => {
+        const s = Math.max(0, Math.floor((d - Date.now()) / 1000)), v = [Math.floor(s / 86400), Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60];
+        c.querySelectorAll('[data-u]').forEach((n, i) => { n.textContent = String(v[i]).padStart(2, '0'); });
+      };
+      clearInterval(evTimer); tick(); evTimer = setInterval(tick, 1000);
     }
 
     // =====================================================================
@@ -1604,6 +1753,24 @@
       ctx.restore();
     }
 
+    // ---------- Glassmorphism kanvas (sama dengan poster Match Recap) ----------
+    // Blur latar lewat turun-skala berulang: jalan di semua browser termasuk Safari
+    function blurred(src) {
+      let c = src;
+      for (let i = 0; i < 3; i++) { const n = document.createElement('canvas'); n.width = Math.max(8, c.width >> 1); n.height = Math.max(8, c.height >> 1); const g = n.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(c, 0, 0, n.width, n.height); c = n; }
+      return c;
+    }
+    // Kartu kaca: latar diburamkan + lapisan putih transparan + tepi bercahaya
+    function glass(ctx, blur, W, H, SC, x, y, w, h, r, tint = .10, edge = .30) {
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 30 * SC; ctx.shadowOffsetY = 12 * SC; rr(ctx, x, y, w, h, r); ctx.fillStyle = '#12060a'; ctx.fill(); ctx.restore();
+      ctx.save(); rr(ctx, x, y, w, h, r); ctx.clip(); ctx.drawImage(blur, 0, 0, W, H);
+      const g = ctx.createLinearGradient(x, y, x + w, y + h); g.addColorStop(0, `rgba(255,255,255,${tint + .07})`); g.addColorStop(1, `rgba(255,255,255,${tint * .35})`);
+      ctx.fillStyle = g; ctx.fillRect(x, y, w, h); ctx.restore();
+      ctx.save(); rr(ctx, x + .75, y + .75, w - 1.5, h - 1.5, r);
+      const b = ctx.createLinearGradient(x, y, x, y + h); b.addColorStop(0, `rgba(255,255,255,${edge + .2})`); b.addColorStop(.5, `rgba(255,255,255,${edge * .5})`); b.addColorStop(1, `rgba(255,255,255,${edge * .7})`);
+      ctx.strokeStyle = b; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+    }
+
     // ---------- Render poster langsung di canvas ----------
     async function renderPoster(kind, fmtKey, showLabel, scale, dateText) {
       const F = FORMATS[fmtKey];
@@ -1625,21 +1792,22 @@
       const smashURL = POSTER_SMASH_IMG ? await fetchDataURL(ghRaw(POSTER_SMASH_IMG, GITHUB_GALERI_BASE)) : null;
       const smashImg = await loadImage(smashURL);
 
-      const cv = document.createElement('canvas');
-      cv.width = W * scale; cv.height = H * scale;
-      const ctx = cv.getContext('2d');
-      ctx.scale(scale, scale);
-      ctx.textBaseline = 'alphabetic';
+      const mk = () => { const c = document.createElement('canvas'); c.width = W * scale; c.height = H * scale; const x = c.getContext('2d'); x.scale(scale, scale); x.textBaseline = 'alphabetic'; return [c, x]; };
 
-      // ----- Latar -----
-      // 1) Dasar: gradien radial hitam pekat (tengah/atas) -> maroon gelap (tepi/bawah)
-      const bg = ctx.createRadialGradient(W / 2, H * 0.28, 0, W / 2, H * 0.28, Math.hypot(W / 2, H * 0.78));
+      // ----- Latar (digambar di kanvas terpisah agar bisa diburamkan untuk efek kaca) -----
+      const [bgc, bgx] = mk();
+      const bg = bgx.createRadialGradient(W / 2, H * 0.28, 0, W / 2, H * 0.28, Math.hypot(W / 2, H * 0.78));
       bg.addColorStop(0, '#0A0A0A'); bg.addColorStop(0.45, '#13070A'); bg.addColorStop(1, '#2B0A11');
-      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-      // 2) Tekstur carbon fiber + grain, 3) ilustrasi pemain smash, 4) garis lapangan
-      drawTexture(ctx, W, H);
-      drawSmashPlayer(ctx, W, H, smashImg);
-      drawCourt(ctx, W, H);
+      bgx.fillStyle = bg; bgx.fillRect(0, 0, W, H);
+      drawTexture(bgx, W, H);
+      drawSmashPlayer(bgx, W, H, smashImg);
+      // cahaya warna di belakang kaca
+      [[W * .95, H * .05, 520, 'rgba(214,69,93,.50)'], [0, H * .32, 560, 'rgba(122,16,32,.80)'], [W, H * .55, 480, 'rgba(155,28,75,.42)'], [W * .05, H * .80, 480, 'rgba(251,191,36,.20)'], [W * .92, H * .97, 560, 'rgba(122,16,32,.75)']]
+        .forEach(([x, y, r, col]) => { const g = bgx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)'); bgx.fillStyle = g; bgx.fillRect(0, 0, W, H); });
+      drawCourt(bgx, W, H);
+      const blur = blurred(bgc);
+      const [cv, ctx] = mk();
+      ctx.drawImage(bgc, 0, 0, W, H);
 
       // ----- Header -----
       const top = F.padTop;
@@ -1671,9 +1839,7 @@
         ctx.font = `600 28px ${FONT_D}`;
         const sp = 6, tw = spacedWidth(ctx, txt, sp), cw = tw + 64, ch = 50;
         const cx = (W - cw) / 2, cy = titleBase + 24;
-        rr(ctx, cx, cy, cw, ch, 25);
-        ctx.fillStyle = 'rgba(122,16,32,.75)'; ctx.fill();
-        ctx.strokeStyle = 'rgba(214,69,93,.9)'; ctx.lineWidth = 2; ctx.stroke();
+        glass(ctx, blur, W, H, scale, cx, cy, cw, ch, 25, .12, .34);
         ctx.fillStyle = '#fff'; spaced(ctx, txt, cx + 32, cy + 34, sp);
         headerBottom = cy + ch;
       }
@@ -1712,16 +1878,14 @@
         const k = CFG[rank], img = photos[rank - 1];
         const blockTop = podBottom - k.bh;
 
-        // blok podium
-        const bgr = ctx.createLinearGradient(0, blockTop, 0, podBottom);
-        bgr.addColorStop(0, hexA(k.c, 0.40)); bgr.addColorStop(1, 'rgba(20,7,11,.96)');
-        ctx.save();
-        ctx.shadowColor = hexA(k.c, 0.45); ctx.shadowBlur = 40 * scale;
-        rr(ctx, k.cx - bw / 2, blockTop, bw, k.bh, [28, 28, 0, 0]);
-        ctx.fillStyle = bgr; ctx.fill();
-        ctx.restore();
-        rr(ctx, k.cx - bw / 2, blockTop, bw, k.bh, [28, 28, 0, 0]);
-        ctx.strokeStyle = k.c; ctx.lineWidth = 3; ctx.stroke();
+        // blok podium: kaca buram + semburat warna peringkat
+        const px0 = k.cx - bw / 2, pr4 = [28, 28, 0, 0];
+        glass(ctx, blur, W, H, scale, px0, blockTop, bw, k.bh, pr4, .10, .32);
+        ctx.save(); rr(ctx, px0, blockTop, bw, k.bh, pr4); ctx.clip();
+        const wg = ctx.createLinearGradient(0, blockTop, 0, podBottom); wg.addColorStop(0, hexA(k.c, 0.42)); wg.addColorStop(1, hexA(k.c, 0.04));
+        ctx.fillStyle = wg; ctx.fillRect(px0, blockTop, bw, k.bh); ctx.restore();
+        ctx.save(); rr(ctx, px0, blockTop, bw, k.bh, pr4);
+        ctx.shadowColor = hexA(k.c, 0.5); ctx.shadowBlur = 20 * scale; ctx.strokeStyle = hexA(k.c, 0.85); ctx.lineWidth = 2.5; ctx.stroke(); ctx.restore();
         // nomor besar transparan
         ctx.save();
         rr(ctx, k.cx - bw / 2, blockTop, bw, k.bh, [28, 28, 0, 0]); ctx.clip();
@@ -1763,12 +1927,11 @@
       const rx = POSTER.padX, rw = W - POSTER.padX * 2;
       rest.forEach((p, i) => {
         const y = rowsTop + i * (rowH + rowGap), mid = y + rowH / 2;
-        const g = ctx.createLinearGradient(rx, 0, rx + rw, 0);
-        g.addColorStop(0, 'rgba(122,16,32,.60)'); g.addColorStop(1, 'rgba(24,24,24,.88)');
-        rr(ctx, rx, y, rw, rowH, 22); ctx.fillStyle = g; ctx.fill();
-        ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.lineWidth = 1.5; ctx.stroke();
+        glass(ctx, blur, W, H, scale, rx, y, rw, rowH, 22, .10, .30);
         ctx.save(); rr(ctx, rx, y, rw, rowH, 22); ctx.clip();
-        ctx.fillStyle = '#D6455D'; ctx.fillRect(rx, y, 8, rowH); ctx.restore();
+        const wr = ctx.createLinearGradient(rx, 0, rx + rw * .7, 0); wr.addColorStop(0, 'rgba(214,69,93,.26)'); wr.addColorStop(1, 'rgba(214,69,93,0)');
+        ctx.fillStyle = wr; ctx.fillRect(rx, y, rw, rowH);
+        ctx.fillStyle = '#D6455D'; ctx.fillRect(rx, y, 7, rowH); ctx.restore();
 
         // nomor peringkat
         const rcx = rx + 50;
@@ -1864,10 +2027,12 @@
     // MUAT SEMUA DATA
     // =====================================================================
     async function loadAll() {
-      const [sRoster, sBulanan, sTahunan] = await Promise.allSettled([
+      const [sRoster, sBulanan, sTahunan, sHof, sEvent] = await Promise.allSettled([
         fetchGrid(SHEET_ROSTER),
         fetchGrid(SHEET_BULANAN),
         fetchGrid(SHEET_TAHUNAN),
+        fetchGrid(SHEET_HOF),
+        fetchGrid(SHEET_EVENT),
       ]);
 
       // Roster dulu agar peta foto siap sebelum podium dirender
@@ -1878,7 +2043,7 @@
         renderRoster(list);
       } else {
         console.error('Roster error:', sRoster.reason);
-        document.getElementById('rosterGrid').innerHTML = `<p class="col-span-full text-center py-10 text-rose-500">Gagal mengambil data roster (${esc(sRoster.reason.message)}).</p>`;
+        document.getElementById('rosterGrid').innerHTML = `<p class="col-span-full text-center py-10 text-rose-500">Gagal mengambil data player (${esc(sRoster.reason.message)}).</p>`;
       }
 
       if (sBulanan.status === 'fulfilled') {
@@ -1900,9 +2065,20 @@
         document.getElementById('pod-tahunan').innerHTML = failHTML(sTahunan.reason.message);
         document.getElementById('tw-tahunan').classList.add('hidden');
       }
+
+      if (sHof.status === 'fulfilled') renderHof(extractHof(sHof.value));
+      else {
+        console.error('Hall of Fame error:', sHof.reason);
+        document.getElementById('hofGrid').innerHTML = `<p class="col-span-full text-center py-10 text-rose-500">Gagal mengambil data Hall of Fame (${esc(sHof.reason.message)}). Pastikan nama tab Sheet 7 benar atau isi SHEET_HOF dengan gid.</p>`;
+      }
+
+      // Hero event selanjutnya dari Sheet 8 (jika gagal / tidak ada event mendatang, tampilan bawaan tetap dipakai)
+      if (sEvent.status === 'fulfilled') { const ev = extractNextEvent(sEvent.value); if (ev) { Object.assign(NEXT_EVENT, ev); renderNextEvent(); } }
+      else console.warn('Sheet 8 (event) gagal dimuat:', sEvent.reason);
     }
 
     // Mulai
+    renderNextEvent();
     route();
     loadAll();
   </script>
