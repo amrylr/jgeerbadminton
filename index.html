@@ -432,7 +432,7 @@
         <div class="mt-3 mx-auto h-1 w-20 bg-brand-maroon rounded"></div>
       </div>
 
-      <div class="grid gap-6 md:grid-cols-2">
+      <div id="videoGrid" class="grid gap-6 md:grid-cols-2">
         <a href="#leaderboard" class="group relative overflow-hidden rounded-2xl bg-brand-maroon text-white p-8 sm:p-10 min-h-[240px] flex flex-col justify-between transition hover:-translate-y-1 hover:shadow-[0_20px_50px_-15px_rgba(214,69,93,.55)]">
           <span class="absolute -right-6 -top-6 text-[9rem] opacity-15 select-none group-hover:rotate-12 transition" aria-hidden="true">🏸</span>
           <div class="relative">
@@ -636,6 +636,10 @@
               </label>
               <input type="date" id="date-bulanan" data-upd aria-label="Tanggal update" class="flex-1 min-w-0 bg-black/50 border border-white/20 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-brand-rose [color-scheme:dark]" />
             </div>
+            <label class="sm:col-span-2 flex items-center gap-2 text-xs text-neutral-300 cursor-pointer select-none rounded-xl bg-white/5 px-4 py-3">
+              <input type="checkbox" id="opt-p2-bulanan" checked class="w-4 h-4 accent-brand-rose" />
+              Buat juga Halaman 2 (semua peringkat 6+ untuk 4:5, 11+ untuk 9:16)
+            </label>
           </div>
           <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button type="button" class="export-btn" data-kind="bulanan" data-export="feed45">Top 5</button>
@@ -696,6 +700,10 @@
               </label>
               <input type="date" id="date-tahunan" data-upd aria-label="Tanggal update" class="flex-1 min-w-0 bg-black/50 border border-white/20 rounded-lg px-2 py-1.5 text-white focus:outline-none focus:border-brand-rose [color-scheme:dark]" />
             </div>
+            <label class="sm:col-span-2 flex items-center gap-2 text-xs text-neutral-300 cursor-pointer select-none rounded-xl bg-white/5 px-4 py-3">
+              <input type="checkbox" id="opt-p2-tahunan" checked class="w-4 h-4 accent-brand-rose" />
+              Buat juga Halaman 2 (semua peringkat 6+ untuk 4:5, 11+ untuk 9:16)
+            </label>
           </div>
           <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button type="button" class="export-btn" data-kind="tahunan" data-export="feed45">Top 5</button>
@@ -876,7 +884,7 @@
         </h1>
         <div class="mt-4 h-1 w-20 bg-brand-maroon rounded"></div>
         <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg leading-relaxed">
-          Kumpulan momen seru PB Jgeer di lapangan. Tiga momen pilihan kami. Ketuk foto untuk melihat postingan aslinya di Instagram.
+          Kumpulan momen seru PB Jgeer di lapangan. Ketuk foto untuk melihat postingan aslinya di Instagram.
         </p>
       </div>
     </section>
@@ -896,7 +904,7 @@
       <div id="galeriGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6"></div>
     </section>
 
-    <section class="border-t border-brand-maroon/60 bg-brand-card">
+    <section id="videoSection" class="border-t border-brand-maroon/60 bg-brand-card">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <h2 class="font-display uppercase font-semibold text-2xl sm:text-3xl tracking-wide mb-8">🎬 Video <span class="text-brand-rose">Mabar</span></h2>
         <div class="grid gap-6 md:grid-cols-2">
@@ -939,6 +947,8 @@
     const SHEET_TAHUNAN = { gid: '1795527929' };
     // Sheet 7 (Hall of Fame). Jika nama tab berbeda, ganti dengan gid: { gid: '123456789' } (angka setelah gid= di URL sheet)
     const SHEET_HOF = { name: ['Sheet7', 'Sheet 7', 'Hall of Fame', 'HallOfFame'] };
+    // Sheet 9 (Galeri: foto & video). Jika nama tab berbeda, ganti dengan gid: { gid: '123456789' }
+    const SHEET_GALERI = { name: ['Sheet9', 'Sheet 9', 'Galeri', 'Gallery'] };
     // Sheet 8 (Event selanjutnya). Jika nama tab berbeda, ganti dengan gid: { gid: '123456789' }
     const SHEET_EVENT = { name: ['Sheet8', 'Sheet 8', 'Event', 'Event Selanjutnya'] };
     // Tampilan bawaan hero event (dipakai selama Sheet 8 kosong / belum ada event mendatang). tanggal: 'YYYY-MM-DDTHH:mm:00+07:00' (kosongkan jika belum ada). Kosongkan field yang tidak dipakai.
@@ -1097,24 +1107,67 @@
     // =====================================================================
     // GALERI STATIS
     // =====================================================================
-    function renderGaleri() {
-      document.getElementById('galeriGrid').innerHTML = GALERI.slice(0, 3).map(g => {
-        const src = ghRaw(g.foto, GITHUB_GALERI_BASE);
+    const isDriveUrl = u => /drive\.google\.com/.test(u);
+    const galeriSrc = (u, w = 1000) => isDriveUrl(u) ? driveThumb(u, w) : ghRaw(u, GITHUB_GALERI_BASE);
+    function mediaKind(url, tipe) {
+      const t = norm(tipe), u = String(url).toLowerCase();
+      if (/video|vid|mp4|reel/.test(t)) return 'video';
+      if (/foto|gambar|image|photo|img/.test(t)) return 'foto';
+      return (/youtube\.com|youtu\.be|vimeo\.com|instagram\.com\/(reel|tv)\//.test(u) || /\.(mp4|webm|mov|m4v|ogv)(\?|#|$)/.test(u)) ? 'video' : 'foto';
+    }
+    // Sheet 9: kolom dikenali dari nama header (foto/gambar, video, link instagram, caption, tipe). Satu baris boleh berisi foto dan/atau video.
+    function extractGaleri(grid) {
+      if (!grid || grid.length < 2) return [];
+      const hd = grid[0].map(norm), used = new Set();
+      const pick = (re, d = -1) => { let i = hd.findIndex((x, k) => re.test(x) && !used.has(k)); if (i < 0 && d >= 0 && d < hd.length && !used.has(d)) i = d; if (i >= 0) used.add(i); return i; };
+      const cT = pick(/tipe|jenis|type|kategori|format/), cIg = pick(/instagram|(^| )ig( |$)|postingan/), cV = pick(/video|youtube|(^| )yt( |$)/), cF = pick(/foto|gambar|image|img|photo|thumbnail/);
+      const cM = (cF < 0 && cV < 0) ? pick(/media|file|link|url/, 0) : -1, cC = pick(/caption|judul|keterangan|deskripsi|nama|title/);
+      const g = (r, c) => c >= 0 ? str(r[c]) : '', out = [];
+      grid.slice(1).forEach(r => {
+        const caption = g(r, cC), ig = g(r, cIg), tipe = g(r, cT);
+        const add = (u, kind) => { if (u) out.push({ url: u, kind: kind || mediaKind(u, tipe), caption, ig }); };
+        add(g(r, cV), 'video'); add(g(r, cF)); add(g(r, cM));
+      });
+      return out;
+    }
+
+    function renderGaleri(list) {
+      list = list || GALERI.slice(0, 3).map(g => ({ url: g.foto, caption: g.caption, ig: g.ig }));
+      const el = document.getElementById('galeriGrid');
+      if (!list.length) { el.innerHTML = `<p class="col-span-full text-center py-10 text-neutral-400">Belum ada foto.</p>`; return; }
+      el.innerHTML = list.map(g => {
+        const src = galeriSrc(g.url), href = g.ig || src;
         return `
-        <a href="${esc(g.ig)}" target="_blank" rel="noopener noreferrer"
+        <a href="${esc(href)}" target="_blank" rel="noopener noreferrer"
            class="block overflow-hidden rounded-3xl bg-brand-card border border-white/10 hover:border-brand-rose/60"
-           aria-label="${esc(g.caption)} - buka di Instagram">
+           aria-label="${esc(g.caption || 'Foto galeri')}">
           <div class="relative aspect-[4/5] bg-gradient-to-br from-brand-maroon/70 to-brand-dark flex items-center justify-center">
             <span class="text-6xl opacity-30" aria-hidden="true">📸</span>
             ${src ? `<img src="${esc(src)}" alt="${esc(g.caption)}" loading="lazy" decoding="async" referrerpolicy="no-referrer"
                  class="absolute inset-0 w-full h-full object-cover" onerror="this.remove()" />` : ''}
             <div class="absolute inset-x-0 bottom-0 p-4 sm:p-5 flex items-end justify-between gap-3 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
               <span class="font-display uppercase tracking-wide text-lg truncate">${esc(g.caption)}</span>
-              <span class="shrink-0 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold">Instagram ↗</span>
+              <span class="shrink-0 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold">${g.ig ? 'Instagram ↗' : 'Buka ↗'}</span>
             </div>
           </div>
         </a>`;
       }).join('');
+    }
+
+    function videoHTML(v) {
+      const u = v.url, ttl = esc(v.caption || 'Video PB Jgeer');
+      const ifr = s => `<iframe title="${ttl}" src="${esc(s)}" loading="lazy" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture; fullscreen" frameborder="0" class="absolute inset-0 w-full h-full"></iframe>`;
+      let m, inner, ratio = 'aspect-video';
+      if ((m = u.match(/(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/))) inner = ifr(`https://www.youtube.com/embed/${m[1]}`);
+      else if ((m = u.match(/vimeo\.com\/(?:video\/)?(\d+)/))) inner = ifr(`https://player.vimeo.com/video/${m[1]}`);
+      else if ((m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=)([\w-]+)/))) inner = ifr(`https://drive.google.com/file/d/${m[1]}/preview`);
+      else if ((m = u.match(/instagram\.com\/(p|reel|tv)\/([\w-]+)/))) { inner = ifr(`https://www.instagram.com/${m[1]}/${m[2]}/embed`); ratio = 'aspect-[4/5]'; }
+      else inner = `<video controls playsinline preload="metadata" class="absolute inset-0 w-full h-full" src="${esc(ghRaw(u, GITHUB_GALERI_BASE))}"></video>`;
+      return `<figure><div class="relative ${ratio} overflow-hidden rounded-2xl bg-black border border-white/10">${inner}</div>${v.caption ? `<figcaption class="mt-2 text-sm text-neutral-300">${esc(v.caption)}</figcaption>` : ''}</figure>`;
+    }
+    function renderVideos(list) {
+      document.getElementById('videoSection').classList.toggle('hidden', !list.length);
+      document.getElementById('videoGrid').innerHTML = list.map(videoHTML).join('');
     }
     renderGaleri();
 
@@ -1770,13 +1823,16 @@ let evTimer;
     }
 
     // ---------- Render poster langsung di canvas ----------
-    async function renderPoster(kind, fmtKey, showLabel, scale, dateText) {
+    // page 1 = podium Top 3 + peringkat 4..limit ; page 2 = semua peringkat setelah limit dalam 1 halaman
+    async function renderPoster(kind, fmtKey, showLabel, scale, dateText, page = 1) {
       const F = FORMATS[fmtKey];
       const st = state[kind];
       const board = st.boards[st.idx];
-      const list = st.ranked.slice(0, F.limit);
-      const top3 = list.slice(0, 3);
-      const rest = list.slice(3);
+      const isP2 = page === 2;
+      const list = isP2 ? st.ranked.slice(F.limit) : st.ranked.slice(0, F.limit);
+      const top3 = isP2 ? [] : list.slice(0, 3);
+      const rest = isP2 ? list : list.slice(3);
+      const rankBase = isP2 ? F.limit + 1 : 4, restOff = isP2 ? 0 : 3;
       const W = F.w, H = F.h;
 
       // Pastikan font tersedia sebelum menggambar
@@ -1851,15 +1907,28 @@ let evTimer;
       }
 
       // ----- Tata letak vertikal: podium + baris, dipusatkan di zona kosong -----
+      if (isP2) {   // anak judul halaman 2
+        const t = `PERINGKAT ${F.limit + 1} – ${st.ranked.length}`;
+        ctx.font = `600 30px ${FONT_D}`; ctx.fillStyle = '#D6455D'; ctx.textAlign = 'left';
+        const sp = 5, tw = spacedWidth(ctx, t, sp), by = headerBottom + 52;
+        spaced(ctx, t, (W - tw) / 2, by, sp); headerBottom = by + 8;
+      }
       const ps = F.ps, S = v => Math.round(v * ps);
-      const podH = S(570), rowH = F.rowH, rowGap = 12, footH = 44;
-      const rowsH = rest.length ? rest.length * rowH + (rest.length - 1) * rowGap : 0;
+      const podH = isP2 ? 0 : S(570), rowGap = 12, footH = 44;
       const footTop = H - F.padBottom - footH;
       const zoneTop = headerBottom + 16, zoneBottom = footTop - 16;
-      const content = podH + (rowsH ? 32 + rowsH : 0);
+      let rowH = F.rowH, cols = 1;
+      if (isP2 && rest.length) {   // muat semua dalam 1 halaman: kecilkan baris, lalu pakai 2 kolom jika perlu
+        const avail = zoneBottom - zoneTop, fit = c => Math.floor((avail + rowGap) / Math.ceil(rest.length / c)) - rowGap;
+        cols = fit(1) >= 64 ? 1 : 2;
+        rowH = Math.max(44, Math.min(F.rowH, fit(cols)));
+      }
+      const nRows = Math.ceil(rest.length / cols);
+      const rowsH = rest.length ? nRows * rowH + (nRows - 1) * rowGap : 0;
+      const content = podH + (podH && rowsH ? 32 : 0) + rowsH;
       const startY = zoneTop + Math.max(0, (zoneBottom - zoneTop - content) / 2);
       const podBottom = startY + podH;
-      const rowsTop = podBottom + 32;
+      const rowsTop = podH ? podBottom + 32 : startY;
 
       // ----- Spotlight arena di atas podium -----
       drawSpotlight(ctx, W / 2, podBottom + 6, 400);
@@ -1921,10 +1990,11 @@ let evTimer;
         if (rank === 1) drawCrown(ctx, k.cx, cy - R - 4, S(64));
       });
 
-      // ----- Peringkat 4+ -----
-      const rx = POSTER.padX, rw = W - POSTER.padX * 2;
+      // ----- Peringkat 4+ (halaman 2: semua sisanya, 1-2 kolom) -----
+      const gapC = 16, rw = (W - POSTER.padX * 2 - gapC * (cols - 1)) / cols, compact = cols > 1;
       rest.forEach((p, i) => {
-        const y = rowsTop + i * (rowH + rowGap), mid = y + rowH / 2;
+        const rx = POSTER.padX + Math.floor(i / nRows) * (rw + gapC);
+        const y = rowsTop + (i % nRows) * (rowH + rowGap), mid = y + rowH / 2;
         glass(ctx, blur, W, H, scale, rx, y, rw, rowH, 22, .10, .30);
         ctx.save(); rr(ctx, rx, y, rw, rowH, 22); ctx.clip();
         const wr = ctx.createLinearGradient(rx, 0, rx + rw * .7, 0); wr.addColorStop(0, 'rgba(214,69,93,.26)'); wr.addColorStop(1, 'rgba(214,69,93,0)');
@@ -1932,36 +2002,41 @@ let evTimer;
         ctx.fillStyle = '#D6455D'; ctx.fillRect(rx, y, 7, rowH); ctx.restore();
 
         // nomor peringkat
-        const rcx = rx + 50;
-        ctx.beginPath(); ctx.arc(rcx, mid, 28, 0, Math.PI * 2);
+        const nr = compact ? 20 : 28, rcx = rx + (compact ? 38 : 50);
+        ctx.beginPath(); ctx.arc(rcx, mid, nr, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(214,69,93,.22)'; ctx.fill(); ctx.strokeStyle = 'rgba(214,69,93,.85)'; ctx.lineWidth = 2; ctx.stroke();
-        ctx.font = `600 30px ${FONT_D}`; ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
-        ctx.fillText(String(i + 4), rcx, mid + 10);
+        ctx.font = `600 ${compact ? 22 : 30}px ${FONT_D}`; ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
+        ctx.fillText(String(rankBase + i), rcx, mid + (compact ? 8 : 10));
 
         // foto
-        const pr = (rowH - 24) / 2, pcx = rcx + 28 + 18 + pr;
+        const pr = (rowH - (compact ? 14 : 24)) / 2, pcx = rcx + nr + (compact ? 12 : 18) + pr;
         ctx.beginPath(); ctx.arc(pcx, mid, pr + 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fill();
-        drawCircleImage(ctx, photos[i + 3], pcx, mid, pr);
+        drawCircleImage(ctx, photos[i + restOff], pcx, mid, pr);
 
-        // skor (kanan) + statistik
+        // skor (kanan) + statistik (hanya mode 1 kolom)
         const col = p.selisih > 0 ? '#fbbf24' : (p.selisih < 0 ? '#f43f5e' : '#a3a3a3');
-        ctx.font = `700 42px ${FONT_D}`; ctx.fillStyle = col; ctx.textAlign = 'right';
+        ctx.font = `700 ${compact ? 32 : 42}px ${FONT_D}`; ctx.fillStyle = col; ctx.textAlign = 'right';
         const scoreTxt = signed(p.selisih), scoreW = ctx.measureText(scoreTxt).width;
-        const scoreRight = rx + rw - 26;
-        ctx.fillText(scoreTxt, scoreRight, mid + 15);
-        ctx.font = `600 22px ${FONT_B}`;
-        const statRight = scoreRight - Math.max(scoreW, 70) - 26;
-        drawSegs(ctx, [
-          { t: `${p.menang}W`, c: '#4ade80' }, { t: ' · ', c: '#8a8a8e' },
-          { t: `${p.kalah}L`, c: '#f43f5e' }, { t: ` · ${p.winRate}%`, c: '#b4b4b8' },
-        ], statRight, mid + 8, 'right');
-        const statW = ctx.measureText(`${p.menang}W · ${p.kalah}L · ${p.winRate}%`).width;
+        const scoreRight = rx + rw - (compact ? 18 : 26);
+        ctx.fillText(scoreTxt, scoreRight, mid + (compact ? 11 : 15));
+        const nameX = pcx + pr + (compact ? 14 : 22);
+        let nameMax;
+        if (compact) nameMax = scoreRight - scoreW - 14 - nameX;
+        else {
+          ctx.font = `600 22px ${FONT_B}`;
+          const statRight = scoreRight - Math.max(scoreW, 70) - 26;
+          drawSegs(ctx, [
+            { t: `${p.menang}W`, c: '#4ade80' }, { t: ' · ', c: '#8a8a8e' },
+            { t: `${p.kalah}L`, c: '#f43f5e' }, { t: ` · ${p.winRate}%`, c: '#b4b4b8' },
+          ], statRight, mid + 8, 'right');
+          const statW = ctx.measureText(`${p.menang}W · ${p.kalah}L · ${p.winRate}%`).width;
+          nameMax = statRight - statW - 20 - nameX;
+        }
 
         // nama (kiri)
-        const nameX = pcx + pr + 22, nameMax = statRight - statW - 20 - nameX;
         ctx.textAlign = 'left'; ctx.fillStyle = '#fff';
-        fitFont(ctx, p.nama.toUpperCase(), nameMax, 32, 500, FONT_D);
-        ctx.fillText(p.nama.toUpperCase(), nameX, mid + 11);
+        fitFont(ctx, p.nama.toUpperCase(), nameMax, compact ? 26 : 32, 500, FONT_D);
+        ctx.fillText(p.nama.toUpperCase(), nameX, mid + (compact ? 9 : 11));
       });
 
       // ----- Footer: ikon Instagram + username -----
@@ -1993,23 +2068,27 @@ let evTimer;
     async function exportBoard(kind, fmtKey) {
       if (!state[kind].ranked.length) { document.getElementById('status-' + kind).textContent = 'Belum ada data untuk diunduh.'; return; }
 
-      const F = FORMATS[fmtKey];
+      const F = FORMATS[fmtKey], hasP2 = state[kind].ranked.length > F.limit;
+      const wantP2 = document.getElementById('opt-p2-' + kind).checked;
+      const pageList = wantP2 && hasP2 ? [1, 2] : [1];
       setExportBusy(kind, true, 'Memproses gambar...');
       try {
         const showLabel = document.getElementById('opt-label-' + kind).checked;
         const dateText = document.getElementById('opt-date-' + kind).checked ? fmtTanggal(document.getElementById('date-' + kind).value) : '';
-        let canvas;
-        try { canvas = await renderPoster(kind, fmtKey, showLabel, 2, dateText); }   // 2160 px (HD)
-        catch (e) { console.warn(e); canvas = await renderPoster(kind, fmtKey, showLabel, 1, dateText); }
-
-        const blob = await new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error('toBlob gagal')), 'image/png'));
         const label = (state[kind].boards[state[kind].idx] || {}).label || '';
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `jgeer-leaderboard-${kind}-${norm(label).replace(/ /g, '-')}-${F.label}.png`.replace('--', '-');
-        document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-        setExportBusy(kind, false, `Selesai: ${canvas.width} x ${canvas.height} px`);
+        let canvas;
+        for (const pg of pageList) {
+          try { canvas = await renderPoster(kind, fmtKey, showLabel, 2, dateText, pg); }   // 2160 px (HD)
+          catch (e) { console.warn(e); canvas = await renderPoster(kind, fmtKey, showLabel, 1, dateText, pg); }
+          const blob = await new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error('toBlob gagal')), 'image/png'));
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = `jgeer-leaderboard-${kind}-${norm(label).replace(/ /g, '-')}-${F.label}${pg === 2 ? '-hal2' : ''}.png`.replace('--', '-');
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+          if (pg === 1 && pageList.length > 1) await new Promise(r => setTimeout(r, 500));
+        }
+        setExportBusy(kind, false, `Selesai: ${pageList.length} halaman, ${canvas.width} x ${canvas.height} px` + (wantP2 && !hasP2 ? ` (halaman 2 tidak dibuat: belum ada peringkat ${F.limit + 1}+)` : ''));
       } catch (err) {
         console.error(err);
         setExportBusy(kind, false, 'Gagal membuat gambar: ' + err.message);
@@ -2025,12 +2104,13 @@ let evTimer;
     // MUAT SEMUA DATA
     // =====================================================================
     async function loadAll() {
-      const [sRoster, sBulanan, sTahunan, sHof, sEvent] = await Promise.allSettled([
+      const [sRoster, sBulanan, sTahunan, sHof, sEvent, sGaleri] = await Promise.allSettled([
         fetchGrid(SHEET_ROSTER),
         fetchGrid(SHEET_BULANAN),
         fetchGrid(SHEET_TAHUNAN),
         fetchGrid(SHEET_HOF),
         fetchGrid(SHEET_EVENT),
+        fetchGrid(SHEET_GALERI),
       ]);
 
       // Roster dulu agar peta foto siap sebelum podium dirender
@@ -2073,6 +2153,12 @@ let evTimer;
       // Hero event selanjutnya dari Sheet 8 (jika gagal / tidak ada event mendatang, tampilan bawaan tetap dipakai)
       if (sEvent.status === 'fulfilled') { const ev = extractNextEvent(sEvent.value); if (ev) { Object.assign(NEXT_EVENT, ev); renderNextEvent(); } }
       else console.warn('Sheet 8 (event) gagal dimuat:', sEvent.reason);
+
+      // Galeri dari Sheet 9 (foto + video). Jika gagal / kosong, galeri bawaan tetap tampil.
+      if (sGaleri.status === 'fulfilled') {
+        const items = extractGaleri(sGaleri.value);
+        if (items.length) { renderGaleri(items.filter(x => x.kind !== 'video')); renderVideos(items.filter(x => x.kind === 'video')); }
+      } else console.warn('Sheet 9 (galeri) gagal dimuat:', sGaleri.reason);
     }
 
     // Mulai
