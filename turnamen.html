@@ -44,6 +44,15 @@ label{display:block;font-size:11px;color:#a3a3a3;text-transform:uppercase;letter
 /* Poster */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.8rem;margin:.6rem 0 1.2rem}.pc{padding:.5rem;cursor:pointer}.pc canvas{width:100%;display:block;border-radius:.9rem;background:#12060a;min-height:120px}.pc .cap{display:flex;justify-content:space-between;align-items:center;gap:.4rem;margin-top:.4rem;font-size:12px}
 #modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1rem}.mbox{max-height:96vh;display:flex;flex-direction:column;gap:.6rem;max-width:min(94vw,520px)}.mbox canvas{max-height:78vh;max-width:100%;object-fit:contain;border-radius:1rem;align-self:center}.mbar{display:flex;gap:.4rem;align-items:center;justify-content:center;flex-wrap:wrap}#mT{font-size:12px;color:#d4d4d8}
+/* Halaman Info */
+.istats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.7rem;margin-top:1rem}.ist{padding:1rem;text-align:center}.ist .ic{font-size:1.8rem}.ist .lb{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#a3a3a3;margin-top:.2rem}.ist b{display:block;font:600 1.15rem Oswald,sans-serif;letter-spacing:.04em;text-transform:uppercase;margin-top:.2rem;word-break:break-word}
+.sh{display:flex;align-items:center;gap:.6rem;margin:1.8rem 0 .8rem}.sh h2{font-size:1.5rem}.sh:after{content:'';flex:1;height:2px;border-radius:9px;background:linear-gradient(90deg,var(--rose),var(--gold),transparent)}
+.prz{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem}.pz{--c:var(--gold);position:relative;padding:1.4rem 1rem;text-align:center;border-color:var(--c)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 18px 40px -20px var(--c)!important;overflow:hidden}.pz:before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 30%,transparent),transparent 70%)}
+.pz>*{position:relative}.pz .md{font-size:2.6rem}.pz h3{color:var(--c);margin-top:.2rem;font-size:1.1rem}.pz b{display:block;font:700 1.35rem Oswald,sans-serif;text-transform:uppercase;margin-top:.4rem}
+.stp{list-style:none;margin:0;padding:0;display:grid;gap:.6rem}.stp li{display:flex;gap:.9rem;align-items:flex-start;padding:.9rem 1rem}.stp .n{flex:none;width:2.2rem;height:2.2rem;border-radius:50%;display:grid;place-items:center;font:700 1.1rem Oswald,sans-serif;background:linear-gradient(135deg,#7A1020,#D6455D);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.rl{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:.6rem}.rl div{display:flex;gap:.6rem;padding:.8rem 1rem;line-height:1.5}.rl i{font-style:normal;color:var(--rose);flex:none}
+.faq details{padding:.8rem 1rem;margin-bottom:.5rem}.faq summary{cursor:pointer;font-weight:600}.faq p{margin:.5rem 0 0;color:#d4d4d8;line-height:1.55}
+.cta{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}.btn.lg{padding:.8rem 1.6rem;font-size:.95rem}a.btn{text-decoration:none;display:inline-block}
 /* Kartu pilih pemain (gaya report) */
 .tpick{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.6rem;align-items:center;margin:.6rem 0}
 .pcard{display:flex;align-items:center;gap:.7rem;padding:.6rem;border-radius:1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);cursor:pointer;transition:border-color .2s;min-width:0}.pcard:hover{border-color:var(--rose)}
@@ -68,7 +77,7 @@ label{display:block;font-size:11px;color:#a3a3a3;text-transform:uppercase;letter
 <body>
 <header class="nav glass">
   <a class="brand" href="index.html"><img id="logo" alt="PB Jgeer"><span class="d">PB <em>Jgeer</em></span></a>
-  <nav id="tabs"><button data-t="bracket" class="on">Bracket</button><button data-t="poster">Poster</button><button data-t="admin">Admin</button></nav>
+  <nav id="tabs"><button data-t="info" class="on">Info</button><button data-t="bracket">Bracket</button><button data-t="poster">Poster</button><button data-t="admin">Admin</button></nav>
   <a class="back" href="index.html">← Beranda</a>
 </header>
 <main>
@@ -77,7 +86,9 @@ label{display:block;font-size:11px;color:#a3a3a3;text-transform:uppercase;letter
     <span class="live"><i></i><span id="hUpd">Memuat data…</span></span>
   </section>
 
-  <section id="v-bracket">
+  <section id="v-info"><div id="infoBox"></div></section>
+
+  <section id="v-bracket" hidden>
     <div id="champ"></div>
     <div class="zoom"><button class="btn" data-z="-.15">−</button><button class="btn" data-z="0">Reset</button><button class="btn" data-z=".15">+</button></div>
     <div id="vp" class="glass"><div id="zw"><div id="stage"></div></div></div>
@@ -97,7 +108,7 @@ label{display:block;font-size:11px;color:#a3a3a3;text-transform:uppercase;letter
     <div id="gate" class="glass pad"><h2>Admin Turnamen</h2><p class="muted">Masukkan password admin untuk mengelola bagan.</p>
       <form id="gf" class="row"><input type="password" id="gp" placeholder="Password" style="max-width:260px" autocomplete="current-password"><button class="btn pri">Masuk</button></form><p id="gm" class="muted"></p></div>
     <div id="panel" hidden>
-      <div class="glass pad"><h2>Info Turnamen</h2><div class="fg">
+      <div class="glass pad"><h2>Data Turnamen</h2><p class="muted">Dipakai untuk bagan, skor, dan poster.</p><div class="fg">
         <label>Nama turnamen<input id="a_nama"></label><label>Tanggal<input type="date" id="a_tgl"></label><label>Lokasi<input id="a_lok"></label>
         <label>Format<select id="a_bo"><option value="1">Best of 1</option><option value="3">Best of 3</option><option value="5">Best of 5</option></select></label>
         <label>Poin per game<select id="a_pt"><option>11</option><option>15</option><option>21</option><option value="30">30 (maks 30, hanya BO1)</option></select></label>
@@ -112,6 +123,15 @@ label{display:block;font-size:11px;color:#a3a3a3;text-transform:uppercase;letter
         <details><summary class="muted" style="cursor:pointer">⏱ Atur jadwal massal</summary><div class="row">
           <label>Mulai<input type="datetime-local" id="bkStart"></label><label>Jeda (menit)<input type="number" id="bkGap" value="40" min="5"></label><label>Lapangan<input type="number" id="bkCourts" value="1" min="1" max="12"></label><button class="btn pri" id="bk">Terapkan</button></div></details>
         <div id="scores"></div></div>
+      <div class="glass pad" id="infoForm"><h2>Konten Halaman Info</h2><p class="muted">Tampil di tab Info. Kolom yang dikosongkan memakai teks bawaan (terlihat sebagai contoh abu-abu). Tanggal, lokasi, format, dan jumlah tim diambil dari Data Turnamen.</p>
+        <div class="fg">
+          <label style="grid-column:1/-1">Deskripsi<textarea id="i_desk" rows="3"></textarea></label>
+          <label>Kategori<input id="i_kat"></label><label>Biaya pendaftaran<input id="i_biaya"></label><label>Batas pendaftaran<input id="i_dl"></label><label>WhatsApp panitia<input id="i_wa" inputmode="tel" placeholder="6281234567890"></label>
+          <label>Hadiah Juara 1<input id="i_h1"></label><label>Hadiah Juara 2<input id="i_h2"></label><label>Hadiah Juara 3<input id="i_h3"></label>
+          <label style="grid-column:1/-1">Tata cara daftar (satu langkah per baris)<textarea id="i_daftar" rows="5"></textarea></label>
+          <label style="grid-column:1/-1">Aturan tambahan (satu aturan per baris)<textarea id="i_aturan" rows="4"></textarea></label>
+          <label style="grid-column:1/-1">Tanya jawab (satu per baris, format: Pertanyaan | Jawaban)<textarea id="i_faq" rows="4"></textarea></label>
+        </div></div>
       <div class="savebar glass"><span id="sst">Tersimpan</span><button class="btn" id="refresh">↻ Perbarui bagan</button><button class="btn" id="reload2">Muat ulang</button><button class="btn danger" id="reset">Reset</button><button class="btn pri" id="save">💾 Simpan ke Spreadsheet</button></div>
     </div>
   </section>
@@ -154,7 +174,7 @@ const avatarHTML = n => `<div class="avs">${split(n).slice(0, 2).map(p => { cons
 
 // ===== MESIN BAGAN =====
 const BYE = { type: 'bye' }, TBD = { type: 'tbd' }, RL = { 64: '64 BESAR', 32: '32 BESAR', 16: '16 BESAR', 8: '8 BESAR', 4: 'SEMI FINAL', 2: 'FINAL' };
-const empty = () => ({ v: 1, nama: 'Jgeer Tournament', tanggal: '', lokasi: '', teams: [], matches: {}, sizeMode: 'auto', seedMode: 'seed', bestOf: 3, pointsTarget: 21 });
+const empty = () => ({ v: 1, nama: 'Jgeer Tournament', tanggal: '', lokasi: '', teams: [], matches: {}, sizeMode: 'auto', seedMode: 'seed', bestOf: 3, pointsTarget: 21, info: {} });
 const nextPow2 = n => { let p = 4; while (p < n) p *= 2; return p; };
 const bsize = s => { const need = Math.min(64, nextPow2(s.teams.length)); return s.sizeMode === 'auto' ? need : Math.min(64, Math.max(need, parseInt(s.sizeMode, 10) || need)); };
 const seedOrder = size => { let o = [1, 2]; for (let n = 4; n <= size; n *= 2) o = o.flatMap(x => [x, n + 1 - x]); return o; };
@@ -193,14 +213,14 @@ const api = p => fetch(API, { method: 'POST', body: JSON.stringify(p) }).then(r 
 async function fetchState() {
   try { const r = await api({ action: 'getTournament' }); if (r && r.status === 'success') return { d: r.data, u: r.updated }; } catch (e) { console.warn('API gagal, pakai gviz', e); }
   try { const t = await gq('Turnamen'), c = t.rows[0] && t.rows[0].c; return { d: c && c[1] && c[1].v ? JSON.parse(c[1].v) : null, u: t.rows[1] && t.rows[1].c[1] && t.rows[1].c[1].v }; } catch (e) { return null; } }
-function normalize(o) { const s = Object.assign(empty(), o || {}); s.teams = Array.isArray(s.teams) ? s.teams.slice(0, 64).map(String) : []; s.matches = s.matches && typeof s.matches === 'object' ? s.matches : {};
+function normalize(o) { const s = Object.assign(empty(), o || {}); s.teams = Array.isArray(s.teams) ? s.teams.slice(0, 64).map(String) : []; s.matches = s.matches && typeof s.matches === 'object' ? s.matches : {}; s.info = s.info && typeof s.info === 'object' && !Array.isArray(s.info) ? s.info : {};
   s.bestOf = [1, 3, 5].includes(+s.bestOf) ? +s.bestOf : 3; s.pointsTarget = [11, 15, 21, 30].includes(+s.pointsTarget) ? +s.pointsTarget : 21; if (s.pointsTarget === 30 && s.bestOf !== 1) s.pointsTarget = 21; return s; }
 async function load(force) {
   if (dirty && !force) return; const r = await fetchState(); if (!r) { $('#hUpd').textContent = 'Gagal memuat data'; return; }
   const raw = JSON.stringify(r.d); if (raw === lastRaw && !force) return; lastRaw = raw; S = normalize(r.d); dirty = false; recompute();
   const u = r.u ? new Date(r.u) : null; $('#hUpd').textContent = 'Live • ' + (u && !isNaN(u) ? 'diperbarui ' + pad(u.getHours()) + '.' + pad(u.getMinutes()) : 'terhubung'); fillAdmin(); setSst(); }
 function recompute() { B = compute(S); $('#hNama').textContent = S.nama || 'Turnamen';
-  $('#hInfo').textContent = [fmtD(S.tanggal), S.lokasi, S.teams.length ? S.teams.length + ' tim • best of ' + S.bestOf + ' • ' + S.pointsTarget + ' poin' : ''].filter(Boolean).join('  •  '); renderBracket(); if (tab() === 'poster') buildPosters(); }
+  $('#hInfo').textContent = [fmtD(S.tanggal), S.lokasi, S.teams.length ? S.teams.length + ' tim • best of ' + S.bestOf + ' • ' + S.pointsTarget + ' poin' : ''].filter(Boolean).join('  •  '); renderBracket(); renderInfo(); if (tab() === 'poster') buildPosters(); }
 
 // ===== BRACKET PUBLIK =====
 let zoom = 1;
@@ -379,7 +399,7 @@ function renderGrid() {
 const openPick = i => { slotN = i; $('#pq').value = ''; renderGrid(); $('#pmodal').hidden = false; };
 function fillSel() { renderPick(); renderTeams(); if (!$('#pmodal').hidden) renderGrid(); }
 function phInfo() { const ps = S.teams.flatMap(split); $('#phInfo').textContent = ps.length ? `${S.teams.length} tim • ${ps.filter(p => photos.has(norm(p))).length}/${ps.length} pemain punya foto (dari Sheet1)` : 'Belum ada tim.'; }
-function fillAdmin() { $('#a_nama').value = S.nama; $('#a_tgl').value = S.tanggal; $('#a_lok').value = S.lokasi; $('#a_bo').value = S.bestOf; $('#a_pt').value = S.pointsTarget; $('#a_sz').value = S.sizeMode; $('#a_sd').value = S.seedMode; syncPts(); renderTeams(); renderPick(); phInfo(); renderScores(); }
+function fillAdmin() { $('#a_nama').value = S.nama; $('#a_tgl').value = S.tanggal; $('#a_lok').value = S.lokasi; $('#a_bo').value = S.bestOf; $('#a_pt').value = S.pointsTarget; $('#a_sz').value = S.sizeMode; $('#a_sd').value = S.seedMode; syncPts(); renderTeams(); renderPick(); phInfo(); renderScores(); fillInfoForm(); }
 function renderScores() {
   const host = $('#scores'); if (!B) { host.innerHTML = '<p class="muted">Tambahkan minimal 2 tim untuk membuat bagan.</p>'; return; } let h = '';
   B.rounds.forEach((arr, r) => arr.forEach(m => { if (m.kind === 'void' || m.kind === 'bye') return; const k = m.r + '-' + m.i, d = S.matches[k] || {}, ok = m.kind === 'wait';
@@ -410,7 +430,7 @@ $('#shuf').onclick = () => { if (S.teams.length < 2 || !okEdit()) return; const 
 $('#demo').onclick = () => { if (roster.length < 4) return toast('Daftar player belum termuat'); if (!okEdit()) return; const n = roster.slice(0, 16), t = []; for (let i = 0; i + 1 < n.length; i += 2) t.push(`${n[i]} / ${n[i + 1]}`); S.teams = t; changed(); };
 $('#refresh').onclick = () => { recompute(); renderScores(); toast('Bagan diperbarui'); };
 $('#reload2').onclick = async () => { if (dirty && !confirm('Perubahan yang belum disimpan akan hilang. Lanjutkan?')) return; dirty = false; await load(true); toast('Dimuat dari spreadsheet'); };
-$('#reset').onclick = () => { if (!confirm('Hapus semua peserta & skor? (tekan Simpan untuk menerapkan ke spreadsheet)')) return; const n = S.nama, t = S.tanggal, l = S.lokasi; S = empty(); S.nama = n; S.tanggal = t; S.lokasi = l; mark(); recompute(); fillAdmin(); };
+$('#reset').onclick = () => { if (!confirm('Hapus semua peserta & skor? (tekan Simpan untuk menerapkan ke spreadsheet)')) return; const n = S.nama, t = S.tanggal, l = S.lokasi, inf = S.info; S = empty(); S.nama = n; S.tanggal = t; S.lokasi = l; S.info = inf; mark(); recompute(); fillAdmin(); };
 $('#bk').onclick = () => { const st = new Date($('#bkStart').value); if (isNaN(st)) return toast('Isi waktu mulai'); const gap = +$('#bkGap').value || 40, cn = Math.max(1, +$('#bkCourts').value || 1); if (!B) return toast('Belum ada bagan');
   let n = 0; B.rounds.flat().filter(m => m.no).sort((a, b) => a.no - b.no).forEach(m => { const t = new Date(st.getTime() + Math.floor(n / cn) * gap * 60000), d = S.matches[m.r + '-' + m.i] = S.matches[m.r + '-' + m.i] || {}; d.time = pad(t.getHours()) + ':' + pad(t.getMinutes()); d.court = String(n % cn + 1); n++; });
   if (!S.tanggal) { S.tanggal = `${st.getFullYear()}-${pad(st.getMonth() + 1)}-${pad(st.getDate())}`; $('#a_tgl').value = S.tanggal; } mark(); recompute(); renderScores(); toast('Jadwal diterapkan'); };
@@ -422,11 +442,87 @@ async function login(pass) { try { const r = await api({ action: 'checkTournamen
 $('#gf').onsubmit = e => { e.preventDefault(); $('#gm').textContent = 'Memeriksa…'; login($('#gp').value); };
 addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 
+// ===== HALAMAN INFO (ubah isi di INFO) =====
+const INFO = {
+  deskripsi: 'Turnamen badminton internal PB Jgeer. Datang, main sungguh-sungguh, dan bersenang-senang bersama Jgeer Famiglia!',
+  kategori: 'Ganda',
+  biaya: 'Segera diumumkan',
+  deadline: '',               // contoh: '20 November 2026'
+  wa: '',                     // nomor WhatsApp panitia, contoh: '6281234567890' (tombol Daftar muncul jika diisi)
+  hadiah: [
+    { t: 'Juara 1', v: 'Segera diumumkan', i: '🥇', c: '#fbbf24' },
+    { t: 'Juara 2', v: 'Segera diumumkan', i: '🥈', c: '#e4e4e7' },
+    { t: 'Juara 3', v: 'Segera diumumkan', i: '🥉', c: '#e08a3c' }],
+  daftar: [
+    'Tentukan pasangan ganda kamu. Keduanya harus pemain PB Jgeer yang terdaftar di data pemain.',
+    'Hubungi panitia dan kirim nama kedua pemain.',
+    'Lakukan pembayaran biaya pendaftaran (jika ada) sesuai arahan panitia.',
+    'Tunggu konfirmasi, lalu cek namamu di tab Bagan setelah pengundian.',
+    'Hadir tepat waktu sesuai jadwal pertandingan dan siap bertanding!'],
+  aturan: [
+    'Kalah sekali langsung tersingkir (sistem gugur). Ada perebutan juara 3 antara dua tim yang kalah di semifinal.',
+    'Pasangan tidak boleh diganti setelah bagan dibuat.',
+    'Peserta wajib hadir sebelum jadwal. Tim yang tidak hadir saat dipanggil dapat dinyatakan kalah WO.',
+    'Keputusan panitia dan wasit mutlak. Junjung sportivitas, taunting boleh sewajarnya.'],
+  faq: [
+    { q: 'Di mana saya bisa melihat jadwal dan hasil?', a: 'Buka tab Bagan. Jadwal, lapangan, dan skor diperbarui langsung oleh panitia.' },
+    { q: 'Bisa daftar sendiri tanpa pasangan?', a: 'Sebaiknya sudah punya pasangan. Hubungi panitia jika butuh dicarikan pasangan.' },
+    { q: 'Perlu bawa raket sendiri?', a: 'Disarankan membawa raket sendiri. Tanyakan panitia untuk ketersediaan raket dan kok.' }]
+};
+function getInfo() {
+  const x = S.info || {}, o = Object.assign({}, INFO), t = v => String(v == null ? '' : v).trim();
+  ['deskripsi', 'kategori', 'biaya', 'deadline', 'wa'].forEach(k => { if (t(x[k])) o[k] = t(x[k]); });
+  ['daftar', 'aturan'].forEach(k => { if (Array.isArray(x[k]) && x[k].length) o[k] = x[k]; });
+  if (Array.isArray(x.faq) && x.faq.length) o.faq = x.faq;
+  o.hadiah = INFO.hadiah.map((hd, i) => Object.assign({}, hd, { v: t((x.hadiah || [])[i]) || hd.v }));
+  return o;
+}
+const IFLD = [['i_desk', 'deskripsi'], ['i_kat', 'kategori'], ['i_biaya', 'biaya'], ['i_dl', 'deadline'], ['i_wa', 'wa']];
+function fillInfoForm() {
+  const x = S.info || {}; IFLD.forEach(([i, k]) => { $('#' + i).value = x[k] || ''; if (i !== 'i_wa') $('#' + i).placeholder = INFO[k] || ''; });
+  $('#i_daftar').value = (x.daftar || []).join('\n'); $('#i_daftar').placeholder = INFO.daftar.join('\n');
+  $('#i_aturan').value = (x.aturan || []).join('\n'); $('#i_aturan').placeholder = INFO.aturan.join('\n');
+  $('#i_faq').value = (x.faq || []).map(f => f.q + ' | ' + f.a).join('\n'); $('#i_faq').placeholder = INFO.faq.map(f => f.q + ' | ' + f.a).join('\n');
+  INFO.hadiah.forEach((hd, n) => { const e = $('#i_h' + (n + 1)); e.value = (x.hadiah || [])[n] || ''; e.placeholder = hd.v; });
+}
+$('#infoForm').addEventListener('input', e => {
+  const id = e.target.id, v = e.target.value, lines = s => s.split('\n').map(z => z.trim()).filter(Boolean); S.info = S.info || {};
+  const f = IFLD.find(([i]) => i === id);
+  if (f) S.info[f[1]] = v;
+  else if (id === 'i_daftar') S.info.daftar = lines(v);
+  else if (id === 'i_aturan') S.info.aturan = lines(v);
+  else if (id === 'i_faq') S.info.faq = lines(v).map(l => { const [q, ...a] = l.split('|'); return { q: q.trim(), a: a.join('|').trim() }; }).filter(z => z.q);
+  else if (/^i_h[123]$/.test(id)) { S.info.hadiah = S.info.hadiah || ['', '', '']; S.info.hadiah[+id[3] - 1] = v; }
+  else return; mark(); renderInfo(); });
+function renderInfo() {
+  const INF = getInfo();
+  const bo = S.bestOf, T = S.pointsTarget, G = (t, tx) => `<span class="${t}">${tx}</span>`;
+  const stats = [['🗓️', 'Tanggal', fmtD(S.tanggal) || 'Segera diumumkan'], ['📍', 'Lokasi', S.lokasi || 'Segera diumumkan'], ['🏸', 'Format', INF.kategori + ' • ' + (bo === 1 ? '1 game' : 'Best of ' + bo)], ['👥', 'Peserta', S.teams.length ? S.teams.length + ' tim' : 'Pendaftaran dibuka'], ['💰', 'Biaya', INF.biaya]];
+  if (INF.deadline) stats.push(['⏳', 'Batas daftar', INF.deadline]);
+  const game = T === 30 ? `Satu game sampai 30 poin dengan rally point. Tidak ada deuce: poin ke-30 langsung menang.` : `Satu game sampai ${T} poin dengan rally point. Jika imbang ${T - 1}–${T - 1} berlaku deuce (selisih 2 poin), maksimal ${T + 9} poin.`;
+  const fmt = bo === 1 ? 'Setiap pertandingan hanya satu game (Best of 1).' : `Setiap pertandingan Best of ${bo}: menangkan ${Math.floor(bo / 2) + 1} game untuk lolos.`;
+  const rules = [fmt, game, ...INF.aturan];
+  const wa = INF.wa ? `https://wa.me/${String(INF.wa).replace(/\D/g, '')}?text=${encodeURIComponent('Halo panitia, saya ingin mendaftar ' + (S.nama || 'turnamen') + '.')}` : '';
+  $('#infoBox').innerHTML = `
+  <div class="glass pad"><h2 style="font-size:1.4rem">Tentang Turnamen</h2><p style="color:#d4d4d8;line-height:1.6;margin:.5rem 0 0">${esc(INF.deskripsi)}</p>
+    <div class="cta">${wa ? `<a class="btn pri lg" href="${esc(wa)}" target="_blank" rel="noopener">📲 Daftar via WhatsApp</a>` : ''}<button class="btn lg" data-go="bracket">Lihat Bagan</button></div></div>
+  <div class="istats">${stats.map(([i, l, v]) => `<div class="glass ist"><div class="ic">${i}</div><div class="lb">${l}</div><b>${esc(v)}</b></div>`).join('')}</div>
+  <div class="sh"><h2>🏆 Hadiah</h2></div>
+  <div class="prz">${INF.hadiah.map(x => `<div class="glass pz" style="--c:${esc(x.c)}"><div class="md">${x.i}</div><h3>${esc(x.t)}</h3><b>${esc(x.v)}</b></div>`).join('')}</div>
+  <div class="sh"><h2>📝 Tata Cara Daftar</h2></div>
+  <ol class="stp">${INF.daftar.map((s, k) => `<li class="glass"><span class="n">${k + 1}</span><span style="padding-top:.3rem;line-height:1.5">${esc(s)}</span></li>`).join('')}</ol>
+  <div class="sh"><h2>📋 Aturan Main</h2></div>
+  <div class="rl">${rules.map(r => `<div class="glass"><i>✔</i><span>${esc(r)}</span></div>`).join('')}</div>
+  <div class="sh"><h2>❓ Tanya Jawab</h2></div>
+  <div class="faq">${INF.faq.map(f => `<details class="glass"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('')}</div>`;
+}
+$('#infoBox').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) $(`#tabs [data-t="${b.dataset.go}"]`).click(); });
+
 // ===== TAB =====
 const tab = () => ($('#tabs .on') || {}).dataset?.t;
-$$('#tabs button').forEach(b => b.onclick = () => { $$('#tabs button').forEach(x => x.classList.toggle('on', x === b)); ['bracket', 'poster', 'admin'].forEach(t => $('#v-' + t).hidden = t !== b.dataset.t);
+$$('#tabs button').forEach(b => b.onclick = () => { $$('#tabs button').forEach(x => x.classList.toggle('on', x === b)); ['info', 'bracket', 'poster', 'admin'].forEach(t => $('#v-' + t).hidden = t !== b.dataset.t);
   if (b.dataset.t === 'poster') buildPosters(); if (b.dataset.t === 'bracket') applyZoom(); if (b.dataset.t === 'admin' && PASS && $('#panel').hidden) login(PASS); history.replaceState(null, '', '#' + b.dataset.t); });
-(async () => { await Promise.all([load(true), loadRoster()]); const h = location.hash.slice(1); if (['poster', 'admin'].includes(h)) $(`#tabs [data-t="${h}"]`).click(); setInterval(() => { if (tab() === 'bracket') load(); }, 30000); })();
+(async () => { renderInfo(); await Promise.all([load(true), loadRoster()]); const h = location.hash.slice(1); if (['bracket', 'poster', 'admin'].includes(h)) $(`#tabs [data-t="${h}"]`).click(); setInterval(() => { if (['info', 'bracket'].includes(tab())) load(); }, 30000); })();
 })();
 </script>
 </body>
