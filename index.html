@@ -432,7 +432,7 @@
         <div class="mt-3 mx-auto h-1 w-20 bg-brand-maroon rounded"></div>
       </div>
 
-      <div id="videoGrid" class="grid gap-6 md:grid-cols-2">
+      <div id="ctaGrid" class="grid gap-6 md:grid-cols-2">
         <a href="#leaderboard" class="group relative overflow-hidden rounded-2xl bg-brand-maroon text-white p-8 sm:p-10 min-h-[240px] flex flex-col justify-between transition hover:-translate-y-1 hover:shadow-[0_20px_50px_-15px_rgba(214,69,93,.55)]">
           <span class="absolute -right-6 -top-6 text-[9rem] opacity-15 select-none group-hover:rotate-12 transition" aria-hidden="true">🏸</span>
           <div class="relative">
@@ -907,7 +907,7 @@
     <section id="videoSection" class="border-t border-brand-maroon/60 bg-brand-card">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <h2 class="font-display uppercase font-semibold text-2xl sm:text-3xl tracking-wide mb-8">🎬 Video <span class="text-brand-rose">Mabar</span></h2>
-        <div class="grid gap-6 md:grid-cols-2">
+        <div id="galeriVideoGrid" class="grid gap-6 md:grid-cols-2">
           <div class="relative aspect-video overflow-hidden rounded-2xl bg-black border border-white/10">
             <iframe title="Video mabar PB Jgeer 1" class="absolute inset-0 w-full h-full" loading="lazy"
               src="https://www.youtube.com/embed/9-LxQ56Zw8M?si=7h0tLmn4wGITRx0J" allowfullscreen frameborder="0"></iframe>
@@ -1167,7 +1167,7 @@
     }
     function renderVideos(list) {
       document.getElementById('videoSection').classList.toggle('hidden', !list.length);
-      document.getElementById('videoGrid').innerHTML = list.map(videoHTML).join('');
+      document.getElementById('galeriVideoGrid').innerHTML = list.map(videoHTML).join('');
     }
     renderGaleri();
 
@@ -2151,7 +2151,7 @@ let evTimer;
       }
 
       // Hero event selanjutnya dari Sheet 8 (jika gagal / tidak ada event mendatang, tampilan bawaan tetap dipakai)
-      if (sEvent.status === 'fulfilled') { const ev = extractNextEvent(sEvent.value); if (ev) { Object.assign(NEXT_EVENT, ev); renderNextEvent(); } }
+      if (sEvent.status === 'fulfilled') { try { const ev = extractNextEvent(sEvent.value); if (ev) { Object.assign(NEXT_EVENT, ev); renderNextEvent(); } } catch (err) { console.warn('Event gagal ditampilkan:', err); } }
       else console.warn('Sheet 8 (event) gagal dimuat:', sEvent.reason);
 
       // Galeri dari Sheet 9 (foto + video). Jika gagal / kosong, galeri bawaan tetap tampil.
