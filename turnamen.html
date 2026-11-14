@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Turnamen | PB Jgeer</title>
-<!-- Primary Meta Tags -->
+
+  <!-- Primary Meta Tags -->
 <title>Turnamen | PB Jgeer</title>
 <meta name="title" content="Turnamen | PB Jgeer">
 <meta name="description" content="Jadwal pertandingan, bagan (bracket), dan hasil skor langsung turnamen bulu tangkis PB Jgeer.">
@@ -38,12 +39,7 @@ body:before{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .d,h1,h2,h3{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.06em;margin:0}
 .glass{background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.03));-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 24px 50px -26px rgba(0,0,0,.75);border-radius:1.5rem}
 .pad{padding:1.25rem}.muted{color:#a3a3a3;font-size:12px;margin:.4rem 0}
-header.nav{position:fixed;top:.75rem;left:.75rem;right:.75rem;z-index:50;max-width:72rem;margin:0 auto;height:3.4rem;padding:0 .9rem;display:flex;align-items:center;gap:.8rem;border-radius:1.1rem}
-.brand{display:flex;align-items:center;gap:.5rem;color:#fff;text-decoration:none;font-size:1.35rem;font-weight:700}.brand img{height:2.2rem}.brand em{color:var(--rose);font-style:normal}
-#tabs{margin-left:auto;display:flex;gap:.25rem}#tabs button,.back{font:600 .85rem Oswald,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#a3a3a3;background:none;border:0;border-radius:9999px;padding:.5rem .95rem;cursor:pointer;text-decoration:none}
-#tabs button.on{background:linear-gradient(135deg,rgba(122,16,32,.95),rgba(214,69,93,.75));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}.back:hover,#tabs button:hover{color:#fff}
-@media(max-width:640px){.back{display:none}.brand span{display:none}#tabs{margin:0 auto}}
-main{max-width:72rem;margin:0 auto;padding:5.2rem .75rem 3rem}section{margin-top:1rem}
+main{max-width:72rem;margin:0 auto;padding:1rem .75rem 7rem}section{margin-top:1rem}
 .hero{padding:1.6rem;background:radial-gradient(28rem 14rem at 90% 0%,rgba(214,69,93,.38),transparent 70%),linear-gradient(135deg,rgba(122,16,32,.5),rgba(255,255,255,.06))}
 .kick{color:var(--rose);font-size:.8rem;letter-spacing:.25em}.hero h1{font-size:clamp(1.9rem,6vw,3.4rem);line-height:1.1;margin:.3rem 0}.hero p{margin:.2rem 0;color:#d4d4d8}
 .live{display:inline-flex;align-items:center;gap:.4rem;margin-top:.6rem;padding:.25rem .8rem;border-radius:9999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);font-size:12px}.live i{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80;animation:p 1.6s infinite}@keyframes p{50%{opacity:.3}}
@@ -91,19 +87,40 @@ label{display:block;font-size:11px;color:#a3a3a3;text-transform:uppercase;letter
 #pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:.6rem;overflow-y:auto;padding:.1rem .3rem .5rem 0}
 .pk{display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:.6rem .3rem;border-radius:1rem;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.14);cursor:pointer;text-align:center;transition:.2s}.pk:hover{border-color:var(--rose);background:rgba(122,16,32,.4)}.pk.dis{opacity:.35;cursor:not-allowed;pointer-events:none}
 .pk .pav{width:56px;height:56px}.pk span{font:600 .72rem Oswald,sans-serif;letter-spacing:.05em;text-transform:uppercase;line-height:1.2;word-break:break-word}
-#toast{position:fixed;left:50%;bottom:1.5rem;transform:translate(-50%,40px);opacity:0;transition:.3s;z-index:200;padding:.6rem 1.1rem;border-radius:9999px;background:rgba(20,8,12,.95);border:1px solid var(--line)}#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast{position:fixed;left:50%;bottom:6.5rem;transform:translate(-50%,40px);opacity:0;transition:.3s;z-index:200;padding:.6rem 1.1rem;border-radius:9999px;background:rgba(20,8,12,.95);border:1px solid var(--line)}#toast.show{opacity:1;transform:translate(-50%,0)}
 /* Admin */
 #panel>.glass{margin-top:1rem}.mr{display:grid;grid-template-columns:minmax(150px,1.3fr) auto 84px 70px 90px;gap:.5rem;align-items:center;padding:.55rem;border-top:1px solid rgba(255,255,255,.1)}.mr .h{font:600 10px Inter;color:var(--gold);letter-spacing:.1em;text-transform:uppercase}.mr .tm{font-weight:600;line-height:1.3}.gi{display:inline-flex;gap:2px;align-items:center;margin-right:6px}.gi input{width:44px;padding:.35rem .2rem;text-align:center}.mr input[type=time],.mr input[type=text]{padding:.35rem .4rem}.ok{font-size:12px}.ok.g1{color:#4ade80}.ok.bad{color:#fda4af}
 @media(max-width:760px){.mr{grid-template-columns:1fr 1fr}.mr .tm,.mr .gs{grid-column:1/-1}}
-.savebar{position:sticky;bottom:.6rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;padding:.7rem 1rem;margin-top:1rem;z-index:20}#sst{margin-right:auto;font-size:12px;color:#d4d4d8}
+.savebar{position:sticky;bottom:6.2rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;padding:.7rem 1rem;margin-top:1rem;z-index:20}#sst{margin-right:auto;font-size:12px;color:#d4d4d8}
+/* Efek timbul saat tab dibuka (ringan) */
+#v-info:not([hidden]),#v-bracket:not([hidden]),#v-poster:not([hidden]),#v-admin:not([hidden]){animation:popUp .38s cubic-bezier(.22,1,.36,1) both}
+@keyframes popUp{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#v-info,#v-bracket,#v-poster,#v-admin{animation:none!important}}
+
+/* ===== DOCK NAVIGASI BAWAH (kaca) ===== */
+.dock{position:fixed;left:50%;bottom:calc(.75rem + env(safe-area-inset-bottom));z-index:60;transform:translateX(-50%);width:min(calc(100% - 1.5rem),34rem);display:flex;align-items:stretch;justify-content:space-between;gap:.15rem;padding:.4rem;border-radius:1.5rem;
+  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.04)),rgba(18,8,11,.55);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);border:1px solid rgba(255,255,255,.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 18px 40px -14px rgba(0,0,0,.85),0 6px 24px -10px rgba(122,16,32,.7);animation:dockIn .45s cubic-bezier(.22,1,.36,1) both}
+@keyframes dockIn{from{opacity:0;transform:translate(-50%,24px)}to{opacity:1;transform:translate(-50%,0)}}
+.dk{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;padding:.5rem .1rem;border-radius:1.1rem;color:#b4b4bb;text-decoration:none;background:none;border:0;cursor:pointer;font:600 9.5px/1 Oswald,Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase;-webkit-tap-highlight-color:transparent;transition:background .2s ease,color .2s ease,transform .15s ease,box-shadow .2s ease}
+.dk-ic{display:grid;place-items:center;width:1.5rem;height:1.5rem}
+.dk-ic svg{width:1.4rem;height:1.4rem;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.dk-ic img{width:1.55rem;height:1.55rem;object-fit:contain}
+.dk-lb{max-width:100%;overflow:hidden;white-space:nowrap}
+.dk:hover{color:#fff;background:rgba(255,255,255,.09)}.dk:active{transform:scale(.94)}
+.dk[aria-current="page"],.dk.on{color:#fff;background:linear-gradient(145deg,#8f1429,#D6455D);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 18px -8px rgba(214,69,93,.9)}
+@media(min-width:640px){.dk{font-size:10.5px;padding:.55rem .1rem}}
+@media(max-width:380px){.dk{font-size:8.5px;letter-spacing:.02em}}
+@media(prefers-reduced-motion:reduce){.dock{animation:none!important}.dk{transition:none}}
 </style>
 </head>
 <body>
-<header class="nav glass">
-  <a class="brand" href="index.html"><img id="logo" alt="PB Jgeer"><span class="d">PB <em>Jgeer</em></span></a>
-  <nav id="tabs"><button data-t="info" class="on">Info</button><button data-t="bracket">Bracket</button><button data-t="poster">Poster</button><button data-t="admin">Admin</button></nav>
-  <a class="back" href="index.html">← Beranda</a>
-</header>
+<nav id="tabs" class="dock" aria-label="Navigasi turnamen">
+  <a class="dk" style="--i:0" href="index.html" title="Beranda PB Jgeer"><span class="dk-ic"><img id="logo" alt=""></span><span class="dk-lb">Beranda</span></a>
+  <button type="button" class="dk on" style="--i:1" data-t="info"><span class="dk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span><span class="dk-lb">Info</span></button>
+  <button type="button" class="dk" style="--i:2" data-t="bracket"><span class="dk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h6v4H3zM3 15h6v4H3zM15 10h6v4h-6z"/><path d="M9 7h3v10H9M12 12h3"/></svg></span><span class="dk-lb">Bagan</span></button>
+  <button type="button" class="dk" style="--i:3" data-t="poster"><span class="dk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></span><span class="dk-lb">Poster</span></button>
+  <button type="button" class="dk" style="--i:4" data-t="admin"><span class="dk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="dk-lb">Admin</span></button>
+</nav>
 <main>
   <section class="hero glass">
     <p class="d kick">Turnamen</p><h1 id="hNama">Memuat…</h1><p id="hInfo"></p>
