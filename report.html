@@ -242,9 +242,28 @@
             <div class="glass-card p-6 sm:p-8">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="font-display uppercase text-2xl font-bold tracking-wide">Antrean Verifikasi</h2>
-                    <button onclick="loadPending()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition">🔄 Refresh</button>
+                    <div class="flex flex-wrap justify-end gap-2">
+                        <button id="btnVerifyAll" onclick="verifyAll()" class="hidden text-xs flex items-center gap-1 bg-green-600 hover:bg-green-500 text-white font-semibold px-3 py-1.5 rounded-full transition shadow-lg">✔ Terima Semua</button>
+                        <button onclick="loadPending()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition">🔄 Refresh</button>
+                    </div>
                 </div>
                 <div id="pendingList" class="space-y-4"></div>
+            </div>
+
+            <div class="glass-card p-5 sm:p-8">
+                <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+                    <div>
+                        <h2 class="font-display uppercase text-2xl font-bold tracking-wide">Kelola Match Recap</h2>
+                        <p class="text-xs text-neutral-400 mt-1">Ubah pemain, skor, atau tanggal, atau hapus match. Setiap perubahan otomatis menarik kembali poin lama dari klasemen.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <input type="date" id="mgDate" class="rounded-lg px-3 py-1.5 text-white outline-none text-sm">
+                        <button onclick="loadManage()" class="ghost-btn">Muat</button>
+                        <button onclick="loadManage(true)" class="ghost-btn">Terbaru</button>
+                    </div>
+                </div>
+                <p id="mgStatus" class="text-xs text-neutral-400 min-h-[1rem] mb-2" aria-live="polite"></p>
+                <div id="mgList" class="max-h-[34rem] overflow-y-auto pr-1"></div>
             </div>
 
             <div class="glass-card border-brand-maroon/60 p-6 sm:p-8 relative overflow-hidden">
@@ -424,6 +443,7 @@
     let currentSelectTarget = "";
     const photoMap = new Map();
     let recapMatches = [];
+    let ADMIN_PASS = '';
 
     function showLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
     
@@ -650,9 +670,11 @@
 
     function checkAdmin() {
         if(document.getElementById('adminPwd').value === "ytta") {
+            ADMIN_PASS = document.getElementById('adminPwd').value;
             document.getElementById('adminLogin').style.display = 'none';
             document.getElementById('adminDashboard').style.display = 'block';
             loadPending();
+            document.getElementById('mgDate').value = todayYMD; loadManage();
         } else { alert("Password Salah!"); }
     }
 
@@ -663,7 +685,7 @@
         fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getPending"}) })
         .then(res => res.json()).then(res => {
             list.innerHTML = "";
-            if(res.pending.length === 0) { list.innerHTML = `<p class="text-neutral-500">Tidak ada antrean verifikasi.</p>`; return; }
+            if(res.pending.length === 0) { list.innerHTML = `<p class="text-neutral-500">Tidak ada antrean verifikasi.</p>`; syncVerifyAll(); return; }
             
             res.pending.forEach(row => {
                 list.innerHTML += `
@@ -682,13 +704,47 @@
                         </div>
                     </div>`;
             });
-        });
+            syncVerifyAll();
+        }).catch(() => { list.innerHTML = `<p class="text-rose-500">Gagal memuat antrean.</p>`; });
+    }
+
+    // Tombol "Terima Semua" hanya tampil jika masih ada antrean
+    function syncVerifyAll() {
+        const n = [...document.querySelectorAll('#pendingList [id^="card-"]')].filter(c => c.style.display !== 'none').length;
+        document.getElementById('btnVerifyAll').classList.toggle('hidden', n === 0);
+        return n;
+    }
+
+    // Panggilan aksi admin (password dikirim & diperiksa di server)
+    async function adminCall(body) {
+        const r = await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ ...body, pass: ADMIN_PASS }) });
+        let res; try { res = await r.json(); } catch (e) { throw new Error('Apps Script belum diperbarui ke V1.2 (aksi tidak dikenali). Salin kode terbaru lalu deploy ulang.'); }
+        if (res.status !== 'success') throw new Error(res.message || 'Gagal memproses.');
+        return res;
+    }
+
+    async function verifyAll() {
+        const n = syncVerifyAll();
+        if (!n || !confirm(`Terima semua ${n} antrean sekaligus? Skor langsung masuk klasemen.`)) return;
+        showLoading(true);
+        try {
+            let done;
+            try { done = (await adminCall({ action: "verifyAll" })).count; }
+            catch (err) {
+                if (/Password/i.test(err.message)) throw err;
+                // Cadangan: Apps Script lama belum punya verifyAll -> setujui satu per satu
+                const pend = (await (await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getPending"}) })).json()).pending || [];
+                done = 0; for (const row of pend) { await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "verifyMatch", id: row[0]}) }).then(r => r.json()); done++; }
+            }
+            alert(`${done} pertandingan disetujui.`);
+        } catch (err) { alert(err.message); }
+        showLoading(false); loadPending(); fetchHistory(); loadManage(lastManageAll);
     }
 
     function verifyMatch(id) {
         showLoading(true);
         fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "verifyMatch", id: id}) }).then(res => res.json()).then(res => {
-            showLoading(false); if(res.status === "success") { document.getElementById(`card-${id}`).style.display = 'none'; fetchHistory(); }
+            showLoading(false); if(res.status === "success") { document.getElementById(`card-${id}`).style.display = 'none'; syncVerifyAll(); fetchHistory(); loadManage(lastManageAll); }
         });
     }
 
@@ -696,8 +752,106 @@
         if(!confirm("Yakin ingin menolak dan menghapus data antrean ini?")) return;
         showLoading(true);
         fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "deleteMatch", id: id}) }).then(res => res.json()).then(res => {
-            showLoading(false); if(res.status === "success") document.getElementById(`card-${id}`).style.display = 'none';
+            showLoading(false); if(res.status === "success") { document.getElementById(`card-${id}`).style.display = 'none'; syncVerifyAll(); }
         });
+    }
+
+
+    // =====================================================================
+    // KELOLA MATCH RECAP (admin): ubah pemain/skor/tanggal atau hapus (poin ditarik kembali di server)
+    // =====================================================================
+    let mgRows = new Map(), lastManageAll = false;
+
+    async function loadManage(all) {
+        lastManageAll = all === true;
+        const st = document.getElementById('mgStatus'), list = document.getElementById('mgList');
+        const date = document.getElementById('mgDate').value;
+        if (!all && !date) { st.textContent = 'Pilih tanggal dulu.'; return; }
+        st.textContent = 'Memuat match...'; list.innerHTML = '';
+        try {
+            const res = await adminCall(all ? { action: 'getRecap', limit: 150 } : { action: 'getRecap', date });
+            mgRows = new Map(res.matches.map(r => [r[0], r]));
+            renderManage(res.matches, all);
+        } catch (err) { st.innerHTML = `<span class="text-rose-500">${esc(err.message)}</span>`; }
+    }
+
+    function renderManage(rows, all) {
+        const st = document.getElementById('mgStatus'), list = document.getElementById('mgList');
+        if (!rows.length) { st.textContent = all ? 'Belum ada match.' : 'Tidak ada match pada tanggal ini.'; list.innerHTML = ''; return; }
+        st.textContent = `${rows.length} match${all ? ' terbaru' : ''}.`;
+        const days = new Map();
+        rows.forEach(r => { if (!days.has(r[1])) days.set(r[1], []); days.get(r[1]).push(r); });
+        list.innerHTML = [...days.entries()].sort((a, b) => b[0].localeCompare(a[0])).map(([ymd, ms]) => {
+            const d = parseTgl(ymd), lb = d ? `${HARI[d.getDay()]}, ${d.getDate()} ${BLN[d.getMonth()]} ${d.getFullYear()}` : ymd;
+            return `<p class="font-display uppercase text-[11px] tracking-[0.2em] text-brand-rose pt-3 pb-1 sticky top-0 bg-[#140a0d]/90 backdrop-blur z-10">${esc(lb)} · ${ms.length} match</p>` +
+                ms.map((r, k) => mgRowHTML(r, k + 1)).join('');
+        }).join('');
+    }
+
+    function mgRowHTML(r, no) {
+        const [id, , , , a1, a2, sa, b1, b2, sb] = r, aw = sa > sb, bw = sb > sa;
+        const nm = (x, y) => `${esc(x)} &amp; ${esc(y)}`;
+        return `<div class="mg-row flex items-center gap-2 py-2 border-b border-white/5 text-sm" data-id="${esc(id)}" data-no="${no}">
+            <span class="w-6 flex-none text-center text-[11px] text-neutral-500 font-display">${pad(no)}</span>
+            <div class="min-w-0 flex-1">
+                <div class="flex justify-between gap-2"><span class="truncate ${aw ? 'text-emerald-400 font-semibold' : 'text-white'}">${nm(a1, a2)}</span><b class="${aw ? 'text-emerald-400' : 'text-white'}">${sa}</b></div>
+                <div class="flex justify-between gap-2"><span class="truncate ${bw ? 'text-emerald-400 font-semibold' : 'text-white'}">${nm(b1, b2)}</span><b class="${bw ? 'text-emerald-400' : 'text-white'}">${sb}</b></div>
+            </div>
+            <button data-act="edit" data-id="${esc(id)}" class="flex-none px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs" title="Ubah">✎</button>
+            <button data-act="del" data-id="${esc(id)}" class="flex-none px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-brand-rose text-xs" title="Hapus">🗑</button>
+        </div>`;
+    }
+
+    function mgEditHTML(r, no) {
+        const [id, ymd, , , a1, a2, sa, b1, b2, sb] = r;
+        const names = [...new Set([...globalPlayers.map(p => p.name), ...GUEST_NAMES])];
+        const opts = sel => (names.includes(sel) ? names : [...names, sel]).map(n => `<option value="${esc(n)}" ${n === sel ? 'selected' : ''}>${esc(n)}</option>`).join('');
+        const sc = v => [0, 1, 2].map(n => `<option ${n === +v ? 'selected' : ''}>${n}</option>`).join('');
+        const cls = 'w-full min-w-0 rounded-lg px-2 py-1.5 text-white text-sm outline-none';
+        return `<div class="mg-row py-3 border-b border-white/10 bg-white/5 rounded-xl px-3 my-1" data-id="${esc(id)}" data-no="${no}">
+            <div class="grid grid-cols-[1fr_1fr_3.5rem] gap-2 mb-2">
+                <select class="${cls}" data-f="a1">${opts(a1)}</select><select class="${cls}" data-f="a2">${opts(a2)}</select><select class="${cls} text-center" data-f="sa">${sc(sa)}</select>
+                <select class="${cls}" data-f="b1">${opts(b1)}</select><select class="${cls}" data-f="b2">${opts(b2)}</select><select class="${cls} text-center" data-f="sb">${sc(sb)}</select>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <input type="date" data-f="tgl" value="${esc(ymd)}" max="${todayYMD}" class="rounded-lg px-2 py-1.5 text-white text-sm outline-none">
+                <div class="flex gap-2">
+                    <button data-act="cancel" data-id="${esc(id)}" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs">Batal</button>
+                    <button data-act="save" data-id="${esc(id)}" class="px-4 py-1.5 rounded-lg bg-green-600 hover:bg-green-500 text-white text-xs font-semibold">Simpan</button>
+                </div>
+            </div></div>`;
+    }
+
+    document.getElementById('mgList').addEventListener('click', async e => {
+        const b = e.target.closest('button[data-act]'); if (!b) return;
+        const id = b.dataset.id, row = b.closest('.mg-row'), r = mgRows.get(id); if (!r) return;
+        if (b.dataset.act === 'edit') { row.outerHTML = mgEditHTML(r, +row.dataset.no); return; }
+        if (b.dataset.act === 'cancel') { row.outerHTML = mgRowHTML(r, +row.dataset.no); return; }
+        if (b.dataset.act === 'del') {
+            if (!confirm(`Hapus match ini?\n${r[4]} & ${r[5]} (${r[6]}) vs ${r[7]} & ${r[8]} (${r[9]})\n\nPoin para pemain akan dikurangi kembali dari klasemen.`)) return;
+            showLoading(true);
+            try { await adminCall({ action: 'deleteVerified', id }); afterManageChange(); }
+            catch (err) { alert(err.message); showLoading(false); }
+            return;
+        }
+        if (b.dataset.act === 'save') {
+            const f = k => row.querySelector(`[data-f="${k}"]`).value;
+            const p = [f('a1'), f('a2'), f('b1'), f('b2')];
+            const real = p.filter(n => !GUEST_NAMES.includes(n));
+            if (new Set(real).size !== real.length) { alert('Satu pemain tidak boleh dipilih dua kali dalam satu match.'); return; }
+            const ymd = f('tgl'); if (!ymd) { alert('Tanggal wajib diisi.'); return; }
+            const [y, m] = ymd.split('-').map(Number);
+            showLoading(true);
+            try {
+                await adminCall({ action: 'updateMatch', id, data: { tanggal: ymd, bulan: BLN[m - 1], tahun: y, tA_p1: p[0], tA_p2: p[1], scoreA: f('sa'), tB_p1: p[2], tB_p2: p[3], scoreB: f('sb') } });
+                afterManageChange();
+            } catch (err) { alert(err.message); showLoading(false); }
+        }
+    });
+
+    function afterManageChange() {
+        recapDays = []; fetchHistory();
+        loadManage(lastManageAll).finally(() => showLoading(false));
     }
 
     // =====================================================================
