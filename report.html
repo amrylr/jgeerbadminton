@@ -1097,8 +1097,9 @@ html body .sk-mob-act{display:none}
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzuOF1mVpvvi9L2HzCqyvsJiVIK5evjeiehO19f4SfSkbLZCOpk1jE5ktV4CZDEnMAE/exec"; 
     
     // GID SHEET 6 untuk Fitur Recap Poster
-    const SHEET_ID = '1ruc4R7QIQ-AEshPhMSKAGFPO3GF4BZ_uztIFtk-M7zE';
-    const SHEET_RECAP = { gid: '245165715' };
+    const SHEET_ID = '1ruc4R7QIQ-AEshPhMSKAGFPO3GF4BZ_uztIFtk-M7zE';  // Sheet6: pertandingan terverifikasi (+ kolom poin)
+    const SHEET_RECAP = { gid: '245165715' };            // Sheet6: pertandingan terverifikasi (+ kolom poin)
+    const POIN_BARU_MULAI = '2026-11-24';                // sistem poin dinamis berlaku mulai tanggal ini
     const pad = n => String(n).padStart(2, '0');
     const toNum = v => { const n = parseFloat(str(v).replace(',', '.')); return isFinite(n) ? n : 0; };
     
@@ -1542,6 +1543,7 @@ html body .sk-mob-act{display:none}
                                 <span class="mx-2 text-neutral-500">VS</span> 
                                 <strong class="text-white">${row[7]} & ${row[8]}</strong> <span class="text-green-400 font-bold">(${row[9]})</span>
                             </p>
+                            ${mgPoinHTML(row)}
                         </div>
                         <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
                             <button class="flex-1 sm:flex-none bg-green-600 hover:bg-green-500 text-white px-5 py-2 rounded font-semibold transition shadow-lg text-sm" onclick="verifyMatch('${row[0]}')">Setujui</button>
@@ -1761,7 +1763,7 @@ html body .sk-mob-act{display:none}
     });
 
     function afterManageChange() {
-        recapDays = []; PE.rows = null; fetchHistory();
+        recapDays = []; PE.refs.clear(); fetchHistory();
         loadManage(lastManageAll).finally(() => showLoading(false));
     }
 
@@ -1815,14 +1817,16 @@ html body .sk-mob-act{display:none}
 
     async function fetchGrid(cfg) {
         const base = `https://docs.google.com/spreadsheets/d/${SHEET_ID}`;
-        const targets = cfg.gid ? [`gid=${cfg.gid}`] : [];
+        const targets = cfg.gid ? [`gid=${cfg.gid}`] : [].concat(cfg.name || []).map(n => `sheet=${encodeURIComponent(n)}`);
         for (const tg of targets) {
-            try { const g = await fetchCSV(`${base}/export?format=csv&${tg}`); if (g.length) return g; } catch(e){}
+            if (cfg.gid) { try { const g = await fetchCSV(`${base}/export?format=csv&${tg}`); if (g.length) return g; } catch(e){} }
             try { const g = await fetchCSV(`${base}/gviz/tq?tqx=out:csv&${tg}`); if (g.length) return g; } catch(e){}
             try { const g = await jsonpGrid(`${base}/gviz/tq?${tg}`); if (g.length) return g; } catch(e){}
         }
         throw new Error("Gagal memuat data.");
     }
+
+    const fetchMatchGrid = () => fetchGrid(SHEET_RECAP);
 
     const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
     const BLN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -1840,9 +1844,9 @@ html body .sk-mob-act{display:none}
         const list = document.getElementById('recapList'), st = document.getElementById('recapStatus');
         st.textContent = 'Mengambil data pertandingan...'; list.innerHTML = '';
         try {
-            const grid = await fetchGrid(SHEET_RECAP);
+            const grid = await fetchMatchGrid();
             await rosterReady;
-            const { days, all } = recapParse(grid); peBuild(all);   // poin dinamis tiap match
+            const { days } = recapParse(grid);   // poin tiap match dibaca dari kolom Sheet6
             recapDays = [...days.values()].sort((x, y) => y.date - x.date).map(d => ({ ...d,
                 label: `${HARI[d.date.getDay()]}, ${d.date.getDate()} ${BLN[d.date.getMonth()]} ${d.date.getFullYear()}`,
                 players: new Set(d.matches.flatMap(m => [m.A1, m.A2, m.B1, m.B2]).filter(Boolean)).size }));
@@ -1885,9 +1889,11 @@ html body .sk-mob-act{display:none}
     // Poin acuan pemain = akumulasi poin bulan itu SEBELUM tanggal match (terkunci seharian).
     // Dihitung dari Sheet6 (sama persis dengan Apps Script V1.3). Tamu/non-roster = 0.
     // =====================================================================
-    const PE = { rows: null, days: new Map(), byId: new Map(), loading: null };
+    const PE = { byId: new Map(), refs: new Map() };   // byId: poin per match (dari kolom Sheet6); refs: cache poin acuan per tanggal
+    const peMember = n => { n = str(n); return !!n && !isGuestName(n) && (isRosterMember(n) || (!globalPlayers.length && !photoMap.size)); };
+    const sg = v => (v > 0 ? '+' : '') + v;
 
-    function calcPoin(tA, tB, sA, sB) {
+    function calcPoin(tA, tB, sA, sB) {   // hanya untuk pratinjau match baru; hasil resmi dihitung Apps Script
         const delta = Math.abs(tA - tB);
         const k = delta <= 4 ? 1 : (delta <= 10 ? 2 : 3);
         const out = { delta, k, kategori: ['Duel Berimbang', 'Duel Penantang', 'Mode Pejuang'][k - 1], poinA: 0, poinB: 0 };
@@ -1901,76 +1907,52 @@ html body .sk-mob-act{display:none}
         out.poinA = aUnder ? pU : pF; out.poinB = aUnder ? pF : pU;
         return out;
     }
-    const peMember = n => { n = str(n); return !!n && !isGuestName(n) && (isRosterMember(n) || (!globalPlayers.length && !photoMap.size)); };
-    const sg = v => (v > 0 ? '+' : '') + v;
 
+    // Baca grid Sheet6. Kolom poin (Selisih, Kategori, Poin Tim A/B) kosong pada data lama.
     function recapParse(grid) {
         const h = grid[0].map(s => String(s).toLowerCase().replace(/[^a-z0-9]/g, ''));
         const f = (re, d) => { const i = h.findIndex(x => re.test(x)); return i >= 0 ? i : d; };
         const A = '(tima|teama|pemaina|playera|^a)\\D*', B = '(timb|teamb|pemainb|playerb|^b)\\D*';
         const c = { id: f(/idmatch|^id$/, 0), t: f(/tanggal|tgl|date/, 1), a1: f(new RegExp(A + '1$'), 4), a2: f(new RegExp(A + '2$'), 5), sa: f(/(skor|score).*a$/, 6),
-                    b1: f(new RegExp(B + '1$'), 7), b2: f(new RegExp(B + '2$'), 8), sb: f(/(skor|score).*b$/, 9) };
-        const days = new Map(), all = [];
+                    b1: f(new RegExp(B + '1$'), 7), b2: f(new RegExp(B + '2$'), 8), sb: f(/(skor|score).*b$/, 9),
+                    kat: f(/^kategori/, -1), sel: f(/^selisih/, -1), pa: f(/^poin.*a$/, -1), pb: f(/^poin.*b$/, -1) };
+        const days = new Map(); PE.byId = new Map();
         for (let i = 1; i < grid.length; i++) {
             const r = grid[i], d = parseTgl(r[c.t]);
             if (!d || !str(r[c.a1]) || !str(r[c.b1])) continue;
             const key = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
             if (!days.has(key)) days.set(key, { key, date: d, matches: [] });
-            const mm = { id: str(r[c.id]), key, ord: i, A1: str(r[c.a1]), A2: str(r[c.a2]), B1: str(r[c.b1]), B2: str(r[c.b2]), a: toNum(r[c.sa]), b: toNum(r[c.sb]) };
-            days.get(key).matches.push(mm); all.push(mm);
+            const mm = { id: str(r[c.id]), A1: str(r[c.a1]), A2: str(r[c.a2]), B1: str(r[c.b1]), B2: str(r[c.b2]), a: toNum(r[c.sa]), b: toNum(r[c.sb]) };
+            if (c.kat >= 0 && str(r[c.kat])) {
+                const delta = str(r[c.sel]) === '' ? null : toNum(r[c.sel]);
+                mm.poin = { kat: str(r[c.kat]), delta, k: delta == null ? 0 : (delta <= 4 ? 1 : delta <= 10 ? 2 : 3), pA: toNum(r[c.pa]), pB: toNum(r[c.pb]) };
+                if (mm.id) PE.byId.set(mm.id, mm.poin);
+            }
+            days.get(key).matches.push(mm);
         }
-        return { days, all };
+        return { days };
     }
 
-    function peBuild(rows) {
-        PE.rows = rows; PE.days = new Map(); PE.byId = new Map();
-        const sorted = rows.slice().sort((x, y) => x.key < y.key ? -1 : x.key > y.key ? 1 : x.ord - y.ord);
-        const cum = new Map(); let curYm = null, i = 0;
-        while (i < sorted.length) {
-            const key = sorted[i].key, ym = key.slice(0, 7);
-            if (ym !== curYm) { cum.clear(); curYm = ym; }
-            const refs = new Map(cum), add = new Map();
-            while (i < sorted.length && sorted[i].key === key) {
-                const m = sorted[i++];
-                const ref = n => peMember(n) ? (refs.get(norm(n)) || 0) : 0;
-                const tA = ref(m.A1) + ref(m.A2), tB = ref(m.B1) + ref(m.B2);
-                const c = calcPoin(tA, tB, m.a, m.b);
-                m.poin = { tA, tB, delta: c.delta, kat: c.kategori, k: c.k, pA: c.poinA, pB: c.poinB };
-                if (m.id) PE.byId.set(m.id, m.poin);
-                [[m.A1, c.poinA], [m.A2, c.poinA], [m.B1, c.poinB], [m.B2, c.poinB]].forEach(([n, p]) => {
-                    if (!peMember(n)) return; const kk = norm(n); add.set(kk, (add.get(kk) || 0) + p);
-                });
-            }
-            add.forEach((v, kk) => cum.set(kk, (cum.get(kk) || 0) + v));
-            PE.days.set(key, add);
-        }
-    }
-    function peRefs(ymd) {
-        const out = new Map(), ym = ymd.slice(0, 7);
-        PE.days.forEach((add, key) => { if (key.slice(0, 7) === ym && key < ymd) add.forEach((v, k) => out.set(k, (out.get(k) || 0) + v)); });
-        return out;
-    }
-    function peEnsure() {
-        if (PE.rows) return Promise.resolve();
-        if (!PE.loading) PE.loading = (async () => {
-            try { await rosterReady; const grid = await fetchGrid(SHEET_RECAP); peBuild(recapParse(grid).all); }
-            finally { PE.loading = null; }
-        })();
-        return PE.loading;
+    // Poin acuan pemain (bulan yang sama, tanggal sebelum ymd) dari Apps Script
+    async function getRefs(ymd) {
+        if (PE.refs.has(ymd)) return PE.refs.get(ymd);
+        const res = await (await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: 'getRefs', date: ymd }) })).json();
+        if (res.status !== 'success') throw new Error(res.message || 'getRefs gagal');
+        const m = new Map(Object.entries(res.refs || {}).map(([k, v]) => [norm(k), +v || 0]));
+        PE.refs.set(ymd, m); return m;
     }
 
     function poinBadge(p) {
-        const cls = 'pb-k' + (p.k || (p.delta <= 4 ? 1 : p.delta <= 10 ? 2 : 3));
+        const cls = 'pb-k' + (p.k || 1);
         const sp = v => `<span class="${v > 0 ? 'pos' : v < 0 ? 'neg' : ''}">${sg(v)} Poin</span>`;
-        return `<div class="pb-tag ${cls}"><b>${esc(p.kat)}</b> (Δ ${p.delta}) • Tim A: ${sp(p.pA)} | Tim B: ${sp(p.pB)}</div>`;
+        return `<div class="pb-tag ${p.delta == null ? '' : cls}"><b>${esc(p.kat)}</b>${p.delta == null ? '' : ` (Δ ${p.delta})`} • Tim A: ${sp(p.pA)} | Tim B: ${sp(p.pB)}</div>`;
     }
     function mgPoinHTML(r) {
         let p = null;
-        if (r[11]) p = { kat: r[11], delta: +r[10] || 0, pA: +r[12] || 0, pB: +r[13] || 0 };
+        if (r[11]) p = { kat: r[11], delta: r[10] === '' || r[10] == null ? null : +r[10], pA: +r[12] || 0, pB: +r[13] || 0 };
         else if (PE.byId.has(String(r[0]))) p = PE.byId.get(String(r[0]));
         if (!p) return '';
-        const k = p.delta <= 4 ? 1 : p.delta <= 10 ? 2 : 3;
-        return `<div class="pb-mini">${esc(p.kat)} (Δ ${p.delta}) • A ${sg(p.pA)} | B ${sg(p.pB)}</div>`;
+        return `<div class="pb-mini">${esc(p.kat)}${p.delta == null ? '' : ` (Δ ${p.delta})`} • A ${sg(p.pA)} | B ${sg(p.pB)}</div>`;
     }
 
     // Live preview saat 4 pemain sudah dipilih
@@ -1979,12 +1961,17 @@ html body .sk-mob-act{display:none}
         const ids = ['tA_p1', 'tA_p2', 'tB_p1', 'tB_p2'], nm = ids.map(id => document.getElementById(prefix + id).value);
         if (nm.some(n => !n)) { box.hidden = true; return; }
         box.hidden = false;
-        if (!PE.rows) {
-            box.innerHTML = '<p class="pv-note">Menghitung poin acuan...</p>';
-            peEnsure().then(() => pvUpdate(prefix)).catch(() => { box.innerHTML = '<p class="pv-note">Poin acuan belum bisa dimuat. Cek koneksi lalu pilih ulang pemain.</p>'; });
+        const ymd = document.getElementById(prefix + 'tanggal').value || todayYMD;
+        if (ymd < POIN_BARU_MULAI) {
+            box.innerHTML = `<p class="pv-note">Tanggal ${esc(ymd)} memakai sistem poin lama (poin = skor tim − skor lawan). Sistem poin dinamis berlaku mulai ${esc(POIN_BARU_MULAI)}.</p>`;
             return;
         }
-        const ymd = document.getElementById(prefix + 'tanggal').value || todayYMD, refs = peRefs(ymd);
+        if (!PE.refs.has(ymd)) {
+            box.innerHTML = '<p class="pv-note">Mengambil poin acuan...</p>';
+            getRefs(ymd).then(() => pvUpdate(prefix)).catch(() => { box.innerHTML = '<p class="pv-note">Poin acuan belum bisa dimuat. Pastikan Apps Script V1.3 sudah di-deploy, lalu pilih ulang pemain.</p>'; });
+            return;
+        }
+        const refs = PE.refs.get(ymd);
         const ref = n => peMember(n) ? (refs.get(norm(n)) || 0) : 0;
         const rv = nm.map(ref), tA = rv[0] + rv[1], tB = rv[2] + rv[3];
         const base = calcPoin(tA, tB, 1, 1), kls = 'pv-k' + base.k;
@@ -2393,9 +2380,9 @@ function jsonpGrid(url) {
 }
 async function fetchGrid(cfg) {
     const base = `https://docs.google.com/spreadsheets/d/${SHEET_ID}`;
-    const targets = cfg.gid ? [`gid=${cfg.gid}`] : [];
+    const targets = cfg.gid ? [`gid=${cfg.gid}`] : [].concat(cfg.name || []).map(n => `sheet=${encodeURIComponent(n)}`);
     for (const tg of targets) {
-        try { const g = await fetchCSV(`${base}/export?format=csv&${tg}`); if (g.length) return g; } catch (e) {}
+        if (cfg.gid) { try { const g = await fetchCSV(`${base}/export?format=csv&${tg}`); if (g.length) return g; } catch (e) {} }
         try { const g = await fetchCSV(`${base}/gviz/tq?tqx=out:csv&${tg}`); if (g.length) return g; } catch (e) {}
         try { const g = await jsonpGrid(`${base}/gviz/tq?${tg}`); if (g.length) return g; } catch (e) {}
     }
